@@ -1,0 +1,6 @@
+ignored-files.txt
+.pb
+.pb.cgf
+.exe
+.pbi
+.pbi.cfg

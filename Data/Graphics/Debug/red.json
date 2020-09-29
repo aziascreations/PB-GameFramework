@@ -1,0 +1,11 @@
+{
+	comment: "This is just a test",
+	id: "debug-red",
+	type: "material",
+	components: [
+		{
+			type: "color",
+			color: "FF0000"
+		}
+	]
+}

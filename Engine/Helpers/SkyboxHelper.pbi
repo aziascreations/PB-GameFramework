@@ -8,61 +8,61 @@ EnableExplicit
 ;- Code
 
 DeclareModule Skybox
-	Declare GenerateSquareSkybox(TexturePrefix$, DerivedResourcePrefix$, Size.i)
+	Declare GenerateSquareSkybox(TexturePrefix$, DerivedResourcePrefix$, Size.i, SizeOffset.i = 0)
 EndDeclareModule
 
 Module Skybox
 	;#SkyboxCubeMeshKey$ = "skybox-square-panel"
 	
-	Procedure GenerateSquareSkybox(TexturePrefix$, DerivedResourcePrefix$, Size.i)
+	Procedure GenerateSquareSkybox(TexturePrefix$, DerivedResourcePrefix$, Size.i, SizeOffset.i = 0)
 		; Materials
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-x+")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-x+",
 			                       CreateMaterial(#PB_Any,
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-x+"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-x+"), #True)
+			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-x+"), #True)
 		EndIf
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-x-")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-x-",
 			                       CreateMaterial(#PB_Any,
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-x-"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-x-"), #True)
+			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-x-"), #True)
 		EndIf
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-y+")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-y+",
 			                       CreateMaterial(#PB_Any,
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-y+"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-y+"), #True)
+			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-y+"), #True)
 		EndIf
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-y-")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-y-",
 			                       CreateMaterial(#PB_Any,
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-y-"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-y-"), #True)
+			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-y-"), #True)
 		EndIf
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-z+")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-z+",
 			                       CreateMaterial(#PB_Any,
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-z+"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-z+"), #True)
+			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-z+"), #True)
 		EndIf
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-z-")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-z-",
 			                       CreateMaterial(#PB_Any,
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-z-"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-z-"), #True)
+			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-z-"), #True)
 		EndIf
 		
 		; Mesh
 		If Not Resources::HasMesh(DerivedResourcePrefix$+"-panel")
 			Resources::SetMesh(DerivedResourcePrefix$+"-panel",
-			                   CreatePlane(#PB_Any, Size, Size, 1, 1, 1, 1))
+			                   CreatePlane(#PB_Any, Size+SizeOffset, Size+SizeOffset, 1, 1, 1, 1))
 		EndIf
 		
 		; Entities
@@ -72,7 +72,7 @@ Module Skybox
 			                                  MeshID(Resources::GetMesh(DerivedResourcePrefix$+"-panel")),
 			                                  MaterialID(Resources::GetMaterial(DerivedResourcePrefix$+"-y+")),
 			                                  0, Size/2, 0))
-			RotateEntity(Resources::GetEntity(DerivedResourcePrefix$+"-top"), 180, 0, 0)
+			RotateEntity(Resources::GetEntity(DerivedResourcePrefix$+"-top"), 180, 180, 0)
 		EndIf
 		
 		If Not Resources::HasEntity(DerivedResourcePrefix$+"-bottom")

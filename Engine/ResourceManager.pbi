@@ -126,6 +126,10 @@ Module Resources
 			ExtractJSONMap(JSONValue(TextureIndexJson), TextureList())
 			
 			ForEach TextureList()
+				If Left(MapKey(TextureList()), 1) = "_"
+					Continue
+				endif
+				
 				AddElement(UnloadedResources())
 				UnloadedResources()\ResourceRealParrentPath$ = RealParentFolder$
 				UnloadedResources()\ResourceArchivePath$ = Folder$
@@ -274,7 +278,7 @@ Module Resources
 				EndIf
 			EndIf
 			
-			Logger::Devel("Registered texture under: "+ResourceId$+" ("+Str(Resource)+")")
+			Logger::Trace("Registered texture under: "+ResourceId$+" ("+Str(Resource)+")")
 			Textures(ResourceId$) = Resource
 			ProcedureReturn #True
 		EndIf

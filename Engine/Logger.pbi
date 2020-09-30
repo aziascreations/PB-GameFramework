@@ -1,6 +1,6 @@
 ﻿;{
 ; * Logger.pbi
-; Version: 1.0.1
+; Version: 1.0.2
 ; Author: Herwin Bozet
 ; 
 ; A very basic logger that can either output to the debugger or the console.
@@ -21,15 +21,19 @@ DeclareModule Logger
 	Declare.b Warning(Message$)
 	Declare.b Error(Message$)
 	Declare.b Devel(Message$)
+	Declare.b Trace(Message$)
 	
 	; Can cause some really weird problems...
 	Declare EnableConsole()
+	
+	Declare EnableTrace()
 EndDeclareModule
 
 Module Logger
 	EnableExplicit
 	
 	Global UseConsole.b = #False
+	Global EnableTrace.b = #False
 	
 	Procedure _Log(Message$)
 		If UseConsole
@@ -59,9 +63,20 @@ Module Logger
 		ProcedureReturn #True
 	EndProcedure
 	
+	Procedure.b Trace(Message$)
+		If EnableTrace
+			_Log("TRACE| "+Message$)
+		EndIf
+		ProcedureReturn #True
+	EndProcedure
+	
 	Procedure EnableConsole()
 		If Not UseConsole
 			UseConsole = OpenConsole("Logs")
 		EndIf
+	EndProcedure
+	
+	Procedure EnableTrace()
+		EnableTrace = #True
 	EndProcedure
 EndModule

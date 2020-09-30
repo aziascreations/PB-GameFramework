@@ -21,6 +21,7 @@ XIncludeFile "./EngineBootlegUltraDeluxe.pbi"
 
 If Not #PB_Compiler_Debugger
 	Logger::EnableConsole()
+	;Logger::EnableTrace()
 EndIf
 
 

@@ -122,6 +122,7 @@ Module CameraTestScreen
 		GroundEnt = CreateEntity(#PB_Any, MeshID(GroundMesh), MaterialID(GroundMat), 0, 0, 0)
 		
 		Skybox::GenerateSquareSkybox("skybox-mm-tmp", "skybox-mainmenu", 64*100)
+		;Skybox::GenerateSquareSkybox("skybox-miramar", "skybox-mainmenu", 64*100, 10)
 		
 		PlayerCamera = CreateCamera(#PB_Any, 0, 0, 100, 100)
 		CameraBackColor(PlayerCamera, RGB(245, 245, 245))
@@ -129,7 +130,8 @@ Module CameraTestScreen
 		CameraLookAt(PlayerCamera, 0, 24, 0)
 		
 		TestingCamera = CreateCamera(#PB_Any, 0, 0, 100, 100)
-		CameraBackColor(TestingCamera, RGB(245, 245, 245))
+		;CameraBackColor(TestingCamera, RGB(245, 245, 245))
+		CameraBackColor(TestingCamera, RGB(0, 0, 0))
 		MoveCamera(TestingCamera, 100, 100, 100, #PB_Absolute)
 		CameraLookAt(TestingCamera, 0, 0, 0)
 		IsUsingPlayerCam = #False
@@ -260,7 +262,10 @@ Module CameraTestScreen
 		Logger::Devel("Deleting entities, meshes, materials and cameras...")
 		
 		ForEach LineEntities()
-			FreeEntity(LineEntities())
+			Protected TempEntity = LineEntities()
+			If IsEntity(TempEntity)
+				FreeEntity(TempEntity)
+			EndIf
 		Next
 		FreeList(LineEntities())
 		

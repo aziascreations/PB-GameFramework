@@ -1,0 +1,1 @@
+Have them defined here or file pointers.

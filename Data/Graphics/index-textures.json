@@ -6,7 +6,21 @@
 	"skybox-mm-tmp-z+": "Skyboxes/mainmenu-temp-z+.png",
 	"skybox-mm-tmp-z-": "Skyboxes/mainmenu-temp-z-.png",
 	
+	"_comment1": "Entries that start with a '_' won't be loaded by the resource manager !",
+	"_skybox-miramar-x+": "Skyboxes/miramar_ft.png",
+	"_skybox-miramar-x-": "Skyboxes/miramar_bk.png",
+	"_skybox-miramar-y+": "Skyboxes/miramar_up.png",
+	"_skybox-miramar-y-": "Skyboxes/miramar_dn.png",
+	"_skybox-miramar-z+": "Skyboxes/miramar_lf.png",
+	"_skybox-miramar-z-": "Skyboxes/miramar_rt.png",
+	
 	"dev-grid-16": "Developement/grid-16.png",
 	"dev-grid-32": "Developement/grid-32.png",
-	"dev-grid-64": "Developement/grid-64.png"
+	"dev-grid-64": "Developement/grid-64.png",
+	
+	"wall1": "Terrain/bricks-dgreen-16.png",
+	"wall2": "Terrain/bricks-red-16.png",
+	"grass1": "Terrain/grass-d1-16.png",
+	"grass2": "Terrain/grass-l1-16.png",
+	"ground1": "Terrain/ground-01-16.png"
 }

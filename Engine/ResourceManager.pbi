@@ -1,6 +1,6 @@
 ﻿;{
 ; * ResourceManager.pbi
-; Version: 0.0.1
+; Version: 0.1.0
 ; Author: Herwin Bozet
 ; 
 ; This modules stores and handles all the indexed resources for the game.
@@ -10,6 +10,11 @@
 
 CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include file !": CompilerEndIf
 EnableExplicit
+
+If Not InitSound()
+	Logger::Error("Failed to start sound engine !")
+	End 5
+EndIf
 
 UsePNGImageDecoder()
 
@@ -32,18 +37,21 @@ DeclareModule Resources
 	Declare.i HasMesh(ResourceId$)
 	Declare.i HasEntity(ResourceId$)
 	Declare.i HasCamera(ResourceId$)
+	Declare.i HasSound(ResourceId$)
 	
 	Declare.i GetTexture(ResourceId$)
 	Declare.i GetMaterial(ResourceId$)
 	Declare.i GetMesh(ResourceId$)
 	Declare.i GetEntity(ResourceId$)
 	Declare.i GetCamera(ResourceId$)
+	Declare.i GetSound(ResourceId$)
 	
 	Declare.b SetTexture(ResourceId$, Resource.i, Overwrite.b = #False, AutoCleanMemory.b = #True)
 	Declare.b SetMaterial(ResourceId$, Resource.i, Overwrite.b = #False, AutoCleanMemory.b = #True)
 	Declare.b SetMesh(ResourceId$, Resource.i, Overwrite.b = #False, AutoCleanMemory.b = #True)
 	Declare.b SetEntity(ResourceId$, Resource.i, Overwrite.b = #False, AutoCleanMemory.b = #True)
 	Declare.b SetCamera(ResourceId$, Resource.i, Overwrite.b = #False, AutoCleanMemory.b = #True)
+	Declare.b SetSound(ResourceId$, Resource.i, Overwrite.b = #False, AutoCleanMemory.b = #True)
 	
 	Declare.b DeleteEntity(ResourceId$, CleanMemory.b = #True)
 	Declare.b DeleteCamera(ResourceId$, CleanMemory.b = #True)
@@ -53,6 +61,7 @@ DeclareModule Resources
 	Declare FlushMeshes(CleanMemory.b = #True)
 	Declare FlushEntities(CleanMemory.b = #True)
 	Declare FlushCameras(CleanMemory.b = #True)
+	Declare FlushSounds(CleanMemory.b = #True)
 	Declare FlushAll(CleanMemory.b = #True)
 EndDeclareModule
 
@@ -61,7 +70,7 @@ Module Resources
 	
 	; This is more complicated than it should be because PB can be pretty retarded at times...
 	Structure ResourceRegistration
-		ResourceRealParrentPath$
+		ResourceRealParentPath$
 		ResourceArchivePath$
 		ResourceFilePath$
 		ResourceKey$
@@ -74,6 +83,7 @@ Module Resources
 		#ResourceType_Mesh
 		#ResourceType_Entity
 		#ResourceType_Camera
+		#ResourceType_Sound
 	EndEnumeration
 	
 	#ResourceErrorKey$ = "error"
@@ -86,6 +96,8 @@ Module Resources
 	Global NewMap Entities.i()
 	
 	Global NewMap Cameras.i()
+	
+	Global NewMap Sounds.i()
 	
 	Global NewList UnloadedResources.ResourceRegistration()
 	
@@ -139,18 +151,17 @@ Module Resources
 		
 		Logger::Devel("Searching for index files in: "+RealParentFolder$+Folder$)
 		
+		; Textures
 		If FileSize(RealParentFolder$+Folder$ + "index-textures.json") > 0
-			Protected TextureIndexJson
+			Logger::Devel("Found a texture index !")
 			
-			TextureIndexJson = LoadJSON(#PB_Any, RealParentFolder$+Folder$ + "index-textures.json")
+			Protected TextureIndexJson = LoadJSON(#PB_Any, RealParentFolder$+Folder$ + "index-textures.json")
 			
 			If Not TextureIndexJson
 				Logger::Error("Failed to load: "+RealParentFolder$+Folder$+"index-textures.json")
 				Logger::Error("-> "+JSONErrorMessage()+" @ "+JSONErrorLine()+":"+JSONErrorPosition())
 				ProcedureReturn NewResourceCount
 			EndIf
-			
-			Logger::Devel("Found a texture index !")
 			
 			Protected NewMap TextureList.s()
 			ExtractJSONMap(JSONValue(TextureIndexJson), TextureList())
@@ -161,7 +172,7 @@ Module Resources
 				EndIf
 				
 				AddElement(UnloadedResources())
-				UnloadedResources()\ResourceRealParrentPath$ = RealParentFolder$
+				UnloadedResources()\ResourceRealParentPath$ = RealParentFolder$
 				UnloadedResources()\ResourceArchivePath$ = Folder$
 				UnloadedResources()\ResourceFilePath$ = TextureList()
 				UnloadedResources()\ResourceKey$ = MapKey(TextureList())
@@ -170,6 +181,38 @@ Module Resources
 			
 			FreeMap(TextureList())
 			FreeJSON(TextureIndexJson)
+		EndIf
+		
+		; Sounds
+		If FileSize(RealParentFolder$+Folder$ + "index-sounds.json") > 0
+			Logger::Devel("Found a sound index !")
+			
+			Protected SoundIndexJson = LoadJSON(#PB_Any, RealParentFolder$+Folder$ + "index-sounds.json")
+			
+			If Not SoundIndexJson
+				Logger::Error("Failed to load: "+RealParentFolder$+Folder$+"index-sounds.json")
+				Logger::Error("-> "+JSONErrorMessage()+" @ "+JSONErrorLine()+":"+JSONErrorPosition())
+				ProcedureReturn NewResourceCount
+			EndIf
+			
+			Protected NewMap SoundList.s()
+			ExtractJSONMap(JSONValue(SoundIndexJson), SoundList())
+			
+			ForEach SoundList()
+				If Left(MapKey(SoundList()), 1) = "_"
+					Continue
+				EndIf
+				
+				AddElement(UnloadedResources())
+				UnloadedResources()\ResourceRealParentPath$ = RealParentFolder$
+				UnloadedResources()\ResourceArchivePath$ = Folder$
+				UnloadedResources()\ResourceFilePath$ = SoundList()
+				UnloadedResources()\ResourceKey$ = MapKey(SoundList())
+				UnloadedResources()\ResourceType = #ResourceType_Sound
+			Next
+			
+			FreeMap(SoundList())
+			FreeJSON(SoundIndexJson)
 		EndIf
 		
 		ProcedureReturn NewResourceCount
@@ -181,7 +224,7 @@ Module Resources
 			Logger::Devel("Loading ressource: "+UnloadedResources()\ResourceKey$)
 			
 			Select UnloadedResources()\ResourceType
-				Case #ResourceType_Texture:
+				Case #ResourceType_Texture
 					Protected NewTexture = LoadTexture(#PB_Any, UnloadedResources()\ResourceArchivePath$ +
 					                                            UnloadedResources()\ResourceFilePath$)
 					
@@ -190,7 +233,17 @@ Module Resources
 					Else
 						Logger::Error("Failed to load texture !")
 					EndIf
-				Default:
+				Case #ResourceType_Sound
+					Protected NewSound = LoadSound(#PB_Any,
+					                               UnloadedResources()\ResourceRealParentPath$ +
+					                               UnloadedResources()\ResourceArchivePath$ +
+					                               UnloadedResources()\ResourceFilePath$)
+					If IsSound(NewSound)
+						SetSound(UnloadedResources()\ResourceKey$, NewSound, #True, #True)
+					Else
+						Logger::Error("Failed to load sound !")
+					EndIf
+				Default
 					Logger::Error("Unknown resource type !!!")
 			EndSelect
 			
@@ -223,6 +276,8 @@ Module Resources
 					ProcedureReturn FindMapElement(Entities(), ResourceId$)
 				Case #ResourceType_Camera:
 					ProcedureReturn FindMapElement(Cameras(), ResourceId$)
+				Case #ResourceType_Sound:
+					ProcedureReturn FindMapElement(Sounds(), ResourceId$)
 			EndSelect
 		EndIf
 		
@@ -247,6 +302,10 @@ Module Resources
 	
 	Procedure.i HasCamera(ResourceId$)
 		ProcedureReturn HasResource(ResourceId$, #ResourceType_Camera)
+	EndProcedure
+	
+	Procedure.i HasSound(ResourceId$)
+		ProcedureReturn HasResource(ResourceId$, #ResourceType_Sound)
 	EndProcedure
 	
 	
@@ -290,6 +349,14 @@ Module Resources
 		EndIf
 		
 		ProcedureReturn Cameras(ResourceId$)
+	EndProcedure
+	
+	Procedure.i GetSound(ResourceId$)
+		If ResourceId$ = #Null$ Or Not FindMapElement(Sounds(), ResourceId$)
+			ProcedureReturn #Null
+		EndIf
+		
+		ProcedureReturn Sounds(ResourceId$)
 	EndProcedure
 	
 	
@@ -381,7 +448,7 @@ Module Resources
 			If FindMapElement(Cameras(), ResourceId$)
 				If Overwrite
 					If CleanMemory
-						FreeTexture(Cameras(ResourceId$))
+						FreeCamera(Cameras(ResourceId$))
 					EndIf
 				Else
 					Logger::Error("Failed to register camera, key already exists: "+ResourceId$)
@@ -390,6 +457,27 @@ Module Resources
 			EndIf
 			
 			Cameras(ResourceId$) = Resource
+			ProcedureReturn #True
+		EndIf
+		
+		ProcedureReturn #False
+	EndProcedure
+	
+	Procedure.b SetSound(ResourceId$, Resource.i, Overwrite.b = #False, CleanMemory.b = #True)
+		If ResourceId$ <> #Null$
+			If FindMapElement(Sounds(), ResourceId$)
+				If Overwrite
+					If CleanMemory
+						; FIXME: Add it back !
+						;FreeTexture(Sounds(ResourceId$))
+					EndIf
+				Else
+					Logger::Error("Failed to register sound, key already exists: "+ResourceId$)
+					ProcedureReturn #False
+				EndIf
+			EndIf
+			
+			Sounds(ResourceId$) = Resource
 			ProcedureReturn #True
 		EndIf
 		
@@ -433,7 +521,11 @@ Module Resources
 	Procedure FlushTextures(CleanMemory.b = #True)
 		If CleanMemory
 			ForEach Textures()
-				FreeTexture(Textures())
+				Protected TempResource = Textures()
+				
+				If IsTexture(TempResource)
+					FreeTexture(TempResource)
+				EndIf
 			Next
 		EndIf
 		
@@ -480,7 +572,26 @@ Module Resources
 		ClearMap(Cameras())
 	EndProcedure
 	
+	Procedure FlushSounds(CleanMemory.b = #True)
+		If CleanMemory
+			ForEach Sounds()
+				Protected TempSound = Sounds()
+				
+				If IsSound(TempSound)
+					FreeSound(TempSound)
+				ElseIf IsSound3D(TempSound)
+					FreeSound3D(TempSound)
+				Else
+					Logger::Warning("Failed to free sound !")
+				EndIf
+			Next
+		EndIf
+		
+		ClearMap(Sounds())
+	EndProcedure
+	
 	Procedure FlushAll(CleanMemory.b = #True)
+		FlushSounds(CleanMemory)
 		FlushCameras(CleanMemory)
 		FlushEntities(CleanMemory)
 		FlushMeshes(CleanMemory)

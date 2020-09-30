@@ -22,9 +22,7 @@ Module ScreenLoading
 	EnableExplicit
 	
 	Global DefaultCamera
-	;Global ErrorMaterial, ErrorTexture, TestMesh, TestEntity
 	Global TextSprite, LogoSprite, StartTime.q
-	
 	Global LogoPhase.a
 	Global LastOpacityTick.q
 	Global CurrentSpriteOpacity.a
@@ -58,26 +56,17 @@ Module ScreenLoading
 		MoveCamera(DefaultCamera, 50, 50, 50, #PB_Absolute)
 		CameraLookAt(DefaultCamera, 0, 0, 0)
 		
-		;ErrorTexture = LoadTexture(#PB_Any, "Graphics/Engine/error.png")
-		;ErrorMaterial = CreateMaterial(#PB_Any, TextureID(ErrorTexture))
-		;MaterialFilteringMode(ErrorMaterial, #PB_Material_None)
-		;DisableMaterialLighting(ErrorMaterial, #True)
-		
-		;TestMesh = CreateCube(#PB_Any, 16)
-		;TestEntity = CreateEntity(#PB_Any, MeshID(TestMesh), MaterialID(ErrorMaterial), 0, 0, 0)
-		
 		LogoSprite = LoadSprite(#PB_Any, "Data/Graphics/Developement/splashLogo.png",
 		                        #PB_Sprite_AlphaBlending)
+		;TransparentSpriteColor(LogoSprite, RGB(245, 245, 245))
+		
 		TextSprite = LoadSprite(#PB_Any, "Data/Graphics/Developement/text-loading.png",
 		                        #PB_Sprite_AlphaBlending)
-		
-		;TransparentSpriteColor(LogoSprite, RGB(245, 245, 245))
 		;TransparentSpriteColor(TextSprite, RGB(245, 245, 245))
 		
 		StartTime = ElapsedMilliseconds()
-		
 		LogoPhase = 1 ; Debug
-		CurrentSpriteOpacity = 255
+		CurrentSpriteOpacity = 255 ; Debug
 		LastOpacityTick = StartTime
 	EndProcedure
 	
@@ -85,47 +74,52 @@ Module ScreenLoading
 		Select LogoPhase
 			Case 0:
 				; Logo is fading in...
-				;If LastOpacityTick + 5 < ElapsedMilliseconds()
-				;	LastOpacityTick = ElapsedMilliseconds()
-				;	CurrentSpriteOpacity = CurrentSpriteOpacity + 1
-				;EndIf
-				;
-				;If CurrentSpriteOpacity = 255
-				;	LogoPhase = 1
-				;	Logger::Devel("Logo phase 1 !")
-				;EndIf
-				LogoPhase = 1
+				If LastOpacityTick + 5 < ElapsedMilliseconds()
+					LastOpacityTick = ElapsedMilliseconds()
+					CurrentSpriteOpacity = CurrentSpriteOpacity + 1
+				EndIf
+				
+				If CurrentSpriteOpacity = 255
+					LogoPhase = 1
+					Logger::Devel("Logo phase 1 !")
+				EndIf
 			Case 1:
 				; Logo is present, loading shit...
 				
+				; Transparency does not work, somehow...
 				;If LastOpacityTick + 2500 < ElapsedMilliseconds()
-				;LastOpacityTick = ElapsedMilliseconds()
-				;LogoPhase = 2
-				;Logger::Devel("Logo phase 2 !")
+				;	LastOpacityTick = ElapsedMilliseconds()
+				;	LogoPhase = 2
+				;	Logger::Devel("Logo phase 2 !")
+				;EndIf
 					
 				If Resources::Update() And LastOpacityTick + 1000 < ElapsedMilliseconds()
 					Logger::Devel("Finished loading resources, changing screen...")
 					;ScreenManager::ChangeScreen("mainmenu")
+					
 					ScreenManager::ChangeScreen("camera-test")
 					ScreenManager::SkipNextRender()
+					Logger::Devel(Logger::#Separator$)
+					
+					;ScreenManager::ChangeScreen("error-no-screen-should-be-found")
+					;ScreenManager::SkipNextRender()
 				EndIf
 			Default:
 				; Logo is fading out...
-				;If LastOpacityTick + 5 < ElapsedMilliseconds()
-				;	LastOpacityTick = ElapsedMilliseconds()
-				;	CurrentSpriteOpacity = CurrentSpriteOpacity - 1
-				;EndIf
-				;
-				;If CurrentSpriteOpacity = 0
-				;	ScreenManager::ChangeScreen("test")
-				;	ScreenManager::SkipNextRender()
-				;EndIf
+				If LastOpacityTick + 5 < ElapsedMilliseconds()
+					LastOpacityTick = ElapsedMilliseconds()
+					CurrentSpriteOpacity = CurrentSpriteOpacity - 1
+				EndIf
+				
+				If CurrentSpriteOpacity = 0
+					ScreenManager::ChangeScreen("test")
+					ScreenManager::SkipNextRender()
+				EndIf
 				LogoPhase = 1
 		EndSelect
 	EndProcedure
 	
 	Procedure OnRender(TimeDelta.q)
-		
 		; Rendering 3D elements...
 		RenderWorld()
 		
@@ -139,7 +133,6 @@ Module ScreenLoading
 		
 		; Finishing.
 		FlipBuffers()
-		;ClearScreen(RGB(0, 0, 0))
 	EndProcedure
 	
 	Procedure OnLeave()
@@ -147,11 +140,6 @@ Module ScreenLoading
 		
 		FreeSprite(LogoSprite)
 		FreeSprite(TextSprite)
-		
-		;FreeEntity(TestEntity)
-		;FreeMesh(TestMesh)
-		;FreeMaterial(ErrorMaterial)
-		;FreeTexture(ErrorTexture)
 		
 		FreeCamera(DefaultCamera)
 	EndProcedure

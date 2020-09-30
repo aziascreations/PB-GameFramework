@@ -53,11 +53,8 @@ EndIf
 IncludePath "./Game/"
 XIncludeFile "./GameCommons.pbi"
 
-
 ; Going into the game screen
-If ScreenManager::ChangeScreen("loading")
-	Logger::Devel("Switched screen to: loading !")
-Else
+If Not ScreenManager::ChangeScreen("loading")
 	Logger::Devel("Failed to switch screen !")
 EndIf
 
@@ -65,7 +62,6 @@ EndIf
 ;-> Main loop
 
 Define LastTick.q = ElapsedMilliseconds(), TimeDelta.q
-Define Quit = #False
 
 Logger::Devel("Entering main loop...")
 Logger::Devel(Logger::#Separator$)
@@ -76,10 +72,25 @@ Repeat
 		Event = WindowEvent()
 		Select Event
 			Case #PB_Event_LeftClick
-				;Debug "click !"
+				Define ClickSound = Resources::GetSound("menu-click")
+				
+				If ClickSound <> #Null And IsSound(ClickSound)
+					PlaySound(ClickSound, #PB_Sound_MultiChannel, 25)
+				Else
+					Logger::Warning("Failed to get sound: menu-click @ "+Str(ClickSound))
+				EndIf
+				
+			Case #PB_Event_RightClick
+				Define BackSound = Resources::GetSound("menu-back")
+				
+				If BackSound <> #Null And IsSound(BackSound)
+					PlaySound(BackSound, #PB_Sound_MultiChannel, 25)
+				Else
+					Logger::Warning("Failed to get sound: menu-back @ "+Str(BackSound))
+				EndIf
 				
 			Case #PB_Event_CloseWindow
-				Quit = #True
+				Engine::IsRunning = #False
 		EndSelect
 	Until Event = 0
 	
@@ -90,12 +101,16 @@ Repeat
 	
 	; Prevents the CPU from going way too fast if vsync is disabled.
 	Delay(1)
-Until Quit
+Until Not Engine::IsRunning
 
 
 ;-> End
 
-ScreenManager::Finish(#True)
-Resources::Finish(#True)
-Logger::Info("Quitting the game...")
+If Engine::HasCrashed
+	; ???
+Else
+	Logger::Devel("The engine is exiting gracefully !")
+EndIf
+
+Engine::Finish(#True)
 End 0

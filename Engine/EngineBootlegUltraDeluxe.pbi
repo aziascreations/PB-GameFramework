@@ -29,13 +29,20 @@ DeclareModule Engine
 	#EngineName$ = "Bootleg Engine Ultra Deluxe Edition"
 	#EngineVersion$ = "0.0.1-indev"
 	
+	Global IsRunning.b = #False
+	Global HasCrashed.b = #False
+	
 	Declare.s GetEngineInfoText()
 	
 	Declare.b Init()
-	Declare   Start()
+	Declare Start()
 	
 	Declare Update(TimeDelta.q)
 	Declare Render(TimeDelta.q)
+	
+	; Shuts down the engine properly.
+	; No part of the engine should be used afterward !
+	Declare Finish(CleanMemory.b=#True)
 EndDeclareModule
 
 Module Engine
@@ -48,13 +55,15 @@ Module Engine
 	Procedure.b Init()
 		Logger::Devel("Initializing "+GetEngineInfoText()+"...")
 		
+		Logger::Devel("Initializing 3D engine...")
 		If Not InitEngine3D()
-			Logger::Error("Failed to initialize 3D Engine !")
+			Logger::Error("Failed to initialize 3D engine !")
 			ProcedureReturn #False
 		EndIf
 		
 		Logger::Devel("Adding 3D archives...")
 		Add3DArchive("./Data", #PB_3DArchive_FileSystem)
+		Logger::Trace("Added: ./Data")
 		
 		Logger::Devel("Initializing engine core modules...")
 		InitSprite()
@@ -63,6 +72,7 @@ Module Engine
 		
 		Logger::Devel("Initializing screen manager...")
 		ScreenManager::Init()
+		ErrorScreen::Register()
 		
 		Logger::Devel("Initializing resource manager...")
 		Resources::Init()
@@ -82,14 +92,19 @@ Module Engine
 	
 	; Starts the window and/or prompts.
 	Procedure Start()
-		Protected GameWindow = #Null
+		Logger::Devel("Starting engine...")
 		
+		Protected GameWindow = #Null
 		If OpenWindow(0, 0, 0, 1440, 900, "PureBasic - 3D Demos", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
 			GameWindow = OpenWindowedScreen(WindowID(0), 0, 0, 1440, 900, 0, 0, 0)
+		Else
+			ProcedureReturn #False
 		EndIf
 		
 		Logger::Devel("Starting resource manager...")
 		Resources::Start()
+		
+		IsRunning = #True
 		
 		ProcedureReturn GameWindow
 	EndProcedure
@@ -100,5 +115,14 @@ Module Engine
 	
 	Procedure Render(TimeDelta.q)
 		ScreenManager::RenderScreen(TimeDelta)
+	EndProcedure
+	
+	Procedure Finish(CleanMemory.b=#True)
+		Logger::Devel("Finishing engine...")
+		
+		Resources::Finish(CleanMemory)
+		ScreenManager::Finish(CleanMemory)
+		;Args::Finish(CleanMemory)
+		;Logger::Finish(CleanMemory)
 	EndProcedure
 EndModule

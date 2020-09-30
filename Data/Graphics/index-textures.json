@@ -16,5 +16,8 @@
 	"wall2": "Terrain/bricks-red-16.png",
 	"grass1": "Terrain/grass-d1-16.png",
 	"grass2": "Terrain/grass-l1-16.png",
-	"ground1": "Terrain/ground-01-16.png"
+	"ground1": "Terrain/ground-01-16.png",
+	
+	"loading-logo": "Developement/splashLogo.png.png",
+	"loading-text": "Developement/text-loading.png"
 }

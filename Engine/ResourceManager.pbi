@@ -18,7 +18,8 @@ UsePNGImageDecoder()
 
 DeclareModule Resources
 	Declare.b Init()
-	Declare.b Clear()
+	Declare.b Start()
+	Declare.b Finish(CleanMemory.b = #True)
 	
 	Declare.q ReadIndexFiles(RealParentFolder$, Folder$)
 	
@@ -88,12 +89,41 @@ Module Resources
 	
 	Global NewList UnloadedResources.ResourceRegistration()
 	
+	; The error resources are kept out of the maps for faster access
+	;  and To protect them from being flushed.
+	Global ErrorTexture, ErrorMaterial
+	
 	Procedure.b Init()
-		; TODO: Load and create error resources.
+		; TODO: ???
 	EndProcedure
 	
-	Procedure.b Clear()
-		; TODO: Free resources from memory.
+	Procedure.b Start()
+		Logger::Devel("Creating error resources...")
+		
+		; Texture
+		If Not IsTexture(ErrorTexture)
+			ErrorTexture = CreateTexture(#PB_Any, 2, 2)
+			StartDrawing(TextureOutput(ErrorTexture))
+			Box(0, 0, 2, 2, RGB(0, 0, 0))
+			Box(1, 0, 1, 1, RGB(255, 0, 255))
+			Box(0, 1, 1, 1, RGB(255, 0, 255))
+			StopDrawing()
+		EndIf
+		
+		; Material
+		If Not IsMaterial(ErrorMaterial)
+			ErrorMaterial = CreateMaterial(#PB_Any, TextureID(ErrorTexture))
+			MaterialFilteringMode(ErrorMaterial, #PB_Material_None)
+		EndIf
+	EndProcedure
+	
+	Procedure.b Finish(CleanMemory.b = #True)
+		FlushAll(CleanMemory)
+		
+		If CleanMemory
+			FreeMaterial(ErrorMaterial)
+			FreeTexture(ErrorTexture)
+		EndIf
 	EndProcedure
 	
 	Procedure.q ReadIndexFiles(RealParentFolder$, Folder$)
@@ -128,7 +158,7 @@ Module Resources
 			ForEach TextureList()
 				If Left(MapKey(TextureList()), 1) = "_"
 					Continue
-				endif
+				EndIf
 				
 				AddElement(UnloadedResources())
 				UnloadedResources()\ResourceRealParrentPath$ = RealParentFolder$
@@ -224,7 +254,7 @@ Module Resources
 	
 	Procedure.i GetTexture(ResourceId$)
 		If ResourceId$ = #Null$ Or Not FindMapElement(Textures(), ResourceId$)
-			ProcedureReturn Textures(#ResourceErrorKey$)
+			ProcedureReturn ErrorTexture
 		EndIf
 		
 		ProcedureReturn Textures(ResourceId$)
@@ -232,7 +262,7 @@ Module Resources
 	
 	Procedure.i GetMaterial(ResourceId$)
 		If ResourceId$ = #Null$ Or Not FindMapElement(Materials(), ResourceId$)
-			ProcedureReturn Materials(#ResourceErrorKey$)
+			ProcedureReturn ErrorMaterial
 		EndIf
 		
 		ProcedureReturn Materials(ResourceId$)

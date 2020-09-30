@@ -14,10 +14,3 @@ XIncludeFile "./LoadingScreen.pbi"
 XIncludeFile "./MainMenuScreen.pbi"
 XIncludeFile "./CameraTestScreen.pbi"
 XIncludeFile "./TestingScreen.pbi"
-
-
-;- Code
-
-
-
-

@@ -96,6 +96,6 @@ Until Quit
 ;-> End
 
 ScreenManager::Finish(#True)
-Resources::FlushAll(#True)
+Resources::Finish(#True)
 Logger::Info("Quitting the game...")
 End 0

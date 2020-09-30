@@ -5,3 +5,5 @@ Packages/
 *.pbf.cfg
 *.pbi.cfg
 *.pbp
+Data/Trash/
+Data/Graphics/Trash/

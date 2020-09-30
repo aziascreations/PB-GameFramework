@@ -12,12 +12,13 @@
 CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include file !": CompilerEndIf
 EnableExplicit
 
+XIncludeFile "./InternalData/DataSection-Data.Internal.pbi"
+
 XIncludeFile "./Arguments.pbi"
 XIncludeFile "./Logger.pbi"
 XIncludeFile "./Screens.pbi"
 XIncludeFile "./ResourceManager.pbi"
 
-XIncludeFile "./InternalData/DataSection-Data.Internal.pbi"
 XIncludeFile "./Helpers/HelpersCommon.pbi"
 XIncludeFile "./Gui/GuiHandler.pbi"
 
@@ -81,13 +82,16 @@ Module Engine
 	
 	; Starts the window and/or prompts.
 	Procedure Start()
-		Protected Result = #Null
+		Protected GameWindow = #Null
 		
 		If OpenWindow(0, 0, 0, 1440, 900, "PureBasic - 3D Demos", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
-			Result = OpenWindowedScreen(WindowID(0), 0, 0, 1440, 900, 0, 0, 0)
+			GameWindow = OpenWindowedScreen(WindowID(0), 0, 0, 1440, 900, 0, 0, 0)
 		EndIf
 		
-		ProcedureReturn Result
+		Logger::Devel("Starting resource manager...")
+		Resources::Start()
+		
+		ProcedureReturn GameWindow
 	EndProcedure
 	
 	Procedure Update(TimeDelta.q)

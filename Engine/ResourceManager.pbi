@@ -43,6 +43,16 @@ DeclareModule Resources
 	Declare.b SetMesh(ResourceId$, Resource.i, Overwrite.b = #False, AutoCleanMemory.b = #True)
 	Declare.b SetEntity(ResourceId$, Resource.i, Overwrite.b = #False, AutoCleanMemory.b = #True)
 	Declare.b SetCamera(ResourceId$, Resource.i, Overwrite.b = #False, AutoCleanMemory.b = #True)
+	
+	Declare.b DeleteEntity(ResourceId$, CleanMemory.b = #True)
+	Declare.b DeleteCamera(ResourceId$, CleanMemory.b = #True)
+	
+	Declare FlushTextures(CleanMemory.b = #True)
+	Declare FlushMaterials(CleanMemory.b = #True)
+	Declare FlushMeshes(CleanMemory.b = #True)
+	Declare FlushEntities(CleanMemory.b = #True)
+	Declare FlushCameras(CleanMemory.b = #True)
+	Declare FlushAll(CleanMemory.b = #True)
 EndDeclareModule
 
 Module Resources
@@ -71,7 +81,7 @@ Module Resources
 	Global NewMap Textures.i()
 	Global NewMap Materials.i()
 	
-	Global NewMap Meshses.i()
+	Global NewMap Meshes.i()
 	Global NewMap Entities.i()
 	
 	Global NewMap Cameras.i()
@@ -127,7 +137,7 @@ Module Resources
 			FreeMap(TextureList())
 			FreeJSON(TextureIndexJson)
 		EndIf
-			
+		
 		ProcedureReturn NewResourceCount
 	EndProcedure
 	
@@ -163,6 +173,9 @@ Module Resources
 		ProcedureReturn #True
 	EndProcedure
 	
+	
+	;- Checkers
+	
 	Procedure.i HasResource(ResourceId$, ResourceType.i)
 		If ResourceId$ <> #Null$
 			Select ResourceType
@@ -171,7 +184,7 @@ Module Resources
 				Case #ResourceType_Material:
 					ProcedureReturn FindMapElement(Materials(), ResourceId$)
 				Case #ResourceType_Mesh:
-					ProcedureReturn FindMapElement(Meshses(), ResourceId$)
+					ProcedureReturn FindMapElement(Meshes(), ResourceId$)
 				Case #ResourceType_Entity:
 					ProcedureReturn FindMapElement(Entities(), ResourceId$)
 				Case #ResourceType_Camera:
@@ -222,11 +235,11 @@ Module Resources
 	EndProcedure
 	
 	Procedure.i GetMesh(ResourceId$)
-		If ResourceId$ = #Null$ Or Not FindMapElement(Meshses(), ResourceId$)
-			ProcedureReturn Meshses(#ResourceErrorKey$)
+		If ResourceId$ = #Null$ Or Not FindMapElement(Meshes(), ResourceId$)
+			ProcedureReturn Meshes(#ResourceErrorKey$)
 		EndIf
 		
-		ProcedureReturn Meshses(ResourceId$)
+		ProcedureReturn Meshes(ResourceId$)
 	EndProcedure
 	
 	Procedure.i GetEntity(ResourceId$)
@@ -291,10 +304,10 @@ Module Resources
 	
 	Procedure.b SetMesh(ResourceId$, Resource.i, Overwrite.b = #False, CleanMemory.b = #True)
 		If ResourceId$ <> #Null$
-			If FindMapElement(Meshses(), ResourceId$)
+			If FindMapElement(Meshes(), ResourceId$)
 				If Overwrite
 					If CleanMemory
-						FreeTexture(Meshses(ResourceId$))
+						FreeTexture(Meshes(ResourceId$))
 					EndIf
 				Else
 					Logger::Error("Failed to register mesh, key already exists: "+ResourceId$)
@@ -302,7 +315,7 @@ Module Resources
 				EndIf
 			EndIf
 			
-			Meshses(ResourceId$) = Resource
+			Meshes(ResourceId$) = Resource
 			ProcedureReturn #True
 		EndIf
 		
@@ -347,5 +360,97 @@ Module Resources
 		EndIf
 		
 		ProcedureReturn #False
+	EndProcedure
+	
+	
+	;- Deleters
+	
+	Procedure.b DeleteEntity(ResourceId$, CleanMemory.b = #True)
+		If ResourceId$ <> #Null$
+			Protected Resource = FindMapElement(Entities(), ResourceId$)
+			
+			If Resource
+				If CleanMemory
+					FreeEntity(Resource)
+				EndIf
+				
+				DeleteMapElement(Entities(), ResourceId$) 
+			EndIf
+		EndIf
+	EndProcedure
+	
+	Procedure.b DeleteCamera(ResourceId$, CleanMemory.b = #True)
+		If ResourceId$ <> #Null$
+			Protected Resource = FindMapElement(Cameras(), ResourceId$)
+			
+			If Resource
+				If CleanMemory
+					FreeCamera(Resource)
+				EndIf
+				
+				DeleteMapElement(Cameras(), ResourceId$) 
+			EndIf
+		EndIf
+	EndProcedure
+	
+	
+	;- Flushers
+	
+	Procedure FlushTextures(CleanMemory.b = #True)
+		If CleanMemory
+			ForEach Textures()
+				FreeTexture(Textures())
+			Next
+		EndIf
+		
+		ClearMap(Textures())
+	EndProcedure
+	
+	Procedure FlushMaterials(CleanMemory.b = #True)
+		If CleanMemory
+			ForEach Materials()
+				FreeMaterial(Materials())
+			Next
+		EndIf
+		
+		ClearMap(Materials())
+	EndProcedure
+	
+	Procedure FlushMeshes(CleanMemory.b = #True)
+		If CleanMemory
+			ForEach Meshes()
+				FreeMesh(Meshes())
+			Next
+		EndIf
+		
+		ClearMap(Meshes())
+	EndProcedure
+	
+	Procedure FlushEntities(CleanMemory.b = #True)
+		If CleanMemory
+			ForEach Entities()
+				FreeEntity(Entities())
+			Next
+		EndIf
+		
+		ClearMap(Entities())
+	EndProcedure
+	
+	Procedure FlushCameras(CleanMemory.b = #True)
+		If CleanMemory
+			ForEach Cameras()
+				FreeCamera(Cameras())
+			Next
+		EndIf
+		
+		ClearMap(Cameras())
+	EndProcedure
+	
+	Procedure FlushAll(CleanMemory.b = #True)
+		FlushCameras(CleanMemory)
+		FlushEntities(CleanMemory)
+		FlushMeshes(CleanMemory)
+		FlushMaterials(CleanMemory)
+		FlushTextures(CleanMemory)
 	EndProcedure
 EndModule

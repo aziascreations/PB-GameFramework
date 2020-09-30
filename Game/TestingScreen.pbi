@@ -13,7 +13,7 @@ DeclareModule ScreenTest
 	Declare OnInit()
 	Declare OnStart()
 	Declare OnUpdate(TimeDelta.q)
-	Declare OnRender()
+	Declare OnRender(TimeDelta.q)
 EndDeclareModule
 
 Module ScreenTest
@@ -47,7 +47,7 @@ Module ScreenTest
 		
 	EndProcedure
 	
-	Procedure OnRender()
+	Procedure OnRender(TimeDelta.q)
 		;Logger::Devel("OnRender was called for testing screen !")
 		
 		; Rendering 3D elements...
@@ -61,8 +61,6 @@ Module ScreenTest
 		FlipBuffers()
 	EndProcedure
 EndModule
-
-;UseModule ScreenTest
 
 
 ;- Code

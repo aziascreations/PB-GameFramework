@@ -19,6 +19,10 @@ EnableExplicit
 IncludePath "./Engine/"
 XIncludeFile "./EngineBootlegUltraDeluxe.pbi"
 
+If Not #PB_Compiler_Debugger
+	Logger::EnableConsole()
+EndIf
+
 
 ;- Code
 
@@ -59,7 +63,7 @@ EndIf
 
 ;-> Main loop
 
-Define LastTick.q = ElapsedMilliseconds()
+Define LastTick.q = ElapsedMilliseconds(), TimeDelta.q
 Define Quit = #False
 
 Logger::Devel("Entering main loop...")
@@ -78,10 +82,10 @@ Repeat
 		EndSelect
 	Until Event = 0
 	
-	Engine::Update(ElapsedMilliseconds() - LastTick)
+	TimeDelta = ElapsedMilliseconds() - LastTick
+	Engine::Update(TimeDelta)
+	Engine::Render(TimeDelta)
 	LastTick = ElapsedMilliseconds()
-	
-	Engine::Render()
 	
 	; Prevents the CPU from going way too fast if vsync is disabled.
 	Delay(1)
@@ -90,5 +94,7 @@ Until Quit
 
 ;-> End
 
+ScreenManager::Finish(#True)
+Resources::FlushAll(#True)
 Logger::Info("Quitting the game...")
 End 0

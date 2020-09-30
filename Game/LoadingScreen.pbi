@@ -14,7 +14,7 @@ DeclareModule ScreenLoading
 	Declare OnInit()
 	Declare OnStart()
 	Declare OnUpdate(TimeDelta.q)
-	Declare OnRender()
+	Declare OnRender(TimeDelta.q)
 	Declare OnLeave()
 EndDeclareModule
 
@@ -105,7 +105,8 @@ Module ScreenLoading
 					
 				If Resources::Update() And LastOpacityTick + 1000 < ElapsedMilliseconds()
 					Logger::Devel("Finished loading resources, changing screen...")
-					ScreenManager::ChangeScreen("mainmenu")
+					;ScreenManager::ChangeScreen("mainmenu")
+					ScreenManager::ChangeScreen("camera-test")
 					ScreenManager::SkipNextRender()
 				EndIf
 			Default:
@@ -123,7 +124,7 @@ Module ScreenLoading
 		EndSelect
 	EndProcedure
 	
-	Procedure OnRender()
+	Procedure OnRender(TimeDelta.q)
 		
 		; Rendering 3D elements...
 		RenderWorld()

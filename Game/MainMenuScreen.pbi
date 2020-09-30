@@ -13,7 +13,7 @@ DeclareModule MainMenuScreen
 	Declare OnInit()
 	Declare OnStart()
 	Declare OnUpdate(TimeDelta.q)
-	Declare OnRender()
+	Declare OnRender(TimeDelta.q)
 	Declare OnLeave()
 EndDeclareModule
 
@@ -45,107 +45,7 @@ Module MainMenuScreen
 		Logger::Devel("OnStart was called for main menu screen !")
 		
 		Logger::Devel("Preparing resources...")
-		;{ Skybox
-		If Not Resources::HasMaterial("skybox-mainmenu-x+")
-			Resources::SetMaterial("skybox-mainmenu-x+",
-			                       CreateMaterial(#PB_Any,
-			                                      TextureID(Resources::GetTexture("skybox-mm-tmp-x+"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-x+"), #True)
-		EndIf
-		
-		If Not Resources::HasMaterial("skybox-mainmenu-x-")
-			Resources::SetMaterial("skybox-mainmenu-x-",
-			                       CreateMaterial(#PB_Any,
-			                                      TextureID(Resources::GetTexture("skybox-mm-tmp-x-"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-x-"), #True)
-		EndIf
-		
-		If Not Resources::HasMaterial("skybox-mainmenu-y+")
-			Resources::SetMaterial("skybox-mainmenu-y+",
-			                       CreateMaterial(#PB_Any,
-			                                      TextureID(Resources::GetTexture("skybox-mm-tmp-y+"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-y+"), #True)
-		EndIf
-		
-		If Not Resources::HasMaterial("skybox-mainmenu-y-")
-			Resources::SetMaterial("skybox-mainmenu-y-",
-			                       CreateMaterial(#PB_Any,
-			                                      TextureID(Resources::GetTexture("skybox-mm-tmp-y-"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-y-"), #True)
-		EndIf
-		
-		If Not Resources::HasMaterial("skybox-mainmenu-z+")
-			Resources::SetMaterial("skybox-mainmenu-z+",
-			                       CreateMaterial(#PB_Any,
-			                                      TextureID(Resources::GetTexture("skybox-mm-tmp-z+"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-z+"), #True)
-		EndIf
-		
-		If Not Resources::HasMaterial("skybox-mainmenu-z-")
-			Resources::SetMaterial("skybox-mainmenu-z-",
-			                       CreateMaterial(#PB_Any,
-			                                      TextureID(Resources::GetTexture("skybox-mm-tmp-z-"))))
-			;DisableMaterialLighting(Resources::GetMaterial("skybox-mainmenu-z-"), #True)
-		EndIf
-		
-		If Not Resources::HasMesh("skybox-plane-mainmenu")
-			Resources::SetMesh("skybox-plane-mainmenu",
-			                   CreatePlane(#PB_Any, #BaseSkyBoxSize, #BaseSkyBoxSize, 1, 1, 1, 1))
-		EndIf
-		
-		If Not Resources::HasEntity("skybox-mainmenu-top")
-			Resources::SetEntity("skybox-mainmenu-top",
-			                     CreateEntity(#PB_Any,
-			                                  MeshID(Resources::GetMesh("skybox-plane-mainmenu")),
-			                                  MaterialID(Resources::GetMaterial("skybox-mainmenu-y+")),
-			                                  0, #BaseSkyBoxSize/2, 0))
-			RotateEntity(Resources::GetEntity("skybox-mainmenu-top"), 180, 0, 0)
-		EndIf
-		
-		If Not Resources::HasEntity("skybox-mainmenu-bottom")
-			Resources::SetEntity("skybox-mainmenu-bottom",
-			                     CreateEntity(#PB_Any,
-			                                  MeshID(Resources::GetMesh("skybox-plane-mainmenu")),
-			                                  MaterialID(Resources::GetMaterial("skybox-mainmenu-y-")),
-			                                  0, #BaseSkyBoxSize/2*-1, 0))
-		EndIf
-		
-		If Not Resources::HasEntity("skybox-mainmenu-front")
-			Resources::SetEntity("skybox-mainmenu-front",
-			                     CreateEntity(#PB_Any,
-			                                  MeshID(Resources::GetMesh("skybox-plane-mainmenu")),
-			                                  MaterialID(Resources::GetMaterial("skybox-mainmenu-x+")),
-			                                  #BaseSkyBoxSize/2, 0, 0))
-			RotateEntity(Resources::GetEntity("skybox-mainmenu-front"), -90, 90, 0) ;x+
-		EndIf
-		
-		If Not Resources::HasEntity("skybox-mainmenu-back")
-			Resources::SetEntity("skybox-mainmenu-back",
-			                     CreateEntity(#PB_Any,
-			                                  MeshID(Resources::GetMesh("skybox-plane-mainmenu")),
-			                                  MaterialID(Resources::GetMaterial("skybox-mainmenu-x-")),
-			                                  #BaseSkyBoxSize/2*-1, 0, 0))
-			RotateEntity(Resources::GetEntity("skybox-mainmenu-back"), -90, -90, 0) ;x-
-		EndIf
-		
-		If Not Resources::HasEntity("skybox-mainmenu-left")
-			Resources::SetEntity("skybox-mainmenu-left",
-			                     CreateEntity(#PB_Any,
-			                                  MeshID(Resources::GetMesh("skybox-plane-mainmenu")),
-			                                  MaterialID(Resources::GetMaterial("skybox-mainmenu-z+")),
-			                                  0, 0, #BaseSkyBoxSize/2))
-			RotateEntity(Resources::GetEntity("skybox-mainmenu-left"), -90, 0, 0)   ;z-
-		EndIf
-		
-		If Not Resources::HasEntity("skybox-mainmenu-right")
-			Resources::SetEntity("skybox-mainmenu-right",
-			                     CreateEntity(#PB_Any,
-			                                  MeshID(Resources::GetMesh("skybox-plane-mainmenu")),
-			                                  MaterialID(Resources::GetMaterial("skybox-mainmenu-z-")),
-			                                  0, 0, #BaseSkyBoxSize/2*-1))
-			RotateEntity(Resources::GetEntity("skybox-mainmenu-right"), 90, 0, 180) ;z+
-		EndIf
-		;}
+		Skybox::GenerateSquareSkybox("skybox-mm-tmp", "skybox-mainmenu", #BaseSkyBoxSize)
 		
 		; Camera
 		If Not Resources::HasCamera("mainmenu")
@@ -156,17 +56,15 @@ Module MainMenuScreen
 			CameraFOV(Resources::GetCamera("mainmenu"), 80)
 		EndIf
 		
-		
 		;Logger::Devel("Finishing...")
 		; ???
-		
 	EndProcedure
 	
 	Procedure OnUpdate(TimeDelta.q)
-		RotateCamera(Resources::GetCamera("mainmenu"), 0, TimeDelta*0.005, 0, #PB_Relative)
+		RotateCamera(Resources::GetCamera("mainmenu"), 0, TimeDelta*0.05, 0, #PB_Relative)
 	EndProcedure
 	
-	Procedure OnRender()
+	Procedure OnRender(TimeDelta.q)
 		ClearScreen(RGB(0, 0, 0))
 		
 		; Rendering 3D elements...
@@ -182,7 +80,17 @@ Module MainMenuScreen
 	Procedure OnLeave()
 		Logger::Devel("OnLeave was called for main menu screen !")
 		
+		Logger::Devel("Deleting entities and cameras...")
+		Resources::FlushCameras(#True)
+		Resources::FlushEntities(#True)
 		
+		;Resources::DeleteEntity("skybox-mainmenu-top")
+		;Resources::DeleteEntity("skybox-mainmenu-bottom")
+		;Resources::DeleteEntity("skybox-mainmenu-front")
+		;Resources::DeleteEntity("skybox-mainmenu-back")
+		;Resources::DeleteEntity("skybox-mainmenu-left")
+		;Resources::DeleteEntity("skybox-mainmenu-right")
+		;Resources::DeleteCamera("mainmenu")
 	EndProcedure
 EndModule
 

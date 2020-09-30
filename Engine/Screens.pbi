@@ -27,12 +27,13 @@ DeclareModule ScreenManager
 	
 	
 	Declare UpdateScreen(TimeDelta.q)
-	Declare RenderScreen()
+	Declare RenderScreen(TimeDelta.q)
 	
 	Declare SkipNextRender()
 	
 	Declare.b ChangeScreen(ScreenKey$)
 	
+	Declare.b Finish(CleanMemory.b=#True)
 EndDeclareModule
 
 Module ScreenManager
@@ -115,7 +116,7 @@ Module ScreenManager
 		EndIf
 	EndProcedure
 	
-	Procedure RenderScreen()
+	Procedure RenderScreen(TimeDelta.q)
 		; Temporary fix
 		If SkipRender
 			SkipRender = #False
@@ -123,7 +124,7 @@ Module ScreenManager
 		EndIf
 		
 		If *CurrentScreen And *CurrentScreen\OnRender
-			CallFunctionFast(*CurrentScreen\OnRender)
+			CallFunctionFast(*CurrentScreen\OnRender, TimeDelta)
 		EndIf
 	EndProcedure
 	
@@ -150,6 +151,36 @@ Module ScreenManager
 		If *CurrentScreen\OnStart
 			CallFunctionFast(*CurrentScreen\OnStart)
 		EndIf
+		
+		ProcedureReturn #True
+	EndProcedure
+	
+	Procedure.b Finish(CleanMemory.b=#True)
+		If *CurrentScreen
+			If *CurrentScreen\OnLeave
+				CallFunctionFast(*CurrentScreen\OnLeave)
+			EndIf
+			If *CurrentScreen\OnQuit
+				CallFunctionFast(*CurrentScreen\OnQuit)
+			EndIf
+		EndIf
+		
+		If CleanMemory
+			ForEach Screens()
+				Protected *TmpScreenPtr.ScreenData = Screens()
+				
+				If *TmpScreenPtr
+					If *TmpScreenPtr\OnUnregister
+						CallFunctionFast(*TmpScreenPtr\OnUnregister)
+					EndIf
+					
+					FreeStructure(Screens())
+				EndIf
+			Next
+		EndIf
+		
+		ClearMap(Screens())
+		FreeMap(Screens())
 		
 		ProcedureReturn #True
 	EndProcedure

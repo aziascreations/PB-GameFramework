@@ -12,11 +12,14 @@
 CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include file !": CompilerEndIf
 EnableExplicit
 
+XIncludeFile "./Arguments.pbi"
 XIncludeFile "./Logger.pbi"
 XIncludeFile "./Screens.pbi"
 XIncludeFile "./ResourceManager.pbi"
 
 XIncludeFile "./InternalData/DataSection-Data.Internal.pbi"
+XIncludeFile "./Helpers/HelpersCommon.pbi"
+XIncludeFile "./Gui/GuiHandler.pbi"
 
 
 ;- Code
@@ -31,7 +34,7 @@ DeclareModule Engine
 	Declare   Start()
 	
 	Declare Update(TimeDelta.q)
-	Declare Render()
+	Declare Render(TimeDelta.q)
 EndDeclareModule
 
 Module Engine
@@ -91,7 +94,7 @@ Module Engine
 		ScreenManager::UpdateScreen(TimeDelta)
 	EndProcedure
 	
-	Procedure Render()
-		ScreenManager::RenderScreen()
+	Procedure Render(TimeDelta.q)
+		ScreenManager::RenderScreen(TimeDelta)
 	EndProcedure
 EndModule

@@ -4,5 +4,9 @@
 	"skybox-mm-tmp-y+": "Skyboxes/mainmenu-temp-y+.png",
 	"skybox-mm-tmp-y-": "Skyboxes/mainmenu-temp-y-.png",
 	"skybox-mm-tmp-z+": "Skyboxes/mainmenu-temp-z+.png",
-	"skybox-mm-tmp-z-": "Skyboxes/mainmenu-temp-z-.png"
+	"skybox-mm-tmp-z-": "Skyboxes/mainmenu-temp-z-.png",
+	
+	"dev-grid-16": "Developement/grid-16.png",
+	"dev-grid-32": "Developement/grid-32.png",
+	"dev-grid-64": "Developement/grid-64.png"
 }

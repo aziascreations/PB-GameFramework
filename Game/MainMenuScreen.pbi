@@ -56,12 +56,18 @@ Module MainMenuScreen
 			CameraFOV(Resources::GetCamera("mainmenu"), 80)
 		EndIf
 		
+		GuiButton::CreateButton("button-test01", 10, 10, 200, 25, "Fuck !")
 		;Logger::Devel("Finishing...")
 		; ???
 	EndProcedure
 	
 	Procedure OnUpdate(TimeDelta.q)
-		RotateCamera(Resources::GetCamera("mainmenu"), 0, TimeDelta*0.05, 0, #PB_Relative)
+		If TimeDelta > 100
+			ProcedureReturn
+		EndIf
+		
+		RotateCamera(Resources::GetCamera("mainmenu"), 0, TimeDelta*0.005, 0, #PB_Relative)
+		Gui::Update(TimeDelta)
 	EndProcedure
 	
 	Procedure OnRender(TimeDelta.q)
@@ -71,7 +77,8 @@ Module MainMenuScreen
 		RenderWorld()
 		
 		; Rendering 2D elements...
-		; ???
+		Gui::Render(TimeDelta)
+		;DisplaySprite()
 		
 		; Finishing.
 		FlipBuffers()
@@ -84,13 +91,7 @@ Module MainMenuScreen
 		Resources::FlushCameras(#True)
 		Resources::FlushEntities(#True)
 		
-		;Resources::DeleteEntity("skybox-mainmenu-top")
-		;Resources::DeleteEntity("skybox-mainmenu-bottom")
-		;Resources::DeleteEntity("skybox-mainmenu-front")
-		;Resources::DeleteEntity("skybox-mainmenu-back")
-		;Resources::DeleteEntity("skybox-mainmenu-left")
-		;Resources::DeleteEntity("skybox-mainmenu-right")
-		;Resources::DeleteCamera("mainmenu")
+		Gui::FlushGuis(#True)
 	EndProcedure
 EndModule
 

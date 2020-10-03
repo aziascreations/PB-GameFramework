@@ -95,9 +95,10 @@ Module ScreenLoading
 					
 				If Resources::Update() And LastOpacityTick + 1000 < ElapsedMilliseconds()
 					Logger::Devel("Finished loading resources, changing screen...")
-					;ScreenManager::ChangeScreen("mainmenu")
 					
+					;ScreenManager::ChangeScreen("mainmenu")
 					ScreenManager::ChangeScreen("camera-test")
+					;ScreenManager::ChangeScreen("dungeon-test")
 					ScreenManager::SkipNextRender()
 					Logger::Devel(Logger::#Separator$)
 					

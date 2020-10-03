@@ -35,7 +35,7 @@ DeclareModule Engine
 	Declare.s GetEngineInfoText()
 	
 	Declare.b Init()
-	Declare Start()
+	Declare Start(FlipMode = #PB_Screen_WaitSynchronization)
 	
 	Declare Update(TimeDelta.q)
 	Declare Render(TimeDelta.q)
@@ -91,12 +91,13 @@ Module Engine
 	EndProcedure
 	
 	; Starts the window and/or prompts.
-	Procedure Start()
+	Procedure Start(FlipMode = #PB_Screen_WaitSynchronization)
 		Logger::Devel("Starting engine...")
 		
 		Protected GameWindow = #Null
-		If OpenWindow(0, 0, 0, 1440, 900, "PureBasic - 3D Demos", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
-			GameWindow = OpenWindowedScreen(WindowID(0), 0, 0, 1440, 900, 0, 0, 0)
+		;1440, 900
+		If OpenWindow(0, 0, 0, 1366, 768, "PureBasic - 3D Demos", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
+			GameWindow = OpenWindowedScreen(WindowID(0), 0, 0, 1440, 900, 0, 0, 0, FlipMode)
 		Else
 			ProcedureReturn #False
 		EndIf
@@ -120,6 +121,7 @@ Module Engine
 	Procedure Finish(CleanMemory.b=#True)
 		Logger::Devel("Finishing engine...")
 		
+		Gui::FlushGuis(CleanMemory)
 		Resources::Finish(CleanMemory)
 		ScreenManager::Finish(CleanMemory)
 		;Args::Finish(CleanMemory)

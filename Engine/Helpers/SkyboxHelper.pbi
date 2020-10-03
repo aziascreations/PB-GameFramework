@@ -8,21 +8,32 @@ EnableExplicit
 ;- Code
 
 DeclareModule Skybox
-	Declare GenerateSquareSkybox(TexturePrefix$, DerivedResourcePrefix$, Size.i, SizeOffset.i = 0)
+	#DefaultSizeOffset = 0
+	#DefaultMaterialFiltering = #PB_Material_None
+	#DefaultMaterialLightingDisabled = #True
+	
+	Declare GenerateSquareSkybox(TexturePrefix$, DerivedResourcePrefix$, Size.i,
+	                             SizeOffset.i = #DefaultSizeOffset,
+	                             MaterialFilteringMode = #DefaultMaterialFiltering,
+	                             MaterialDisabledLightingStatus = #DefaultMaterialLightingDisabled)
 EndDeclareModule
 
 Module Skybox
 	;#SkyboxCubeMeshKey$ = "skybox-square-panel"
 	
-	Procedure GenerateSquareSkybox(TexturePrefix$, DerivedResourcePrefix$, Size.i, SizeOffset.i = 0)
+	Procedure GenerateSquareSkybox(TexturePrefix$, DerivedResourcePrefix$, Size.i,
+	                               SizeOffset.i = #DefaultSizeOffset,
+	                               MaterialFilteringMode = #DefaultMaterialFiltering,
+	                               MaterialDisabledLightingStatus = #DefaultMaterialLightingDisabled)
 		; Materials
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-x+")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-x+",
 			                       CreateMaterial(#PB_Any,
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-x+"))))
-			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-x+"), #True)
 		EndIf
+		DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-x+"), MaterialDisabledLightingStatus)
+		MaterialFilteringMode(Resources::GetMaterial(DerivedResourcePrefix$+"-x+"), MaterialFilteringMode)
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-x-")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-x-",
@@ -30,6 +41,8 @@ Module Skybox
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-x-"))))
 			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-x-"), #True)
 		EndIf
+		DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-x-"), MaterialDisabledLightingStatus)
+		MaterialFilteringMode(Resources::GetMaterial(DerivedResourcePrefix$+"-x-"), MaterialFilteringMode)
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-y+")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-y+",
@@ -37,6 +50,8 @@ Module Skybox
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-y+"))))
 			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-y+"), #True)
 		EndIf
+		DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-y+"), MaterialDisabledLightingStatus)
+		MaterialFilteringMode(Resources::GetMaterial(DerivedResourcePrefix$+"-y+"), MaterialFilteringMode)
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-y-")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-y-",
@@ -44,6 +59,8 @@ Module Skybox
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-y-"))))
 			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-y-"), #True)
 		EndIf
+		DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-y-"), MaterialDisabledLightingStatus)
+		MaterialFilteringMode(Resources::GetMaterial(DerivedResourcePrefix$+"-y-"), MaterialFilteringMode)
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-z+")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-z+",
@@ -51,6 +68,8 @@ Module Skybox
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-z+"))))
 			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-z+"), #True)
 		EndIf
+		DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-z+"), MaterialDisabledLightingStatus)
+		MaterialFilteringMode(Resources::GetMaterial(DerivedResourcePrefix$+"-z+"), MaterialFilteringMode)
 		
 		If Not Resources::HasMaterial(DerivedResourcePrefix$+"-z-")
 			Resources::SetMaterial(DerivedResourcePrefix$+"-z-",
@@ -58,6 +77,8 @@ Module Skybox
 			                                      TextureID(Resources::GetTexture(TexturePrefix$+"-z-"))))
 			DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-z-"), #True)
 		EndIf
+		DisableMaterialLighting(Resources::GetMaterial(DerivedResourcePrefix$+"-z-"), MaterialDisabledLightingStatus)
+		MaterialFilteringMode(Resources::GetMaterial(DerivedResourcePrefix$+"-z-"), MaterialFilteringMode)
 		
 		; Mesh
 		If Not Resources::HasMesh(DerivedResourcePrefix$+"-panel")

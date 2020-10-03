@@ -21,8 +21,8 @@ XIncludeFile "./EngineBootlegUltraDeluxe.pbi"
 
 If Not #PB_Compiler_Debugger
 	Logger::EnableConsole()
-	;Logger::EnableTrace()
 EndIf
+Logger::EnableTrace()
 
 
 ;- Code
@@ -66,45 +66,42 @@ Define LastTick.q = ElapsedMilliseconds(), TimeDelta.q
 Logger::Devel("Entering main loop...")
 Logger::Devel(Logger::#Separator$)
 
+ExamineMouse()
+ReleaseMouse(#True)
+
 Repeat
+	ExamineMouse()
+	
 	Define Event
 	Repeat
 		Event = WindowEvent()
 		Select Event
 			Case #PB_Event_LeftClick
-				Define ClickSound = Resources::GetSound("menu-click")
-				
-				If ClickSound <> #Null And IsSound(ClickSound)
-					PlaySound(ClickSound, #PB_Sound_MultiChannel, 25)
-				Else
-					Logger::Warning("Failed to get sound: menu-click @ "+Str(ClickSound))
-				EndIf
+				Gui::MouveClick(Gui::#GuiEvent_LeftClick, MouseX(), MouseY())
 				
 			Case #PB_Event_RightClick
-				Define BackSound = Resources::GetSound("menu-back")
-				
-				If BackSound <> #Null And IsSound(BackSound)
-					PlaySound(BackSound, #PB_Sound_MultiChannel, 25)
-				Else
-					Logger::Warning("Failed to get sound: menu-back @ "+Str(BackSound))
-				EndIf
+				Gui::MouveClick(Gui::#GuiEvent_RightClick, MouseX(), MouseY())
 				
 			Case #PB_Event_CloseWindow
 				Engine::IsRunning = #False
 		EndSelect
 	Until Event = 0
 	
+	; Calculating the time delta
 	TimeDelta = ElapsedMilliseconds() - LastTick
-	Engine::Update(TimeDelta)
-	Engine::Render(TimeDelta)
 	LastTick = ElapsedMilliseconds()
 	
+	; Calling the screen functions
+	Engine::Update(TimeDelta)
+	Engine::Render(TimeDelta)
+	
 	; Prevents the CPU from going way too fast if vsync is disabled.
-	Delay(1)
+	; This is a bad way of doing it, but it works, so...
+	;Delay(1)
 Until Not Engine::IsRunning
 
 
-;-> End
+;- End
 
 If Engine::HasCrashed
 	; ???

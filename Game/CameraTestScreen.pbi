@@ -9,8 +9,6 @@ EnableExplicit
 
 DeclareModule CameraTestScreen
 	Declare.i GetScreen()
-	Declare OnRegister()
-	Declare OnInit()
 	Declare OnStart()
 	Declare OnUpdate(TimeDelta.q)
 	Declare OnRender(TimeDelta.q)
@@ -93,21 +91,13 @@ Module CameraTestScreen
 	
 	Procedure.i GetScreen()
 		ProcedureReturn ScreenManager::CreateScreen("Camera test",
-		                                            @OnRegister(),
 		                                            #Null,
-		                                            @OnInit(),
+		                                            #Null,
+		                                            #Null,
 		                                            @OnStart(),
 		                                            @OnUpdate(),
 		                                            @OnRender(),
 		                                            @OnLeave())
-	EndProcedure
-	
-	Procedure OnRegister()
-		Logger::Devel("OnRegister was called for camera testing screen !")
-	EndProcedure
-	
-	Procedure OnInit()
-		Logger::Devel("OnInit was called for camera testing screen !")
 	EndProcedure
 	
 	Procedure OnStart()
@@ -121,8 +111,24 @@ Module CameraTestScreen
 		GroundMesh = CreatePlane(#PB_Any, 64*100, 64*100, 100, 100, 100, 100)
 		GroundEnt = CreateEntity(#PB_Any, MeshID(GroundMesh), MaterialID(GroundMat), 0, 0, 0)
 		
-		Skybox::GenerateSquareSkybox("skybox-mm-tmp", "skybox-mainmenu", 64*100)
+		;Skybox::GenerateSquareSkybox("skybox-mm-tmp", "skybox-mainmenu", 64*100)
+		Skybox::GenerateSquareSkybox("skybox-grass-sky", "skybox-mainmenu", 64*100, 125)
 		;Skybox::GenerateSquareSkybox("skybox-miramar", "skybox-mainmenu", 64*100, 10)
+		
+		If Resources::SetMaterial("dev-uv-map-01",
+		                          CreateMaterial(#PB_Any,
+		                                         TextureID(Resources::GetTexture("dev-uv-map-01"))),
+		                          #True, #True)
+			MaterialFilteringMode(Resources::GetMaterial("dev-uv-map-01"), #PB_Material_None)
+		EndIf
+		If Resources::SetEntity("cube-1-test",
+		                        CreateEntity(#PB_Any,
+		                                     MeshID(Resources::GetMesh("cube-1")),
+		                                     MaterialID(Resources::GetMaterial("dev-uv-map-01")),
+		                                     -64, 16, -64),
+		                        #True, #True)
+			ScaleEntity(Resources::GetEntity("cube-1-test"), 64/4, 64/4, 64/4, #PB_Absolute)
+		EndIf
 		
 		PlayerCamera = CreateCamera(#PB_Any, 0, 0, 100, 100)
 		CameraBackColor(PlayerCamera, RGB(245, 245, 245))

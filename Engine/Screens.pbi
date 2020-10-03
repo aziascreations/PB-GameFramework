@@ -43,6 +43,8 @@ DeclareModule ScreenManager
 	Declare.b Finish(CleanMemory.b=#True)
 	
 	Declare.b SetErrorScreen(*NewErrorScreen, Overwrite.b=#True, CleanMemory.b=#True)
+	
+	Declare.b ShowErrorScreen(Message$)
 EndDeclareModule
 
 Module ScreenManager
@@ -143,7 +145,13 @@ Module ScreenManager
 	EndProcedure
 	
 	Procedure.b ChangeScreen(ScreenKey$)
-		Protected *NewScreen.ScreenData = Screens(ScreenKey$)
+		Protected *NewScreen.ScreenData
+		
+		If ScreenKey$ = "ERROR"
+			*NewScreen = *ErrorScreen
+		Else
+			*NewScreen = Screens(ScreenKey$)
+		EndIf
 		
 		If Not *NewScreen
 			Logger::Error("Failed to find screen named: "+ScreenKey$)
@@ -219,6 +227,11 @@ Module ScreenManager
 		*ErrorScreen = *NewErrorScreen
 		
 		ProcedureReturn #True
+	EndProcedure
+	
+	Procedure.b ShowErrorScreen(Message$)
+		*ErrorScreen\ScreenName$ = Message$
+		ChangeScreen("ERROR")
 	EndProcedure
 EndModule
 

@@ -34,8 +34,13 @@ mkdir Build\Data\
 mkdir Build\Licenses\
 pbcompiler.exe /EXE ".\Build\Game.exe" /ICON ".\icon.ico" ".\Game.pb"
 robocopy .\ .\Build\ Engine3d.dll
-robocopy .\ .\Build\ LICENSE
+::robocopy .\ .\Build\ LICENSE
+copy .\LICENSE ".\Build\Licenses\Custom PB Engine.txt"
 xcopy Data Build\Data\ /E /Y
 xcopy Licenses Build\Licenses\ /E /Y
+rmdir /Q /S Build\Data\Trash
+rmdir /Q /S Build\Data\Graphics\Trash
+del /s /q .\Build\*.pdn
+del /s /q .\Build\*.tga
 
 pause

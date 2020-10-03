@@ -11,6 +11,8 @@
 CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include file !": CompilerEndIf
 EnableExplicit
 
+XIncludeFile "./Helpers/MeshHelper.pbi"
+
 If Not InitSound()
 	Logger::Error("Failed to start sound engine !")
 	End 5
@@ -215,6 +217,38 @@ Module Resources
 			FreeJSON(SoundIndexJson)
 		EndIf
 		
+		; Meshes
+		If FileSize(RealParentFolder$+Folder$ + "index-meshes.json") > 0
+			Logger::Devel("Found a mesh index !")
+			
+			Protected MeshIndexJson = LoadJSON(#PB_Any, RealParentFolder$+Folder$ + "index-meshes.json")
+			
+			If Not MeshIndexJson
+				Logger::Error("Failed to load: "+RealParentFolder$+Folder$+"index-meshes.json")
+				Logger::Error("-> "+JSONErrorMessage()+" @ "+JSONErrorLine()+":"+JSONErrorPosition())
+				ProcedureReturn NewResourceCount
+			EndIf
+			
+			Protected NewMap MeshList.s()
+			ExtractJSONMap(JSONValue(MeshIndexJson), MeshList())
+			
+			ForEach MeshList()
+				If Left(MapKey(MeshList()), 1) = "_"
+					Continue
+				EndIf
+				
+				AddElement(UnloadedResources())
+				UnloadedResources()\ResourceRealParentPath$ = RealParentFolder$
+				UnloadedResources()\ResourceArchivePath$ = Folder$
+				UnloadedResources()\ResourceFilePath$ = MeshList()
+				UnloadedResources()\ResourceKey$ = MapKey(MeshList())
+				UnloadedResources()\ResourceType = #ResourceType_Mesh
+			Next
+			
+			FreeMap(MeshList())
+			FreeJSON(MeshIndexJson)
+		EndIf
+		
 		ProcedureReturn NewResourceCount
 	EndProcedure
 	
@@ -242,6 +276,15 @@ Module Resources
 						SetSound(UnloadedResources()\ResourceKey$, NewSound, #True, #True)
 					Else
 						Logger::Error("Failed to load sound !")
+					EndIf
+				Case #ResourceType_Mesh
+					Protected NewMesh = MeshHelper::ParseMeshFile(UnloadedResources()\ResourceRealParentPath$ +
+					                                              UnloadedResources()\ResourceArchivePath$ +
+					                                              UnloadedResources()\ResourceFilePath$)
+					If IsMesh(NewMesh)
+						SetMesh(UnloadedResources()\ResourceKey$, NewMesh, #True, #True)
+					Else
+						Logger::Error("Failed to load mesh !")
 					EndIf
 				Default
 					Logger::Error("Unknown resource type !!!")

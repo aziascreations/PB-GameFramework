@@ -8,16 +8,34 @@
 	"skybox-mm-tmp-z+": "Skyboxes/mainmenu-temp-z+.png",
 	"skybox-mm-tmp-z-": "Skyboxes/mainmenu-temp-z-.png",
 	
+	"skybox-grass-sky-x+": "Skyboxes/grass-sky-front.png",
+	"skybox-grass-sky-x-": "Skyboxes/grass-sky-back.png",
+	"skybox-grass-sky-y+": "Skyboxes/grass-sky-top.png",
+	"skybox-grass-sky-y-": "Skyboxes/grass-sky-bottom.png",
+	"skybox-grass-sky-z+": "Skyboxes/grass-sky-right.png",
+	"skybox-grass-sky-z-": "Skyboxes/grass-sky-left.png",
+	
 	"dev-grid-16": "Developement/grid-16.png",
 	"dev-grid-32": "Developement/grid-32.png",
 	"dev-grid-64": "Developement/grid-64.png",
+	
+	"dev-uv-map-01": "Developement/texture01x4.png",
 	
 	"wall1": "Terrain/bricks-dgreen-16.png",
 	"wall2": "Terrain/bricks-red-16.png",
 	"grass1": "Terrain/grass-d1-16.png",
 	"grass2": "Terrain/grass-l1-16.png",
 	"ground1": "Terrain/ground-01-16.png",
+	"bush1": "Terrain/bush-green-01-16.png",
+	"bush2": "Terrain/bush-green-02-16.png",
+	"bars1": "Terrain/bars-01-16.png",
+	"bars2": "Terrain/bars-02-16.png",
+	"metal1": "Terrain/metal-01-16.png",
+	"metal2": "Terrain/metal-02-16.png",
 	
-	"loading-logo": "Developement/splashLogo.png.png",
-	"loading-text": "Developement/text-loading.png"
+	"loading-logo": "Developement/splashLogo.png",
+	"loading-text": "Developement/text-loading.png",
+	
+	"pot-2": "Objects/pot-02.png",
+	"turd-1": "Objects/turd-01.png"
 }

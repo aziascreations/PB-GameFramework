@@ -259,7 +259,6 @@ Module CameraTestScreen
 		
 		; Rendering 2D elements...
 		
-		
 		; Finishing.
 		FlipBuffers()
 	EndProcedure

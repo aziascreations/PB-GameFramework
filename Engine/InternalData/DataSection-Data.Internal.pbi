@@ -6,7 +6,11 @@ DataSection
 	IncludeBinary "./game.json"
 	game_json_stop:
 	
-	;error_png_start:
-	;IncludeBinary "./error.png"
-	;error_png_stop:
+; 	icon_mesh_png_start:
+; 	IncludeBinary "icon-node.png"
+; 	icon_mesh_png_stop:
+; 	
+; 	icon_node_png_start:
+; 	IncludeBinary "icon-mesh.png"
+; 	icon_node_png_stop:
 EndDataSection

@@ -24,7 +24,7 @@ Module MeshHelper
 	Procedure.i ParseMeshFile(FilePath$)
 		Protected FileId, ReturnedMeshID = #Null
 		
-		Protected Scale.d = 1.0
+		Protected Scale.d = 1.0, HasDefinedVertices = #False
 		
 		FileId = ReadFile(#PB_Any, FilePath$)
 		If FileId
@@ -41,6 +41,8 @@ Module MeshHelper
 					Select Left(Line$, 1)
 						Case "#"
 							Continue
+						Case "m"
+							AddSubMesh()
 						Case "s"
 							Scale = ValD(StringField(Line$, 2, " "))
 							Logger::Trace("Setting scale: '"+Line$+"' => '"+StrD(Scale)+"'")
@@ -48,13 +50,26 @@ Module MeshHelper
 							MeshVertexPosition(ValD(StringField(Line$, 2, " "))*Scale,
 							                   ValD(StringField(Line$, 3, " "))*Scale,
 							                   ValD(StringField(Line$, 4, " "))*Scale)
+							HasDefinedVertices = #True
 						Case "c"
-							MeshVertexColor(RGB(Val(StringField(Line$, 3, " ")),
-							                    Val(StringField(Line$, 4, " ")),
-							                    Val(StringField(Line$, 5, " "))))
+							If CountString(Line$, " ") >= 4
+								MeshVertexColor(RGB(Val(StringField(Line$, 3, " ")),
+								                    Val(StringField(Line$, 4, " ")),
+								                    Val(StringField(Line$, 5, " "))))
+							Else
+								MeshVertexColor(RGB(Val(StringField(Line$, 2, " ")),
+								                    Val(StringField(Line$, 3, " ")),
+								                    Val(StringField(Line$, 4, " "))))
+							EndIf
 						Case "t"
-							MeshVertexTextureCoordinate(ValD(StringField(Line$, 3, " ")),
-							                            ValD(StringField(Line$, 4, " ")))
+							If CountString(Line$, " ") >= 3
+								MeshVertexTextureCoordinate(ValD(StringField(Line$, 3, " ")),
+								                            ValD(StringField(Line$, 4, " ")))
+							Else
+								MeshVertexTextureCoordinate(ValD(StringField(Line$, 2, " ")),
+								                            ValD(StringField(Line$, 3, " ")))
+								
+							EndIf
 						Case "f"
 							MeshFace(Val(StringField(Line$, 2, " ")),
 							         Val(StringField(Line$, 3, " ")),
@@ -63,10 +78,16 @@ Module MeshHelper
 							Logger::Error("Unknown mesh command: "+Line$)
 					EndSelect
 				Wend
+				
+				; Prevents a crash is the model has not defined any vertices.
+				If Not HasDefinedVertices
+					MeshVertexPosition(0.0, 0.0, 0.0)
+				EndIf
+				
 				NormalizeMesh(ReturnedMeshID)
 				BuildMeshTangents(ReturnedMeshID)
+				BuildMeshShadowVolume(ReturnedMeshID)
 				
-				; FIXME: Can crash here if no vertex is defined !
 				FinishMesh(#True)
 			Else
 				Logger::Error("Failed to create mesh !")

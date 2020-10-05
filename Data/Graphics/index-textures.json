@@ -8,6 +8,20 @@
 	"skybox-mm-tmp-z+": "Skyboxes/mainmenu-temp-z+.png",
 	"skybox-mm-tmp-z-": "Skyboxes/mainmenu-temp-z-.png",
 	
+	"skybox-model-x+": "Skyboxes/model-sky-x+.png",
+	"skybox-model-x-": "Skyboxes/model-sky-x-.png",
+	"skybox-model-y+": "Skyboxes/model-sky-y+.png",
+	"skybox-model-y-": "Skyboxes/model-sky-y-.png",
+	"skybox-model-z+": "Skyboxes/model-sky-z+.png",
+	"skybox-model-z-": "Skyboxes/model-sky-z-.png",
+	
+	"skybox-test2-x+": "Skyboxes/test-02.png",
+	"skybox-test2-x-": "Skyboxes/test-02.png",
+	"skybox-test2-y+": "Skyboxes/test-02.png",
+	"skybox-test2-y-": "Skyboxes/test-02.png",
+	"skybox-test2-z+": "Skyboxes/test-02.png",
+	"skybox-test2-z-": "Skyboxes/test-02.png",
+	
 	"skybox-grass-sky-x+": "Skyboxes/grass-sky-front.png",
 	"skybox-grass-sky-x-": "Skyboxes/grass-sky-back.png",
 	"skybox-grass-sky-y+": "Skyboxes/grass-sky-top.png",

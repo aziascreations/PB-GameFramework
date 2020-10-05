@@ -17,6 +17,13 @@ This is just a test
 You can either open the main file named "Game.pb" and compile it.<br>
 Or you can run the "_build.cmd" script file to compile it in a separate folder.
 
+## Known Bugs
+
+Some objects/entities can disapear if you move the game window to a different screen.<br>
+I have no idea on why this happens...
+
+The Game can hang a tiny bit and crash when shutting it down.<br>
+It is probably related to the main loop, but I'm not sure why it happens yet, probably a race condition.
 
 ## Licenses
 

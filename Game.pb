@@ -22,7 +22,7 @@ XIncludeFile "./EngineBootlegUltraDeluxe.pbi"
 If Not #PB_Compiler_Debugger
 	Logger::EnableConsole()
 EndIf
-Logger::EnableTrace()
+;Logger::EnableTrace()
 
 
 ;- Code
@@ -39,7 +39,8 @@ EndIf
 
 ; Starts the game window.
 ; May open prompts before returning !
-If Not Engine::Start()
+Global GameWindow = Engine::Start()
+If Not GameWindow
 	Logger::Error("Failed to start engine, now exiting...")
 	MessageRequester("Fatal error", "Engine start failure !",
 	                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
@@ -72,20 +73,24 @@ ReleaseMouse(#True)
 Repeat
 	ExamineMouse()
 	
-	Define Event
-	Repeat
-		Event = WindowEvent()
-		Select Event
-			Case #PB_Event_LeftClick
-				Gui::MouveClick(Gui::#GuiEvent_LeftClick, MouseX(), MouseY())
-				
-			Case #PB_Event_RightClick
-				Gui::MouveClick(Gui::#GuiEvent_RightClick, MouseX(), MouseY())
-				
-			Case #PB_Event_CloseWindow
-				Engine::IsRunning = #False
-		EndSelect
-	Until Event = 0
+	If Engine::RunMainWindowLoop
+		Define Event
+		Repeat
+			Event = WindowEvent()
+			Select Event
+				Case #PB_Event_LeftClick
+					Gui::MouveClick(Gui::#GuiEvent_LeftClick, MouseX(), MouseY())
+					
+				Case #PB_Event_RightClick
+					Gui::MouveClick(Gui::#GuiEvent_RightClick, MouseX(), MouseY())
+					
+				Case #PB_Event_CloseWindow
+					If EventWindow() = GameWindow
+						Engine::IsRunning = #False
+					EndIf
+			EndSelect
+		Until Event = 0
+	EndIf
 	
 	; Calculating the time delta
 	TimeDelta = ElapsedMilliseconds() - LastTick

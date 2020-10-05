@@ -97,6 +97,7 @@ Module ScreenLoading
 					Logger::Devel("Finished loading resources, changing screen...")
 					
 					;ScreenManager::ChangeScreen("mainmenu")
+					;ScreenManager::ChangeScreen("model-manipulator")
 					ScreenManager::ChangeScreen("camera-test")
 					;ScreenManager::ChangeScreen("dungeon-test")
 					ScreenManager::SkipNextRender()

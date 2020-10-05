@@ -598,7 +598,11 @@ Module Resources
 	Procedure FlushEntities(CleanMemory.b = #True)
 		If CleanMemory
 			ForEach Entities()
-				FreeEntity(Entities())
+				Protected TempEntity = Entities()
+				
+				If IsEntity(TempEntity)
+					FreeEntity(TempEntity)
+				EndIf
 			Next
 		EndIf
 		

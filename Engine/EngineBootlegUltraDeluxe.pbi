@@ -31,6 +31,7 @@ DeclareModule Engine
 	
 	Global IsRunning.b = #False
 	Global HasCrashed.b = #False
+	Global RunMainWindowLoop.b = #True
 	
 	Declare.s GetEngineInfoText()
 	

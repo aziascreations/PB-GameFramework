@@ -17,6 +17,11 @@ DeclareModule Args
 EndDeclareModule
 
 Module Args
+	; It's only useful if you parse the whole thing at once...
+	; (?:(?:\s?\-\-(?<la>[a-zA-Z]+))|(?:\s?\-(?<sa>[a-zA-Z]+))|(?<ae>\s?\-\-)|(?:\s?\"(?<tx1>[^\"]+)\")|(?:\s?(?<tx2>[^\s]+)))/g
+	#ArgumentsRegex$ = "(?:(?:\s?\-\-(?<la>[a-zA-Z]+))|(?:\s?\-(?<sa>[a-zA-Z]+))|(?<ae>\s?\-\-)|(?:\s?\"+
+	                   #DQUOTE$+"(?<tx1>[^\"+#DQUOTE$+"]+)\"+#DQUOTE$+")|(?:\s?(?<tx2>[^\s]+)))/g"
+	
 	Global NewList Arguments.i()
 	
 	Procedure Parse()

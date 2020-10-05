@@ -39,8 +39,9 @@ EndIf
 
 ; Starts the game window.
 ; May open prompts before returning !
-Global GameWindow = Engine::Start()
-If Not GameWindow
+;Global GameWindow = Engine::Start()
+;If Not GameWindow
+If Not Engine::Start()
 	Logger::Error("Failed to start engine, now exiting...")
 	MessageRequester("Fatal error", "Engine start failure !",
 	                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
@@ -73,6 +74,8 @@ ReleaseMouse(#True)
 Repeat
 	ExamineMouse()
 	
+	; TODO: Add an external debug window here to mess around with the engine live.
+	
 	If Engine::RunMainWindowLoop
 		Define Event
 		Repeat
@@ -85,9 +88,8 @@ Repeat
 					Gui::MouveClick(Gui::#GuiEvent_RightClick, MouseX(), MouseY())
 					
 				Case #PB_Event_CloseWindow
-					If EventWindow() = GameWindow
-						Engine::IsRunning = #False
-					EndIf
+					;If EventWindow() = GameWindow
+					Engine::IsRunning = #False
 			EndSelect
 		Until Event = 0
 	EndIf
@@ -110,6 +112,7 @@ Until Not Engine::IsRunning
 
 If Engine::HasCrashed
 	; ???
+	; Do something with the on-line library ?
 Else
 	Logger::Devel("The engine is exiting gracefully !")
 EndIf

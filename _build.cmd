@@ -33,6 +33,7 @@ mkdir Build\
 mkdir Build\Data\
 mkdir Build\Licenses\
 pbcompiler.exe /EXE ".\Build\Game.exe" /ICON ".\icon.ico" ".\Game.pb"
+::pbcompiler.exe /EXE ".\Build\Game.exe" ".\Game.pb"
 robocopy .\ .\Build\ Engine3d.dll
 ::robocopy .\ .\Build\ LICENSE
 copy .\LICENSE ".\Build\Licenses\Custom PB Engine.txt"

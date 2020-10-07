@@ -39,9 +39,8 @@ EndIf
 
 ; Starts the game window.
 ; May open prompts before returning !
-;Global GameWindow = Engine::Start()
-;If Not GameWindow
-If Not Engine::Start()
+Global GameWindow = Engine::Start()
+If Not GameWindow
 	Logger::Error("Failed to start engine, now exiting...")
 	MessageRequester("Fatal error", "Engine start failure !",
 	                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
@@ -88,8 +87,9 @@ Repeat
 					Gui::MouveClick(Gui::#GuiEvent_RightClick, MouseX(), MouseY())
 					
 				Case #PB_Event_CloseWindow
-					;If EventWindow() = GameWindow
-					Engine::IsRunning = #False
+					If EventWindow() = GameWindow
+						Engine::IsRunning = #False
+					EndIf
 			EndSelect
 		Until Event = 0
 	EndIf

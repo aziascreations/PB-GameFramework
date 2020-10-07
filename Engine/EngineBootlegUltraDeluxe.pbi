@@ -97,9 +97,16 @@ Module Engine
 		
 		Protected GameWindow = #Null
 		;1440, 900
-		If OpenWindow(0, 0, 0, 1366, 768, "PureBasic - 3D Demos", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
-			GameWindow = OpenWindowedScreen(WindowID(0), 0, 0, 1440, 900, 0, 0, 0, FlipMode)
+		;1366, 768
+		
+		GameWindow = OpenWindow(0, 0, 0, 1366, 768, "PureBasic - 3D Demos", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
+		If GameWindow
+			If Not OpenWindowedScreen(WindowID(0), 0, 0, 1366, 768, 0, 0, 0, FlipMode)
+				Logger::Error("Failed to open windowed screen !")
+				ProcedureReturn #False
+			EndIf
 		Else
+			Logger::Error("Failed to open main window !")
 			ProcedureReturn #False
 		EndIf
 		

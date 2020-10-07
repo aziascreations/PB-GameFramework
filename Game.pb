@@ -87,9 +87,9 @@ Repeat
 					Gui::MouveClick(Gui::#GuiEvent_RightClick, MouseX(), MouseY())
 					
 				Case #PB_Event_CloseWindow
-					If EventWindow() = GameWindow
-						Engine::IsRunning = #False
-					EndIf
+					;If EventWindow() = GameWindow
+					Engine::IsRunning = #False
+					;EndIf
 			EndSelect
 		Until Event = 0
 	EndIf

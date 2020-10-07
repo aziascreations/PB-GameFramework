@@ -78,11 +78,10 @@ Module Engine
 		Logger::Devel("Initializing resource manager...")
 		Resources::Init()
 		Resources::ReadIndexFiles("./Data/", "./Graphics")
-		Resources::ReadIndexFiles("./Data/", "./Maps")
+		Resources::ReadIndexFiles("./Data/", "./Materials")
 		Resources::ReadIndexFiles("./Data/", "./Models")
 		Resources::ReadIndexFiles("./Data/", "./Musics")
 		Resources::ReadIndexFiles("./Data/", "./Sounds")
-		Resources::ReadIndexFiles("./Data/", "./Trash")
 		
 		;Logger::Devel("Processing game.json...")
 		; Load datasection config

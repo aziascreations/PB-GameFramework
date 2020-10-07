@@ -197,18 +197,19 @@ Module Resources
 	
 	Global NewList UnloadedResources.ResourceRegistration()
 	
+	Global LoadingStep.i = 0
+	
 	
 	;-> Basics
 	
 	Procedure.b Init()
-		;Logger::Devel("Resources::Init() was called !")
-		
+		Logger::Devel("Resources::Init() was called !")
+		LoadingStep = 0
 	EndProcedure
 	
 	Procedure.b Start()
 		Logger::Trace("Starting resource manager...")
 		Logger::Trace("Checking error resources...")
-		
 		; Texture
 		If Not IsTexture(ErrorTexture)
 			Logger::Trace("Creating error texture...")
@@ -237,6 +238,40 @@ Module Resources
 		EndIf
 	EndProcedure
 	
+	Procedure.q ProcessIndexFile(RealParentFolder$, Folder$, IndexFilename$, ResourceType.i)
+		Protected NewResourceCount.q = 0
+		
+		Logger::Devel("Reading index file: "+IndexFilename$)
+		Protected IndexFileJson = LoadJSON(#PB_Any, RealParentFolder$+Folder$+IndexFilename$)
+		
+		If Not IndexFileJson
+			Logger::Error("Failed to load: "+RealParentFolder$+Folder$+IndexFilename$)
+			Logger::Error("-> "+JSONErrorMessage()+" @ "+JSONErrorLine()+":"+JSONErrorPosition())
+			ProcedureReturn NewResourceCount
+		EndIf
+		
+		Protected NewMap ResourceList.s()
+		ExtractJSONMap(JSONValue(IndexFileJson), ResourceList())
+		
+		ForEach ResourceList()
+			If Left(MapKey(ResourceList()), 1) = "_"
+				Continue
+			EndIf
+			AddElement(UnloadedResources())
+			UnloadedResources()\ResourceRealParentPath$ = RealParentFolder$
+			UnloadedResources()\ResourceArchivePath$ = Folder$
+			UnloadedResources()\ResourceFilePath$ = ResourceList()
+			UnloadedResources()\ResourceKey$ = MapKey(ResourceList())
+			UnloadedResources()\ResourceType = ResourceType
+			NewResourceCount = NewResourceCount + 1
+		Next
+		
+		FreeMap(ResourceList())
+		FreeJSON(IndexFileJson)
+		
+		ProcedureReturn NewResourceCount
+	EndProcedure
+	
 	Procedure.q ReadIndexFiles(RealParentFolder$, Folder$)
 		Protected NewResourceCount.q = 0
 		
@@ -251,143 +286,134 @@ Module Resources
 		Logger::Devel("Searching for index files in: "+RealParentFolder$+Folder$)
 		
 		; Textures
-		If FileSize(RealParentFolder$+Folder$ + "index-textures.json") > 0
+		If FileSize(RealParentFolder$+Folder$+"index-textures.json") > 0
 			Logger::Devel("Found a texture index !")
-			
-			Protected TextureIndexJson = LoadJSON(#PB_Any, RealParentFolder$+Folder$ + "index-textures.json")
-			
-			If Not TextureIndexJson
-				Logger::Error("Failed to load: "+RealParentFolder$+Folder$+"index-textures.json")
-				Logger::Error("-> "+JSONErrorMessage()+" @ "+JSONErrorLine()+":"+JSONErrorPosition())
-				ProcedureReturn NewResourceCount
-			EndIf
-			
-			Protected NewMap TextureList.s()
-			ExtractJSONMap(JSONValue(TextureIndexJson), TextureList())
-			
-			ForEach TextureList()
-				If Left(MapKey(TextureList()), 1) = "_"
-					Continue
-				EndIf
-				
-				AddElement(UnloadedResources())
-				UnloadedResources()\ResourceRealParentPath$ = RealParentFolder$
-				UnloadedResources()\ResourceArchivePath$ = Folder$
-				UnloadedResources()\ResourceFilePath$ = TextureList()
-				UnloadedResources()\ResourceKey$ = MapKey(TextureList())
-				UnloadedResources()\ResourceType = #ResourceType_Texture
-			Next
-			
-			FreeMap(TextureList())
-			FreeJSON(TextureIndexJson)
+			NewResourceCount = NewResourceCount +
+			                   ProcessIndexFile(RealParentFolder$, Folder$,
+			                                    "index-textures.json",
+			                                    #ResourceType_Texture)
 		EndIf
 		
 		; Sounds
 		If FileSize(RealParentFolder$+Folder$ + "index-sounds.json") > 0
 			Logger::Devel("Found a sound index !")
-			
-			Protected SoundIndexJson = LoadJSON(#PB_Any, RealParentFolder$+Folder$ + "index-sounds.json")
-			
-			If Not SoundIndexJson
-				Logger::Error("Failed to load: "+RealParentFolder$+Folder$+"index-sounds.json")
-				Logger::Error("-> "+JSONErrorMessage()+" @ "+JSONErrorLine()+":"+JSONErrorPosition())
-				ProcedureReturn NewResourceCount
-			EndIf
-			
-			Protected NewMap SoundList.s()
-			ExtractJSONMap(JSONValue(SoundIndexJson), SoundList())
-			
-			ForEach SoundList()
-				If Left(MapKey(SoundList()), 1) = "_"
-					Continue
-				EndIf
-				
-				AddElement(UnloadedResources())
-				UnloadedResources()\ResourceRealParentPath$ = RealParentFolder$
-				UnloadedResources()\ResourceArchivePath$ = Folder$
-				UnloadedResources()\ResourceFilePath$ = SoundList()
-				UnloadedResources()\ResourceKey$ = MapKey(SoundList())
-				UnloadedResources()\ResourceType = #ResourceType_Sound
-			Next
-			
-			FreeMap(SoundList())
-			FreeJSON(SoundIndexJson)
+			NewResourceCount = NewResourceCount +
+			                   ProcessIndexFile(RealParentFolder$, Folder$,
+			                                    "index-sounds.json",
+			                                    #ResourceType_Sound)
 		EndIf
 		
 		; Meshes
 		If FileSize(RealParentFolder$+Folder$ + "index-meshes.json") > 0
 			Logger::Devel("Found a mesh index !")
-			
-			Protected MeshIndexJson = LoadJSON(#PB_Any, RealParentFolder$+Folder$ + "index-meshes.json")
-			
-			If Not MeshIndexJson
-				Logger::Error("Failed to load: "+RealParentFolder$+Folder$+"index-meshes.json")
-				Logger::Error("-> "+JSONErrorMessage()+" @ "+JSONErrorLine()+":"+JSONErrorPosition())
-				ProcedureReturn NewResourceCount
-			EndIf
-			
-			Protected NewMap MeshList.s()
-			ExtractJSONMap(JSONValue(MeshIndexJson), MeshList())
-			
-			ForEach MeshList()
-				If Left(MapKey(MeshList()), 1) = "_"
-					Continue
-				EndIf
-				
-				AddElement(UnloadedResources())
-				UnloadedResources()\ResourceRealParentPath$ = RealParentFolder$
-				UnloadedResources()\ResourceArchivePath$ = Folder$
-				UnloadedResources()\ResourceFilePath$ = MeshList()
-				UnloadedResources()\ResourceKey$ = MapKey(MeshList())
-				UnloadedResources()\ResourceType = #ResourceType_Mesh
-			Next
-			
-			FreeMap(MeshList())
-			FreeJSON(MeshIndexJson)
+			NewResourceCount = NewResourceCount +
+			                   ProcessIndexFile(RealParentFolder$, Folder$,
+			                                    "index-meshes.json",
+			                                    #ResourceType_Mesh)
+		EndIf
+		
+		; Images
+		If FileSize(RealParentFolder$+Folder$ + "index-images.json") > 0
+			Logger::Devel("Found an image index !")
+			NewResourceCount = NewResourceCount +
+			                   ProcessIndexFile(RealParentFolder$, Folder$,
+			                                    "index-images.json",
+			                                    #ResourceType_Image)
+		EndIf
+		
+		; Sprites
+		If FileSize(RealParentFolder$+Folder$ + "index-sprites.json") > 0
+			Logger::Devel("Found a sprite index !")
+			NewResourceCount = NewResourceCount +
+			                   ProcessIndexFile(RealParentFolder$, Folder$,
+			                                    "index-sprites.json",
+			                                    #ResourceType_Sprite)
 		EndIf
 		
 		ProcedureReturn NewResourceCount
 	EndProcedure
 	
 	Procedure.b Update()
-		If ListSize(UnloadedResources()) > 0
-			FirstElement(UnloadedResources())
-			Logger::Devel("Loading ressource: "+UnloadedResources()\ResourceKey$)
+		Protected HasProcessedResource = #False
+		
+		If ListSize(UnloadedResources()) > 0 And LoadingStep < 6
+			If LoadingStep = 0
+				FirstElement(UnloadedResources())
+				LoadingStep = LoadingStep + 1
+			EndIf
 			
-			Select UnloadedResources()\ResourceType
-				Case #ResourceType_Texture
+			ForEach UnloadedResources()
+				If UnloadedResources()\ResourceType = #ResourceType_Texture And LoadingStep = 1
+					Logger::Devel("Loading texture: "+UnloadedResources()\ResourceKey$)
+					
 					Protected NewTexture = LoadTexture(#PB_Any, UnloadedResources()\ResourceArchivePath$ +
 					                                            UnloadedResources()\ResourceFilePath$)
 					
 					If IsTexture(NewTexture)
 						SetTexture(UnloadedResources()\ResourceKey$, NewTexture, #True, #True)
+						HasProcessedResource = #True
 					Else
 						Logger::Error("Failed to load texture !")
 					EndIf
-				Case #ResourceType_Sound
+				EndIf
+				If UnloadedResources()\ResourceType = #ResourceType_Image And LoadingStep = 2
+					Logger::Devel("Loading image: "+UnloadedResources()\ResourceKey$)
+					
+					Protected NewImage = LoadImage(#PB_Any,
+					                               UnloadedResources()\ResourceRealParentPath$ +
+					                               UnloadedResources()\ResourceArchivePath$ +
+					                               UnloadedResources()\ResourceFilePath$)
+					
+					If IsImage(NewImage)
+						SetImage(UnloadedResources()\ResourceKey$, NewImage, #True, #True)
+						HasProcessedResource = #True
+					Else
+						Logger::Error("Failed to load image !")
+					EndIf
+				EndIf
+				If UnloadedResources()\ResourceType = #ResourceType_Sprite And LoadingStep = 3
+					
+				EndIf
+				If UnloadedResources()\ResourceType = #ResourceType_Mesh And LoadingStep = 4
+					Logger::Devel("Loading mesh: "+UnloadedResources()\ResourceKey$)
+					
+					Protected NewMesh = MeshHelper::ParseMeshFile(UnloadedResources()\ResourceRealParentPath$ +
+					                                              UnloadedResources()\ResourceArchivePath$ +
+					                                              UnloadedResources()\ResourceFilePath$)
+					If IsMesh(NewMesh)
+						SetMesh(UnloadedResources()\ResourceKey$, NewMesh, #True, #True)
+						HasProcessedResource = #True
+					Else
+						Logger::Error("Failed to load mesh !")
+					EndIf
+				EndIf
+				If UnloadedResources()\ResourceType = #ResourceType_Sound And LoadingStep = 5
+					Logger::Devel("Loading sound: "+UnloadedResources()\ResourceKey$)
+					
 					Protected NewSound = LoadSound(#PB_Any,
 					                               UnloadedResources()\ResourceRealParentPath$ +
 					                               UnloadedResources()\ResourceArchivePath$ +
 					                               UnloadedResources()\ResourceFilePath$)
 					If IsSound(NewSound)
 						SetSound(UnloadedResources()\ResourceKey$, NewSound, #True, #True)
+						HasProcessedResource = #True
 					Else
 						Logger::Error("Failed to load sound !")
 					EndIf
-				Case #ResourceType_Mesh
-					Protected NewMesh = MeshHelper::ParseMeshFile(UnloadedResources()\ResourceRealParentPath$ +
-					                                              UnloadedResources()\ResourceArchivePath$ +
-					                                              UnloadedResources()\ResourceFilePath$)
-					If IsMesh(NewMesh)
-						SetMesh(UnloadedResources()\ResourceKey$, NewMesh, #True, #True)
-					Else
-						Logger::Error("Failed to load mesh !")
-					EndIf
-				Default
-					Logger::Error("Unknown resource type !!!")
-			EndSelect
+				EndIf
+				
+				If HasProcessedResource
+					DeleteElement(UnloadedResources())
+					FirstElement(UnloadedResources())
+					ProcedureReturn #False
+				EndIf
+			Next
 			
-			DeleteElement(UnloadedResources())
+			If HasProcessedResource
+				Logger::Error("Resource Manager finished update loop AND loaded stuff !")
+			Else
+				LoadingStep = LoadingStep + 1
+			EndIf
 			
 			ProcedureReturn #False
 		EndIf

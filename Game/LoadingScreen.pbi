@@ -45,24 +45,19 @@ Module ScreenLoading
 	
 	Procedure OnInit()
 		Logger::Devel("OnInit was called for loading screen !")
-		
 	EndProcedure
 	
 	Procedure OnStart()
 		Logger::Devel("OnStart was called for loading screen !")
 		
+		LogoSprite = Resources::GetSprite("loading-logo")
+		TextSprite = Resources::GetSprite("loading-text")
+		
 		DefaultCamera = CreateCamera(#PB_Any, 0, 0, 100, 100)
 		CameraBackColor(DefaultCamera, RGB(245, 245, 245))
 		MoveCamera(DefaultCamera, 50, 50, 50, #PB_Absolute)
 		CameraLookAt(DefaultCamera, 0, 0, 0)
-		
-		LogoSprite = LoadSprite(#PB_Any, "Data/Graphics/Developement/splashLogo.png",
-		                        #PB_Sprite_AlphaBlending)
-		;TransparentSpriteColor(LogoSprite, RGB(245, 245, 245))
-		
-		TextSprite = LoadSprite(#PB_Any, "Data/Graphics/Developement/text-loading.png",
-		                        #PB_Sprite_AlphaBlending)
-		;TransparentSpriteColor(TextSprite, RGB(245, 245, 245))
+		Resources::SetCamera("loading-camera", DefaultCamera, #True, #True)
 		
 		StartTime = ElapsedMilliseconds()
 		LogoPhase = 1 ; Debug
@@ -92,13 +87,20 @@ Module ScreenLoading
 				;	LogoPhase = 2
 				;	Logger::Devel("Logo phase 2 !")
 				;EndIf
-					
+				
+				If LogoSprite = Resources::ErrorSprite And Resources::HasSprite("loading-logo")
+					LogoSprite = Resources::GetSprite("loading-logo")
+				EndIf
+				If TextSprite = Resources::ErrorSprite And Resources::HasSprite("loading-text")
+					TextSprite = Resources::GetSprite("loading-text")
+				EndIf
+				
 				If Resources::Update() And LastOpacityTick + 1000 < ElapsedMilliseconds()
 					Logger::Devel("Finished loading resources, changing screen...")
 					
 					;ScreenManager::ChangeScreen("mainmenu")
-					;ScreenManager::ChangeScreen("model-manipulator")
-					ScreenManager::ChangeScreen("camera-test")
+					ScreenManager::ChangeScreen("model-manipulator")
+					;ScreenManager::ChangeScreen("camera-test")
 					;ScreenManager::ChangeScreen("dungeon-test")
 					ScreenManager::SkipNextRender()
 					Logger::Devel(Logger::#Separator$)
@@ -139,11 +141,7 @@ Module ScreenLoading
 	
 	Procedure OnLeave()
 		Logger::Devel("OnLeave was called for loading screen !")
-		
-		FreeSprite(LogoSprite)
-		FreeSprite(TextSprite)
-		
-		FreeCamera(DefaultCamera)
+		Resources::FlushCameras(#True)
 	EndProcedure
 EndModule
 

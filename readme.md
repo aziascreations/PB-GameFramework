@@ -2,20 +2,28 @@
 
 This is just a test
 
-
 ## Features
 
 * Customizable launcher (Unity style)
-* GUI system
-* Launch arguments parsing
+* GUI system (Unfinished)
+* Launch arguments parsing (Unfinished)
 * Logging
 * Resource Management
 * Screens (aka: scenes)
 
-
 ## Building
-You can either open the main file named "Game.pb" and compile it.<br>
-Or you can run the "_build.cmd" script file to compile it in a separate folder.
+
+### For release
+To build and package the game you can run the included scripts in this order:<br>
+&nbsp;&nbsp;1. [_clean.cmd](_clean.cmd)<br>
+&nbsp;&nbsp;2. [_build.cmd](_build.cmd)<br>
+&nbsp;&nbsp;3. [_package.cmd](_package.cmd)
+
+This will build the x86 and x64 versions of the game, copy the content of the "Data/" and "Licenses/" folders, remove the trash from them and package everything accordingly.
+
+### For development
+If you simply want to run the game to test your code, you can either compile [game.pb](game.pb) or simply open the [game.pbp](game.pbp) file and use the project.<br>
+Just keep in mind that you will have to copy the appropriate DLL from the "Libraries/" folder in the root folder for this to work.
 
 ## Known Bugs
 
@@ -24,6 +32,8 @@ I have no idea on why this happens...
 
 The Game can hang a tiny bit and crash when shutting it down.<br>
 It is probably related to the main loop, but I'm not sure why it happens yet, probably a race condition.
+
+The x86 version of the game look "stuttery"...
 
 ## Licenses
 

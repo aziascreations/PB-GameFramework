@@ -47,8 +47,17 @@
 	"metal1": "Terrain/metal-01-16.png",
 	"metal2": "Terrain/metal-02-16.png",
 	
-	"loading-logo": "Developement/splashLogo.png",
-	"loading-text": "Developement/text-loading.png",
+	"pot-2": "Objects/pot-02.png",
 	
-	"pot-2": "Objects/pot-02.png"
+	"car-ambulance": "Developement/car-ambulance-1.png",
+	"city-building": "Developement/city-building-1.png",
+	"city-house": "Developement/city-building-2.png",
+	"city-tower-1": "Developement/city-building-3.png",
+	"city-tower-2": "Developement/city-building-4.png",
+	
+	"city-car-1": "Developement/city-car-1.png",
+	"city-car-2": "Developement/city-car-2.png",
+	"city-car-3": "Developement/city-car-3.png",
+	"city-car-4": "Developement/city-car-4.png",
+	"city-car-5": "Developement/city-car-5.png"
 }

@@ -1,5 +1,10 @@
 {
 	"_comment1": "Entries that start with a '_' won't be loaded by the resource manager !",
 	
-	"cube-1": "test.msh"
+	"cube-1": "test.msh",
+	"car-ambulance": "car-ambulance.msh",
+	"city-tile-4": "city-tile-4.msh",
+	"city-tile-8": "city-tile-8.msh",
+	"city-tile-12": "city-tile-12.msh",
+	"city-tile-16": "city-tile-16.msh"
 }

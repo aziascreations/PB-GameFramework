@@ -29,16 +29,16 @@ echo.
 
 echo ━┫ Packaging source code ┣━
 :: TODO: filter out the exes that may appear in the source code folders when testing out stuff.
-7z a -mx9 ./Packages/%APPNAME%-sources.zip ./Data ./Engine ./Game ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./*.dll ./LICENSE ./readme.md ./*.pbp
-7z a -mx9 ./Packages/%APPNAME%-sources.7z ./Data ./Engine ./Game ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./*.dll ./LICENSE ./readme.md ./*.pbp
-7z a -mx9 ./Packages/%APPNAME%-sources.tar ./Data ./Engine ./Game ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./*.dll ./LICENSE ./readme.md ./*.pbp
+7z a -mx9 ./Packages/%APPNAME%-sources.zip ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
+7z a -mx9 ./Packages/%APPNAME%-sources.7z ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
+7z a -mx9 ./Packages/%APPNAME%-sources.tar ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
 7z a -mx9 ./Packages/%APPNAME%-sources.tar.gz ./Packages/%APPNAME%-sources.tar
 echo.
 
 echo ━┫ Packaging repository ┣━
-7z a -mx9 ./Packages/%APPNAME%-sources+git.zip ./Data ./Engine ./Game ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./*.dll ./LICENSE ./readme.md ./*.pbp ./.git ./.gitignore
-7z a -mx9 ./Packages/%APPNAME%-sources+git.7z ./Data ./Engine ./Game ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./*.dll ./LICENSE ./readme.md ./*.pbp ./.git ./.gitignore
-7z a -mx9 ./Packages/%APPNAME%-sources+git.tar ./Data ./Engine ./Game ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./*.dll ./LICENSE ./readme.md ./*.pbp ./.git ./.gitignore
+7z a -mx9 ./Packages/%APPNAME%-sources+git.zip ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore ./.git
+7z a -mx9 ./Packages/%APPNAME%-sources+git.7z ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore ./.git
+7z a -mx9 ./Packages/%APPNAME%-sources+git.tar ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore ./.git
 7z a -mx9 ./Packages/%APPNAME%-sources+git.tar.gz ./Packages/%APPNAME%-sources+git.tar
 echo.
 

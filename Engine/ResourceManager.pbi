@@ -40,7 +40,8 @@ DeclareModule Resources
 	
 	; The error resources are kept out of the maps for faster access
 	;  and To protect them from being flushed.
-	Global ErrorTexture, ErrorMaterial
+	#ErrorAssetSize = 16
+	Global ErrorImage, ErrorSprite, ErrorTexture, ErrorMaterial
 	
 	;-> Basics
 	Declare.b Init()
@@ -109,10 +110,10 @@ DeclareModule Resources
 		Resources::GetResource(ResourceId, Resources::#ResourceType_Other)
 	EndMacro
 	Macro GetImage(ResourceId)
-		Resources::GetResource(ResourceId, Resources::#ResourceType_Image)
+		Resources::GetResource(ResourceId, Resources::#ResourceType_Image, Resources::ErrorImage)
 	EndMacro
 	Macro GetSprite(ResourceId)
-		Resources::GetResource(ResourceId, Resources::#ResourceType_Sprite)
+		Resources::GetResource(ResourceId, Resources::#ResourceType_Sprite, Resources::ErrorSprite)
 	EndMacro
 	Macro Get(ResourceId, ResourceType, FallbackValue = #Null)
 		Resources::GetResource(ResourceId, ResourceType, FallbackValue)
@@ -210,14 +211,33 @@ Module Resources
 	Procedure.b Start()
 		Logger::Trace("Starting resource manager...")
 		Logger::Trace("Checking error resources...")
+		
+		; Image (Common)
+		If Not IsImage(ErrorImage)
+			Logger::Trace("Creating error image...")
+			ErrorImage = CreateImage(#PB_Any, #ErrorAssetSize, #ErrorAssetSize, 24, RGB(0, 0, 0))
+			StartDrawing(ImageOutput(ErrorImage))
+			Box(0, 0, #ErrorAssetSize, #ErrorAssetSize, RGB(0, 0, 0))
+			Box(#ErrorAssetSize/2, 0, #ErrorAssetSize/2, #ErrorAssetSize/2, RGB(255, 0, 255))
+			Box(0, #ErrorAssetSize/2, #ErrorAssetSize/2, #ErrorAssetSize/2, RGB(255, 0, 255))
+			StopDrawing()
+		EndIf
+		
+		; Sprite
+		If Not IsSprite(ErrorSprite)
+			Logger::Trace("Creating error sprite...")
+			ErrorSprite = CreateSprite(#PB_Any, #ErrorAssetSize, #ErrorAssetSize, #PB_Sprite_AlphaBlending)
+			StartDrawing(SpriteOutput(ErrorSprite))
+			DrawImage(ImageID(ErrorImage), 0, 0)
+			StopDrawing()
+		EndIf
+		
 		; Texture
 		If Not IsTexture(ErrorTexture)
 			Logger::Trace("Creating error texture...")
-			ErrorTexture = CreateTexture(#PB_Any, 2, 2)
+			ErrorTexture = CreateTexture(#PB_Any, #ErrorAssetSize, #ErrorAssetSize)
 			StartDrawing(TextureOutput(ErrorTexture))
-			Box(0, 0, 2, 2, RGB(0, 0, 0))
-			Box(1, 0, 1, 1, RGB(255, 0, 255))
-			Box(0, 1, 1, 1, RGB(255, 0, 255))
+			DrawImage(ImageID(ErrorImage), 0, 0)
 			StopDrawing()
 		EndIf
 		
@@ -343,7 +363,7 @@ Module Resources
 			EndIf
 			
 			ForEach UnloadedResources()
-				If UnloadedResources()\ResourceType = #ResourceType_Texture And LoadingStep = 1
+				If UnloadedResources()\ResourceType = #ResourceType_Texture And LoadingStep = 3
 					Logger::Devel("Loading texture: "+UnloadedResources()\ResourceKey$)
 					
 					Protected NewTexture = LoadTexture(#PB_Any, UnloadedResources()\ResourceArchivePath$ +
@@ -371,8 +391,20 @@ Module Resources
 						Logger::Error("Failed to load image !")
 					EndIf
 				EndIf
-				If UnloadedResources()\ResourceType = #ResourceType_Sprite And LoadingStep = 3
+				If UnloadedResources()\ResourceType = #ResourceType_Sprite And LoadingStep = 1
+					Logger::Devel("Loading sprite: "+UnloadedResources()\ResourceKey$)
 					
+					Protected NewSprite = LoadSprite(#PB_Any, UnloadedResources()\ResourceRealParentPath$ +
+					                                          UnloadedResources()\ResourceArchivePath$ +
+					                                          UnloadedResources()\ResourceFilePath$,
+					                                 #PB_Sprite_AlphaBlending)
+					
+					If IsSprite(NewSprite)
+						SetSprite(UnloadedResources()\ResourceKey$, NewSprite, #True, #True)
+						HasProcessedResource = #True
+					Else
+						Logger::Error("Failed to load sprite !")
+					EndIf
 				EndIf
 				If UnloadedResources()\ResourceType = #ResourceType_Mesh And LoadingStep = 4
 					Logger::Devel("Loading mesh: "+UnloadedResources()\ResourceKey$)

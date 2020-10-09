@@ -202,6 +202,32 @@ Module ScreenModelManipulator
 		UpdateElementList(*MeshData)
 		
 		
+		; TMP
+		;#TxtTmp$ = "city-building"
+		
+		#TxtTmp$ = "city-tower-2"
+		#MdlTmp$ = "city-tile-16"
+		
+		;#TxtTmp$ = "city-car-2"
+		;#MdlTmp$ = "city-tile-8"
+		
+		If Not Resources::HasMaterial(#TxtTmp$)
+			Resources::Set(#TxtTmp$,
+			               CreateMaterial(#PB_Any,
+			                              TextureID(Resources::GetTexture(#TxtTmp$))),
+			               Resources::#ResourceType_Material)
+			MaterialFilteringMode(Resources::GetMaterial(#TxtTmp$), #PB_Material_None)
+			MaterialBlendingMode(Resources::GetMaterial(#TxtTmp$), #PB_Material_AlphaBlend)
+		EndIf
+		
+		If Not Resources::HasEntity(#MdlTmp$)
+			Resources::Set(#MdlTmp$,
+			               CreateEntity(#PB_Any,
+			                            MeshID(Resources::GetMesh(#MdlTmp$)),
+			                            MaterialID(Resources::GetMaterial(#TxtTmp$)),
+			                            0, 0, 0),
+			               Resources::#ResourceType_Entity)
+		EndIf
 		
 		
 	EndProcedure

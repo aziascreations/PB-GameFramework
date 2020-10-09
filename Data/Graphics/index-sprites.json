@@ -1,3 +1,6 @@
 {
-	"_comment1": "Entries that start with a '_' won't be loaded by the resource manager !"
+	"_comment1": "Entries that start with a '_' won't be loaded by the resource manager !",
+	
+	"loading-logo": "Developement/splashLogo.png",
+	"loading-text": "Developement/text-loading.png"
 }

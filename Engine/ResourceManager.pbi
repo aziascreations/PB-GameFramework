@@ -374,6 +374,7 @@ Module Resources
 						HasProcessedResource = #True
 					Else
 						Logger::Error("Failed to load texture !")
+						HasProcessedResource = #True ; TEMP FIX
 					EndIf
 				EndIf
 				If UnloadedResources()\ResourceType = #ResourceType_Image And LoadingStep = 2
@@ -389,6 +390,7 @@ Module Resources
 						HasProcessedResource = #True
 					Else
 						Logger::Error("Failed to load image !")
+						HasProcessedResource = #True ; TEMP FIX
 					EndIf
 				EndIf
 				If UnloadedResources()\ResourceType = #ResourceType_Sprite And LoadingStep = 1
@@ -404,6 +406,7 @@ Module Resources
 						HasProcessedResource = #True
 					Else
 						Logger::Error("Failed to load sprite !")
+						HasProcessedResource = #True ; TEMP FIX
 					EndIf
 				EndIf
 				If UnloadedResources()\ResourceType = #ResourceType_Mesh And LoadingStep = 4
@@ -417,6 +420,7 @@ Module Resources
 						HasProcessedResource = #True
 					Else
 						Logger::Error("Failed to load mesh !")
+						HasProcessedResource = #True ; TEMP FIX
 					EndIf
 				EndIf
 				If UnloadedResources()\ResourceType = #ResourceType_Sound And LoadingStep = 5
@@ -431,6 +435,7 @@ Module Resources
 						HasProcessedResource = #True
 					Else
 						Logger::Error("Failed to load sound !")
+						HasProcessedResource = #True ; TEMP FIX
 					EndIf
 				EndIf
 				

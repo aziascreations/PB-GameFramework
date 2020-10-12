@@ -204,7 +204,7 @@ Module ScreenModelManipulator
 		
 		; TMP
 		;#TxtTmp$ = "city-building"
-		
+		;#TxtTmp$ = "city-wall-1"
 		#TxtTmp$ = "city-tower-2"
 		#MdlTmp$ = "city-tile-16"
 		

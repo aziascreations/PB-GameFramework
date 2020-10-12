@@ -44,6 +44,8 @@ DeclareModule Engine
 	; Shuts down the engine properly.
 	; No part of the engine should be used afterward !
 	Declare Finish(CleanMemory.b=#True)
+	
+	Declare.b IsRunningInArchive(CheckCurrentDirectory.b = #True, CheckFile$ = #Null$, CheckFolder$ = #Null$)
 EndDeclareModule
 
 Module Engine
@@ -83,8 +85,17 @@ Module Engine
 		Resources::ReadIndexFiles("./Data/", "./Musics")
 		Resources::ReadIndexFiles("./Data/", "./Sounds")
 		
-		;Logger::Devel("Processing game.json...")
-		; Load datasection config
+; 		Logger::Devel("Processing game.json...")
+; 		; Load datasection config
+; 		Protected GameJson = CatchJSON(#PB_Any, InternalData:: game_json_start,
+; 		                               InternalData::game_json_stop - InternalData::game_json_start)
+; 		If IsJSON(GameJson)
+; 			
+; 			FreeJSON(GameJson)
+; 		Else
+; 			Logger::Devel("Failed to parse JSON: "+JSONErrorMessage()+"@"+
+; 			              JSONErrorLine()+":"+JSONErrorPosition())
+; 		EndIf
 		
 		Logger::Devel("Done !")
 		ProcedureReturn #True
@@ -133,5 +144,27 @@ Module Engine
 		ScreenManager::Finish(CleanMemory)
 		;Args::Finish(CleanMemory)
 		;Logger::Finish(CleanMemory)
+	EndProcedure
+	
+	Procedure.b IsRunningInArchive(CheckCurrentDirectory.b = #True, CheckFile$ = #Null$, CheckFolder$ = #Null$)
+		If CheckCurrentDirectory
+			If FindString(GetCurrentDirectory(), GetTemporaryDirectory())
+				ProcedureReturn #True
+			EndIf
+		EndIf
+		
+		If CheckFile$ <> #Null$
+			If Not (FileSize(CheckFile$) >= 0)
+				ProcedureReturn #True
+			EndIf
+		EndIf
+		
+		If CheckFolder$ <> #Null$
+			If FileSize(CheckFolder$) <> -2
+				ProcedureReturn #True
+			EndIf
+		EndIf
+		
+		ProcedureReturn #False
 	EndProcedure
 EndModule

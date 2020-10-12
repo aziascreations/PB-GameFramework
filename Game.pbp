@@ -8,7 +8,7 @@
   <section name="data">
     <explorer view="C:\ProgramData\PureBasic\Examples\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2020-10-09 02:06" user="Herwin" host="DESKTOP-FCBVC66"/>
+    <lastopen date="2020-10-12 12:46" user="Herwin" host="DESKTOP-FCBVC66"/>
   </section>
   <section name="files">
     <file name="Engine\Arguments.pbi">
@@ -21,7 +21,7 @@
     </file>
     <file name="Engine\EngineBootlegUltraDeluxe.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="425ef0b042e5d9e6e09cd304dc4482d3"/>
+      <fingerprint md5="6d3ac02e61c972980b65c76ac2e6b120"/>
     </file>
     <file name="Engine\Gui\GuiButton.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+++"/>
@@ -45,7 +45,7 @@
     </file>
     <file name="Engine\InternalData\DataSection-Data.Internal.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+++"/>
-      <fingerprint md5="a99ec86fccdceaf6698b7cd085bc5dcc"/>
+      <fingerprint md5="882e1198b90a94f4730ae947b930fe8a"/>
     </file>
     <file name="Engine\Logger.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -53,15 +53,15 @@
     </file>
     <file name="Engine\ResourceManager.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="e57b0b39ac755489d96d61b306a3ee97"/>
+      <fingerprint md5="2e2d178971f33252e71fa84a1324ce52"/>
     </file>
     <file name="Engine\Screens.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="2e8b32af56ca67187db117a7a5c5bdc2"/>
     </file>
     <file name="Game.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="3d1cf415e1f33fcd9a83e53d25c07098"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="20e79a5b0f7e1159da293259d1d003c5"/>
     </file>
     <file name="Game\CameraTestScreen.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -88,8 +88,8 @@
       <fingerprint md5="d9f17a1773d13a0947d495bdf599f77d"/>
     </file>
     <file name="Game\ModelManipulatorScreen.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="6077c9358f5e027e75dc8776043a48c5"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="6e03dbcc73f14b0d7dddab07807fcc02"/>
     </file>
     <file name="Game\ModelManipulatorTextureWindow.pbf">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -109,7 +109,7 @@
       <options xpskin="1" debug="1"/>
       <temporaryexe value="source"/>
       <icon enable="1">icon.ico</icon>
-      <compilecount enable="1" value="405"/>
+      <compilecount enable="1" value="432"/>
       <buildcount enable="1" value="1"/>
     </target>
     <target name="x86" enabled="1" default="0">

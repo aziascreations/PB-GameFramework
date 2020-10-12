@@ -53,11 +53,13 @@
 	"city-building": "Developement/city-building-1.png",
 	"city-house": "Developement/city-building-2.png",
 	"city-tower-1": "Developement/city-building-3.png",
-	"city-tower-2": "Developement/city-building-4.png",
+	"city-tower-2": "Developement/city-building-5.png",
 	
 	"city-car-1": "Developement/city-car-1.png",
 	"city-car-2": "Developement/city-car-2.png",
 	"city-car-3": "Developement/city-car-3.png",
 	"city-car-4": "Developement/city-car-4.png",
-	"city-car-5": "Developement/city-car-5.png"
+	"city-car-5": "Developement/city-car-5.png",
+	
+	"city-wall-1": "Developement/city-wall-1.png"
 }

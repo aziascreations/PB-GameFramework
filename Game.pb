@@ -29,6 +29,22 @@ EndIf
 
 ;-> Initialisation
 
+If Engine::IsRunningInArchive() Or Engine::IsRunningInArchive(#False, #Null$, "./Data") Or
+   (Engine::IsRunningInArchive(#False, "Engine3d.dll") And
+    Engine::IsRunningInArchive(#False, "Engine3D.dll"))
+	Define MsgResult.i = MessageRequester("Warning",
+	                                      "We detected that the game might be missing some"+#CRLF$+
+	                                      "important files or might be running from an archive."+#CRLF$+#CRLF$+
+	                                      "If you are running it from an archive, please"+#CRLF$+
+	                                      "extract it before running it to avoid errors !"+#CRLF$+#CRLF$+
+	                                      "Do you still wish to continue and run the game ?",
+	                                      #PB_MessageRequester_Warning | #PB_MessageRequester_YesNo)
+	If MsgResult = #PB_MessageRequester_No
+		End 0
+	EndIf
+EndIf
+
+
 ; Prepares the engine internally.
 If Not Engine::Init()
 	Logger::Error("Engine failed to start, now exiting...")

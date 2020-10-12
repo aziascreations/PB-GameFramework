@@ -1,7 +1,7 @@
 {
 	"application": {
-		name: "TestApp",
-		version: "0.0.1",
+		"name": "TestApp",
+		"version": "0.0.1",
 	},
 	"config": {
 		

@@ -37,6 +37,7 @@ xcopy Data Build\Commons\Data\ /E /Y
 xcopy Licenses Build\Commons\Licenses\ /E /Y
 rmdir /Q /S Build\Commons\Data\Trash
 rmdir /Q /S Build\Commons\Data\Graphics\Trash
+rmdir /Q /S Build\Commons\Data\Launcher
 del /s /q .\Build\Commons\*.pdn
 del /s /q .\Build\Commons\*.tga
 xcopy Build\Commons\Data\ Build\x64\Data\ /E /Y
@@ -47,10 +48,12 @@ echo.
 
 echo ━┫ Compiling x86 ┣━
 %CPLR86% /EXE ".\Build\x86\Game.exe" /ICON ".\icon.ico" ".\Game.pb"
+%CPLR86% /EXE ".\Build\x86\Launcher.exe" /ICON ".\icon.ico" ".\Launcher.pb"
 echo.
 
 echo ━┫ Compiling x64 ┣━
 %CPLR64% /EXE ".\Build\x64\Game.exe" /ICON ".\icon.ico" ".\Game.pb"
+%CPLR64% /EXE ".\Build\x64\Launcher.exe" /ICON ".\icon.ico" ".\Launcher.pb"
 echo.
 
 echo ━┫ Final clean-up ┣━

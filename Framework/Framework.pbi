@@ -28,7 +28,7 @@ XIncludeFile "./Gui/GuiHandler.pbi"
 ;- Code
 
 DeclareModule Framework
-	#EngineName$ = "Bootleg Framework Ultra Deluxe Edition"
+	#EngineName$ = "Bootleg Framework - Ultra Deluxe Edition"
 	#EngineVersion$ = "0.0.1-indev"
 	
 	Global IsRunning.b = #False
@@ -111,9 +111,9 @@ Module Framework
 		;1440, 900
 		;1366, 768
 		
-		GameWindow = OpenWindow(0, 0, 0, 1366, 768, "PureBasic - 3D Demos", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
+		GameWindow = OpenWindow(#PB_Any, 0, 0, 1366, 768, "PureBasic - 3D Demos", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
 		If GameWindow
-			If Not OpenWindowedScreen(WindowID(0), 0, 0, 1366, 768, 0, 0, 0, FlipMode)
+			If Not OpenWindowedScreen(WindowID(GameWindow), 0, 0, 1366, 768, 0, 0, 0, FlipMode)
 				Logger::Error("Failed to open windowed screen !")
 				ProcedureReturn #False
 			EndIf

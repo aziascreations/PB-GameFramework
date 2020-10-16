@@ -1,10 +1,10 @@
 {
-	"icon-info": "Engine/icon-info.png",
-	"icon-mesh": "Engine/icon-mesh.png",
-	"icon-node": "Engine/icon-node.png",
-	"icon-floppy": "Engine/icon-floppy-cyan-shaded.png",
-	"icon-wrench": "Engine/icon-wrench-shaded.png",
-	"icon-screenfull": "Engine/icon-screen-full-shaded.png",
-	"icon-texture": "Engine/icon-texture-shaded.png",
-	"icon-entity": "Engine/icon-actor-shaded.png"
+	"icon-info": "Framework/icon-info.png",
+	"icon-mesh": "Framework/icon-mesh.png",
+	"icon-node": "Framework/icon-node.png",
+	"icon-floppy": "Framework/icon-floppy-cyan-shaded.png",
+	"icon-wrench": "Framework/icon-wrench-shaded.png",
+	"icon-screenfull": "Framework/icon-screen-full-shaded.png",
+	"icon-texture": "Framework/icon-texture-shaded.png",
+	"icon-entity": "Framework/icon-actor-shaded.png"
 }

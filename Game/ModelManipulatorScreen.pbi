@@ -191,8 +191,8 @@ Module ScreenModelManipulator
 		EndIf
 		*MeshData\Name$ = "Root Mesh"
 		
-		MeshIcon = LoadImage(#PB_Any, "./Data/Graphics/Engine/icon-mesh.png")
-		NodeIcon = LoadImage(#PB_Any, "./Data/Graphics/Engine/icon-node.png")
+		MeshIcon = LoadImage(#PB_Any, "./Data/Graphics/Framework/icon-mesh.png")
+		NodeIcon = LoadImage(#PB_Any, "./Data/Graphics/Framework/icon-node.png")
 		
 		If Not (IsImage(MeshIcon) And IsImage(NodeIcon))
 			ScreenManager::ShowErrorScreen("Failed to load the tool images !")

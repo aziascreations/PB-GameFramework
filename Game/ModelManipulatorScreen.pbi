@@ -179,7 +179,7 @@ Module ScreenModelManipulator
 		;}
 		
 		; - Model Editor start code
-		Engine::RunMainWindowLoop = #False
+		Framework::RunMainWindowLoop = #False
 		
 		OpenWindow_ModelEditor()
 		OpenWindow_UVViewer(0, 600)
@@ -281,7 +281,7 @@ Module ScreenModelManipulator
 					
 				Default
 					If Event = #PB_Event_CloseWindow
-						Engine::IsRunning = #False
+						Framework::IsRunning = #False
 					EndIf
 			EndSelect
 		Until Event = 0
@@ -302,7 +302,7 @@ Module ScreenModelManipulator
 		Logger::Devel("OnLeave was called for model screen !")
 		
 		; Clearing out the remaining events.
-		Engine::RunMainWindowLoop = #True
+		Framework::RunMainWindowLoop = #True
 		Protected Event
 		Repeat : Event = WindowEvent() : Until Event = 0
 		

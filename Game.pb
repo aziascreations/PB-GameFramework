@@ -13,11 +13,12 @@
 
 
 ;- Compiler Directives
+
 EnableExplicit
 
 ; Include the engine module and all the other ones.
-IncludePath "./Engine/"
-XIncludeFile "./EngineBootlegUltraDeluxe.pbi"
+IncludePath "./Framework/"
+XIncludeFile "./Framework.pbi"
 
 If Not #PB_Compiler_Debugger
 	Logger::EnableConsole()
@@ -29,9 +30,9 @@ EndIf
 
 ;-> Initialisation
 
-If Engine::IsRunningInArchive() Or Engine::IsRunningInArchive(#False, #Null$, "./Data") Or
-   (Engine::IsRunningInArchive(#False, "Engine3d.dll") And
-    Engine::IsRunningInArchive(#False, "Engine3D.dll"))
+If Framework::IsRunningInArchive() Or Framework::IsRunningInArchive(#False, #Null$, "./Data") Or
+   (Framework::IsRunningInArchive(#False, "Engine3d.dll") And
+    Framework::IsRunningInArchive(#False, "Engine3D.dll"))
 	Define MsgResult.i = MessageRequester("Warning",
 	                                      "We detected that the game might be missing some"+#CRLF$+
 	                                      "important files or might be running from an archive."+#CRLF$+#CRLF$+
@@ -46,7 +47,7 @@ EndIf
 
 
 ; Prepares the engine internally.
-If Not Engine::Init()
+If Not Framework::Init()
 	Logger::Error("Engine failed to start, now exiting...")
 	MessageRequester("Fatal error", "Engine initialization failure !",
 	                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
@@ -55,7 +56,7 @@ EndIf
 
 ; Starts the game window.
 ; May open prompts before returning !
-Global GameWindow = Engine::Start()
+Global GameWindow = Framework::Start()
 If Not GameWindow
 	Logger::Error("Failed to start engine, now exiting...")
 	MessageRequester("Fatal error", "Engine start failure !",
@@ -70,7 +71,7 @@ EndIf
 IncludePath "./Game/"
 XIncludeFile "./GameCommons.pbi"
 
-; Going into the game screen
+; Going into the loading screen
 If Not ScreenManager::ChangeScreen("loading")
 	Logger::Devel("Failed to switch screen !")
 EndIf
@@ -91,7 +92,7 @@ Repeat
 	
 	; TODO: Add an external debug window here to mess around with the engine live.
 	
-	If Engine::RunMainWindowLoop
+	If Framework::RunMainWindowLoop
 		Define Event
 		Repeat
 			Event = WindowEvent()
@@ -104,7 +105,7 @@ Repeat
 					
 				Case #PB_Event_CloseWindow
 					;If EventWindow() = GameWindow
-					Engine::IsRunning = #False
+					Framework::IsRunning = #False
 					;EndIf
 			EndSelect
 		Until Event = 0
@@ -115,23 +116,23 @@ Repeat
 	LastTick = ElapsedMilliseconds()
 	
 	; Calling the screen functions
-	Engine::Update(TimeDelta)
-	Engine::Render(TimeDelta)
+	Framework::Update(TimeDelta)
+	Framework::Render(TimeDelta)
 	
 	; Prevents the CPU from going way too fast if vsync is disabled.
 	; This is a bad way of doing it, but it works, so...
 	;Delay(1)
-Until Not Engine::IsRunning
+Until Not Framework::IsRunning
 
 
 ;- End
 
-If Engine::HasCrashed
+If Framework::HasCrashed
 	; ???
 	; Do something with the on-line library ?
 Else
 	Logger::Devel("The engine is exiting gracefully !")
 EndIf
 
-Engine::Finish(#True)
+Framework::Finish(#True)
 End 0

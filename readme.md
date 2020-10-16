@@ -1,4 +1,4 @@
-# PureBasic Game Engine Test
+# PureBasic 3D Game Framework Test
 
 This is just a test
 
@@ -37,8 +37,8 @@ The x86 version of the game look "stuttery"...
 
 ## Licenses
 
-### Engine
-The custom engine and examples are covered under the *Unlicense* license.<br>
+### Framework
+The custom framework and examples are covered under the *Unlicense* license.<br>
 You can check it here: [LICENSE](LICENSE)
 
 ### PureBasic Libraries
@@ -46,4 +46,4 @@ Some of the internal libraries of PureBasic have special licenses, you can find 
 The license files are taken from the [fantaisie-software/purebasic-repository-template](https://github.com/fantaisie-software/purebasic-repository-template) repository.
 
 ### Remarks
-To avoid any issues with the fact you may have to include some license files in your final product, the build script copies the whole "Licenses" folder in the "Build/" folder and adds the one for the engine under the following name: "Custom PB Engine.txt".
+To avoid any issues with the fact you may have to include some license files in your final product, the build script copies the whole "Licenses" folder in the "Build/" folder and adds the one for the framework under the following name: "Custom PB Framework.txt".

@@ -1,5 +1,5 @@
 ﻿;{
-; * EngineBootlegUltraDeluxe.pbi
+; * Framework.pbi
 ; Version: N/A
 ; Author: Herwin Bozet
 ; 
@@ -14,6 +14,8 @@ EnableExplicit
 
 XIncludeFile "./InternalData/DataSection-Data.Internal.pbi"
 
+; TODO: Include module common
+
 XIncludeFile "./Arguments.pbi"
 XIncludeFile "./Logger.pbi"
 XIncludeFile "./Screens.pbi"
@@ -25,15 +27,15 @@ XIncludeFile "./Gui/GuiHandler.pbi"
 
 ;- Code
 
-DeclareModule Engine
-	#EngineName$ = "Bootleg Engine Ultra Deluxe Edition"
+DeclareModule Framework
+	#EngineName$ = "Bootleg Framework Ultra Deluxe Edition"
 	#EngineVersion$ = "0.0.1-indev"
 	
 	Global IsRunning.b = #False
 	Global HasCrashed.b = #False
 	Global RunMainWindowLoop.b = #True
 	
-	Declare.s GetEngineInfoText()
+	Declare.s GetFrameworkInfoText()
 	
 	Declare.b Init()
 	Declare Start(FlipMode = #PB_Screen_WaitSynchronization)
@@ -48,15 +50,15 @@ DeclareModule Engine
 	Declare.b IsRunningInArchive(CheckCurrentDirectory.b = #True, CheckFile$ = #Null$, CheckFolder$ = #Null$)
 EndDeclareModule
 
-Module Engine
+Module Framework
 	EnableExplicit
 	
-	Procedure.s GetEngineInfoText()
+	Procedure.s GetFrameworkInfoText()
 		ProcedureReturn #EngineName$+" v"+#EngineVersion$
 	EndProcedure
 	
 	Procedure.b Init()
-		Logger::Devel("Initializing "+GetEngineInfoText()+"...")
+		Logger::Devel("Initializing "+GetFrameworkInfoText()+"...")
 		
 		Logger::Devel("Initializing 3D engine...")
 		If Not InitEngine3D()

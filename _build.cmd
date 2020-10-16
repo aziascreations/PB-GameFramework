@@ -30,7 +30,7 @@ mkdir Build\x64\Licenses\
 echo.
 
 echo ━┫ Copying assets ┣━
-copy .\LICENSE ".\Build\Commons\Licenses\Custom PB Engine.txt"
+copy .\LICENSE ".\Build\Commons\Licenses\Custom PB Framework.txt"
 robocopy .\Libraries\x64\ .\Build\x64
 robocopy .\Libraries\x86\ .\Build\x86
 xcopy Data Build\Commons\Data\ /E /Y

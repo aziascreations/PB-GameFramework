@@ -35,11 +35,4 @@ echo ━┫ Packaging source code ┣━
 7z a -mx9 ./Packages/%APPNAME%-sources.tar.gz ./Packages/%APPNAME%-sources.tar
 echo.
 
-echo ━┫ Packaging repository ┣━
-7z a -mx9 ./Packages/%APPNAME%-sources+git.zip ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore ./.git .gitattributes
-7z a -mx9 ./Packages/%APPNAME%-sources+git.7z ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore ./.git .gitattributes
-7z a -mx9 ./Packages/%APPNAME%-sources+git.tar ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore ./.git .gitattributes
-7z a -mx9 ./Packages/%APPNAME%-sources+git.tar.gz ./Packages/%APPNAME%-sources+git.tar
-echo.
-
 pause

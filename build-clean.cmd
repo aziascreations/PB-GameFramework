@@ -1,7 +1,5 @@
 @echo off
-
 echo Cleaning...
-
 rmdir /Q /S Build\
 rmdir /Q /S Packages\
 del .\*.exe
@@ -10,3 +8,4 @@ del .\*.ini
 del /S *.pb.cfg
 del /S *.pbi.cfg
 del /S *.pbf.cfg
+exit /B

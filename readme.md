@@ -27,6 +27,8 @@ This script builds the x86 and x64 versions of the game and launcher, copy the c
 <b>$> [build-package.cmd](build-package.cmd)</b><br>
 Packages the game accordingly in the *"Packages/"* folder.
 
+And if you want to configure these scripts, you can modify the *"[build-config.cmd](build-config.cmd)"* file and modify the lines that are relevant to your needs.
+
 ### Modules
 
 #### XInput

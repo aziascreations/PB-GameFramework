@@ -1,38 +1,66 @@
 @echo off
 chcp 65001 >nul
 echo ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-echo ┃ Automated packaging script v1.0 ┃
+echo ┃ Automated packaging script v2.0 ┃
 echo ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-set PATH=%PATH%;C:\Program Files\7-Zip
-set APPNAME=GameTest
 echo.
+goto package-settings
 
+
+:package-settings
+echo ━┫ Internal settings ┣━
+call build-config
+if defined PACKAGE_APP_NAME (
+	if "%PACKAGE_APP_NAME%" == "" (
+		set PACKAGE_APP_NAME=CONFIG-ERROR-EMPTY
+	)
+) else (
+	set PACKAGE_APP_NAME=CONFIG-ERROR-UNDEFINED
+)
+echo Done !
+echo.
+goto package-clean
+
+
+:package-clean
 echo ━┫ Preliminary clean-up ┣━
 rmdir /Q /S Packages\
 del .\*.exe
+echo Done !
 echo.
+goto package-setup
 
+
+:package-setup
 echo ━┫ Environment setup ┣━
 mkdir Packages\
+echo Done !
 echo.
+goto package-package
 
+
+:package-package
 echo ━┫ Packaging application ┣━
-7z a -mx9 ./Packages/%APPNAME%-x64.zip ./Build/x64/*
-7z a -mx9 ./Packages/%APPNAME%-x86.zip ./Build/x86/*
-7z a -mx9 ./Packages/%APPNAME%-x64.7z ./Build/x64/*
-7z a -mx9 ./Packages/%APPNAME%-x86.7z ./Build/x86/*
-7z a -mx9 ./Packages/%APPNAME%-x64.tar ./Build/x64/*
-7z a -mx9 ./Packages/%APPNAME%-x64.tar.gz ./Packages/%APPNAME%-x64.tar
-7z a -mx9 ./Packages/%APPNAME%-x86.tar ./Build/x86/*
-7z a -mx9 ./Packages/%APPNAME%-x86.tar.gz ./Packages/%APPNAME%-x86.tar
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-x64.zip" ./Build/x64/*
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-x86.zip" ./Build/x86/*
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-x64.7z" ./Build/x64/*
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-x86.7z" ./Build/x86/*
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-x64.tar" ./Build/x64/*
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-x64.tar.gz" "./Packages/%PACKAGE_APP_NAME%-x64.tar"
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-x86.tar" ./Build/x86/*
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-x86.tar.gz" "./Packages/%PACKAGE_APP_NAME%-x86.tar"
+echo Done !
 echo.
-
 echo ━┫ Packaging source code ┣━
 :: TODO: filter out the exes that may appear in the source code folders when testing out stuff.
-7z a -mx9 ./Packages/%APPNAME%-sources.zip ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
-7z a -mx9 ./Packages/%APPNAME%-sources.7z ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
-7z a -mx9 ./Packages/%APPNAME%-sources.tar ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
-7z a -mx9 ./Packages/%APPNAME%-sources.tar.gz ./Packages/%APPNAME%-sources.tar
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.zip" ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.7z" ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.tar" ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.tar.gz" "./Packages/%PACKAGE_APP_NAME%-sources.tar"
+echo Done !
 echo.
+goto end
 
+
+:end
 pause

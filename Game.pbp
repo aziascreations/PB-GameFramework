@@ -8,7 +8,7 @@
   <section name="data">
     <explorer view="C:\ProgramData\PureBasic\Examples\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2020-10-16 05:23" user="Herwin" host="DESKTOP-FCBVC66"/>
+    <lastopen date="2020-10-18 18:47" user="Herwin" host="DESKTOP-FCBVC66"/>
   </section>
   <section name="files">
     <file name="Framework\Arguments.pbi">
@@ -21,7 +21,7 @@
     </file>
     <file name="Framework\Framework.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="b78d9d947e8db44d87742f5499016248"/>
+      <fingerprint md5="223445081af7f253400a5bbc27e2bac6"/>
     </file>
     <file name="Framework\Gui\GuiButton.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+++"/>
@@ -61,7 +61,7 @@
     </file>
     <file name="Framework\Screens.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="2e8b32af56ca67187db117a7a5c5bdc2"/>
+      <fingerprint md5="5186313b00f7c4c2c0803b7741b5e797"/>
     </file>
     <file name="Game.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -92,7 +92,7 @@
       <fingerprint md5="d9f17a1773d13a0947d495bdf599f77d"/>
     </file>
     <file name="Game\ModelManipulatorScreen.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="c110f76fa8ca5023da5aebddc5f0ba88"/>
     </file>
     <file name="Game\ModelManipulatorTextureWindow.pbf">
@@ -113,8 +113,11 @@
       <options xpskin="1" debug="1"/>
       <temporaryexe value="source"/>
       <icon enable="1">icon.ico</icon>
-      <compilecount enable="1" value="447"/>
+      <compilecount enable="1" value="449"/>
       <buildcount enable="1" value="1"/>
+      <constants>
+        <constant value="#FRAMEWORK_MODULE_XINPUT = #True" enable="1"/>
+      </constants>
     </target>
     <target name="x86" enabled="1" default="0">
       <inputfile value="Game.pb"/>
@@ -126,6 +129,16 @@
       <icon enable="1">icon.ico</icon>
       <compilecount enable="1" value="138"/>
       <buildcount enable="1" value="1"/>
+      <constants>
+        <constant value="#FRAMEWORK_MODULE_XINPUT = #True" enable="1"/>
+      </constants>
+    </target>
+    <target name="Launcher - x64" enabled="1" default="0">
+      <inputfile value=""/>
+      <outputfile value=""/>
+      <options/>
+      <compilecount enable="1" value="46"/>
+      <buildcount enable="1" value="0"/>
     </target>
   </section>
 </project>

@@ -16,6 +16,11 @@ XIncludeFile "./InternalData/DataSection-Data.Internal.pbi"
 
 ; TODO: Include module common
 
+; Optional: Imports XInput if #FRAMEWORK_MODULE_XINPUT is defined.
+CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+	XIncludeFile "./Controllers/XInput.pbi"
+CompilerEndIf
+
 XIncludeFile "./Arguments.pbi"
 XIncludeFile "./Logger.pbi"
 XIncludeFile "./Screens.pbi"
@@ -35,6 +40,10 @@ DeclareModule Framework
 	Global HasCrashed.b = #False
 	Global RunMainWindowLoop.b = #True
 	
+	CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+		Global XInputLibraryID.i = #Null
+	CompilerEndIf
+	
 	Declare.s GetFrameworkInfoText()
 	
 	Declare.b Init()
@@ -48,6 +57,10 @@ DeclareModule Framework
 	Declare Finish(CleanMemory.b=#True)
 	
 	Declare.b IsRunningInArchive(CheckCurrentDirectory.b = #True, CheckFile$ = #Null$, CheckFolder$ = #Null$)
+	
+	Macro IsXInputEnabled()
+		Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+	EndMacro
 EndDeclareModule
 
 Module Framework
@@ -86,6 +99,17 @@ Module Framework
 		Resources::ReadIndexFiles("./Data/", "./Models")
 		Resources::ReadIndexFiles("./Data/", "./Musics")
 		Resources::ReadIndexFiles("./Data/", "./Sounds")
+		
+		; Optional: Initialize XInput if #FRAMEWORK_MODULE_XINPUT is defined.
+		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+			Logger::Devel("Initializing XInput...")
+			XInputLibraryID = XInput::InitXInput()
+			
+			If Not XInputLibraryID
+				Logger::Error("Failed to initialize XInput 1.4 !")
+				ProcedureReturn #False
+			EndIf
+		CompilerEndIf
 		
 ; 		Logger::Devel("Processing game.json...")
 ; 		; Load datasection config
@@ -146,6 +170,11 @@ Module Framework
 		ScreenManager::Finish(CleanMemory)
 		;Args::Finish(CleanMemory)
 		;Logger::Finish(CleanMemory)
+		
+		; Optional: Closes XInput if #FRAMEWORK_MODULE_XINPUT is defined.
+		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+			XInput::CloseXInputLibrary(XInputLibraryID)
+		CompilerEndIf
 	EndProcedure
 	
 	Procedure.b IsRunningInArchive(CheckCurrentDirectory.b = #True, CheckFile$ = #Null$, CheckFolder$ = #Null$)

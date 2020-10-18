@@ -21,6 +21,9 @@ DeclareModule ScreenManager
 		*OnRender
 		*OnLeave
 		*OnQuit
+		
+		; Controls
+		
 	EndStructure
 	
 	Declare.b Init()

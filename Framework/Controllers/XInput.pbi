@@ -1,7 +1,16 @@
 ﻿
 ;- Compiler Directives
 
-;CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include file !": CompilerEndIf
+CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include file !": CompilerEndIf
+
+CompilerIf #PB_Compiler_OS <> #PB_OS_Windows
+	CompilerError "Unable to XInput module for an OS that isn't Windows !"
+CompilerEndIf
+
+CompilerIf Not Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+	CompilerError "The #FRAMEWORK_MODULE_XINPUT constant is not defined !"
+CompilerEndIf
+
 EnableExplicit
 
 
@@ -83,7 +92,7 @@ DeclareModule XInput
 	#BATTERY_LEVEL_FULL             = $03
 	
 	; User index definitions
-	#XUSER_MAX_COUNT                 = 4
+	#XUSER_MAX_COUNT                = 4
 	
 	#XUSER_INDEX_ANY                = $000000FF
 	

@@ -23,14 +23,19 @@ DeclareModule ScreenManager
 		*OnQuit
 		
 		; Controls
-		
+		*OnControllerButtonDown
+		*OnControllerButtonUp
+		*OnControllerAxisMoved
 	EndStructure
+	
+	Global *CurrentScreen.ScreenData = #Null
 	
 	Declare.b Init()
 	
 	Declare.i CreateScreen(ScreenName$ = "DefaultScreen", *OnRegister = #Null, *OnUnregister = #Null,
-	                        *OnInit = #Null, *OnStart = #Null, *OnUpdate = #Null, *OnRender = #Null,
-	                        *OnLeave = #Null, *OnQuit = #Null)
+	                       *OnInit = #Null, *OnStart = #Null, *OnUpdate = #Null, *OnRender = #Null,
+	                       *OnLeave = #Null, *OnQuit = #Null, *OnControllerButtonDown = #Null,
+	                       *OnControllerButtonUp = #Null, *OnControllerAxisMoved = #Null)
 	
 	; Returns non-zero if the screen was registered !
 	Declare.b RegisterScreen(*CurrentScreen.ScreenData, ScreenKey$, Overwrite.b = #False, AutoFreeMemory.b = #True)
@@ -53,7 +58,6 @@ EndDeclareModule
 Module ScreenManager
 	EnableExplicit
 	
-	Global *CurrentScreen.ScreenData = #Null
 	Global NewMap Screens.i()
 	Global SkipRender.b = #False
 	Global *ErrorScreen.ScreenData = #Null
@@ -66,8 +70,9 @@ Module ScreenManager
 	EndProcedure
 	
 	Procedure.i CreateScreen(ScreenName$ = "DefaultScreen", *OnRegister = #Null, *OnUnregister = #Null,
-	                          *OnInit = #Null, *OnStart = #Null, *OnUpdate = #Null, *OnRender = #Null,
-	                          *OnLeave = #Null, *OnQuit = #Null)
+	                         *OnInit = #Null, *OnStart = #Null, *OnUpdate = #Null, *OnRender = #Null,
+	                         *OnLeave = #Null, *OnQuit = #Null, *OnControllerButtonDown = #Null,
+	                         *OnControllerButtonUp = #Null, *OnControllerAxisMoved = #Null)
 		Protected *NewScreen.ScreenData = AllocateStructure(ScreenData)
 		
 		If *NewScreen
@@ -81,6 +86,9 @@ Module ScreenManager
 				\OnRender = *OnRender
 				\OnLeave = *OnLeave
 				\OnQuit = *OnQuit
+				\OnControllerButtonDown = *OnControllerButtonDown
+				\OnControllerButtonUp = *OnControllerButtonUp
+				\OnControllerAxisMoved = *OnControllerAxisMoved
 			EndWith
 		EndIf
 		

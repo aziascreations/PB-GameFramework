@@ -7,6 +7,24 @@ set CPLR86="C:\Program Files\PureBasic\PureBasic_5.70_x86_x64\Compilers\pbcompil
 set CPLR64="C:\Program Files\PureBasic\PureBasic_5.70_x64\Compilers\pbcompiler.exe"
 echo.
 
+echo ━┫ Internal settings ┣━
+:: XInput Module (Windows Only)
+set MODULE_FRAMEWORK_XINPUT=1
+
+:: DInput Module (Windows Only) (Not implemented !!!)
+set MODULE_FRAMEWORK_DINPUT=0
+
+:: Preparing the constants
+set PB_COMPILER_MODULES=
+if defined MODULE_FRAMEWORK_XINPUT (
+	if "%MODULE_FRAMEWORK_XINPUT%" == "1" (
+		echo Using XInput module !
+		set PB_COMPILER_MODULES=%PB_COMPILER_MODULES% /CONSTANT FRAMEWORK_MODULE_XINPUT=#True
+	)
+)
+echo Constants: %PB_COMPILER_MODULES%
+echo.
+
 echo ━┫ Preliminary clean-up ┣━
 echo ● Deleting Build/
 rmdir /Q /S Build\
@@ -47,12 +65,12 @@ xcopy Build\Commons\Licenses\ Build\x86\Licenses\ /E /Y
 echo.
 
 echo ━┫ Compiling x86 ┣━
-%CPLR86% /EXE ".\Build\x86\Game.exe" /ICON ".\icon.ico" ".\Game.pb"
+%CPLR86% /EXE ".\Build\x86\Game.exe" /ICON ".\icon.ico" %PB_COMPILER_MODULES% ".\Game.pb"
 %CPLR86% /EXE ".\Build\x86\Launcher.exe" /ICON ".\icon.ico" ".\Launcher.pb"
 echo.
 
 echo ━┫ Compiling x64 ┣━
-%CPLR64% /EXE ".\Build\x64\Game.exe" /ICON ".\icon.ico" ".\Game.pb"
+%CPLR64% /EXE ".\Build\x64\Game.exe" /ICON ".\icon.ico" %PB_COMPILER_MODULES% ".\Game.pb"
 %CPLR64% /EXE ".\Build\x64\Launcher.exe" /ICON ".\icon.ico" ".\Launcher.pb"
 echo.
 

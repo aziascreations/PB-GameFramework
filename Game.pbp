@@ -8,7 +8,7 @@
   <section name="data">
     <explorer view="C:\ProgramData\PureBasic\Examples\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2020-10-18 18:47" user="Herwin" host="DESKTOP-FCBVC66"/>
+    <lastopen date="2020-10-18 22:20" user="Herwin" host="DESKTOP-FCBVC66"/>
   </section>
   <section name="files">
     <file name="Framework\Arguments.pbi">
@@ -19,9 +19,13 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+++"/>
       <fingerprint md5="456d42a7ac76a51b3fd619464695837b"/>
     </file>
+    <file name="Framework\Controllers\XInput.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+++"/>
+      <fingerprint md5="1b1ef27d24ad78eabeb30a09f882cc8b"/>
+    </file>
     <file name="Framework\Framework.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="223445081af7f253400a5bbc27e2bac6"/>
+      <fingerprint md5="7823c9bd3283cdf5fbfb7a3a0a76f5bb"/>
     </file>
     <file name="Framework\Gui\GuiButton.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+++"/>
@@ -61,7 +65,7 @@
     </file>
     <file name="Framework\Screens.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="5186313b00f7c4c2c0803b7741b5e797"/>
+      <fingerprint md5="59cf26f2aac4b280f183549540f64cea"/>
     </file>
     <file name="Game.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -71,17 +75,21 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="33b25542dd3d0011db7688aff85b856d"/>
     </file>
+    <file name="Game\ControllerTestScreen.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="7b02c843ff61125602bc3121965db589"/>
+    </file>
     <file name="Game\DungeonTestScreen.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="98c27ff94a37e2db76ece1cada298c90"/>
     </file>
     <file name="Game\GameCommons.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="04e543b63c1050be9f040f3679240097"/>
+      <fingerprint md5="c4887e896aa82f468c2018295ae815d6"/>
     </file>
     <file name="Game\LoadingScreen.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="db84452af838dae449e0603a621b8ebf"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="1958ba26cead5bba5b099f2dba794358"/>
     </file>
     <file name="Game\MainMenuScreen.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
@@ -103,6 +111,10 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="b05839a7102efe9df44a17b1c1a72381"/>
     </file>
+    <file name="Framework\Controllers\ControllerManager.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+++"/>
+      <fingerprint md5="7e6a55ea954cc45fb48f3ea2253434fc"/>
+    </file>
   </section>
   <section name="targets">
     <target name="x64" enabled="1" default="1">
@@ -113,10 +125,11 @@
       <options xpskin="1" debug="1"/>
       <temporaryexe value="source"/>
       <icon enable="1">icon.ico</icon>
-      <compilecount enable="1" value="449"/>
+      <compilecount enable="1" value="465"/>
       <buildcount enable="1" value="1"/>
       <constants>
         <constant value="#FRAMEWORK_MODULE_XINPUT = #True" enable="1"/>
+        <constant value="#FRAMEWORK_MODULE_DINPUT = #True" enable="1"/>
       </constants>
     </target>
     <target name="x86" enabled="1" default="0">
@@ -131,6 +144,7 @@
       <buildcount enable="1" value="1"/>
       <constants>
         <constant value="#FRAMEWORK_MODULE_XINPUT = #True" enable="1"/>
+        <constant value="#FRAMEWORK_MODULE_DINPUT = #True" enable="1"/>
       </constants>
     </target>
     <target name="Launcher - x64" enabled="1" default="0">

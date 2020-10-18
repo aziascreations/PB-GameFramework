@@ -14,13 +14,6 @@ EnableExplicit
 
 XIncludeFile "./InternalData/DataSection-Data.Internal.pbi"
 
-; TODO: Include module common
-
-; Optional: Imports XInput if #FRAMEWORK_MODULE_XINPUT is defined.
-CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
-	XIncludeFile "./Controllers/XInput.pbi"
-CompilerEndIf
-
 XIncludeFile "./Arguments.pbi"
 XIncludeFile "./Logger.pbi"
 XIncludeFile "./Screens.pbi"
@@ -28,6 +21,12 @@ XIncludeFile "./ResourceManager.pbi"
 
 XIncludeFile "./Helpers/HelpersCommon.pbi"
 XIncludeFile "./Gui/GuiHandler.pbi"
+
+; Optional: Imports XInput if #FRAMEWORK_MODULE_XINPUT is defined.
+CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+	XIncludeFile "./Controllers/XInput.pbi"
+	XIncludeFile "./Controllers/ControllerManager.pbi"
+CompilerEndIf
 
 
 ;- Code
@@ -109,6 +108,13 @@ Module Framework
 				Logger::Error("Failed to initialize XInput 1.4 !")
 				ProcedureReturn #False
 			EndIf
+			
+			If Not XInput::LoadXInputFunctions(XInputLibraryID) = #False
+				Logger::Error("Failed to load functions from the XInput 1.4 library !")
+				ProcedureReturn #False
+			EndIf
+			
+			XInput::XInputEnable(#True)
 		CompilerEndIf
 		
 ; 		Logger::Devel("Processing game.json...")
@@ -155,6 +161,10 @@ Module Framework
 	EndProcedure
 	
 	Procedure Update(TimeDelta.q)
+		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+			ControllerManager::Update()
+		CompilerEndIf
+		
 		ScreenManager::UpdateScreen(TimeDelta)
 	EndProcedure
 	

@@ -10,6 +10,9 @@ A basic 3D game framework for PureBasic.
 * Screens (aka: scenes)
 * Unity style launcher (Unfinished)
 
+## Optional Features
+* XInput controller support (Windows only)
+
 ## Building
 
 ### For release
@@ -27,9 +30,12 @@ Packages the game accordingly in the *"Packages/"* folder.
 ### Modules
 
 #### XInput
-You can enable XInput support by compiling the game and framework by setting the `#FRAMEWORK_MODULE_XINPUT` constant in the compiler.
+You can enable XInput support by compiling the game and framework by setting the `#FRAMEWORK_MODULE_XINPUT` constant in the compiler or by making sure the build script has the variable `%MODULE_FRAMEWORK_XINPUT%` set to `1`.
 
 By doing so, you will have access to the `XInput` module and it's fonctions, and the XInput library will be loaded when you call `Framework::Init()`.
+And since this module is the only controller module present in the framework for now, if you activate it, the framework will take care of calling the controller-related procedures of your screens with the help of the `ControllerManager` module.
+
+More info about the XInput module can be found in the [relevant documentation](Documentation/XInput.md).
 
 ### For development
 If you simply want to run the game to test your code, you can either compile *"[Game.pb](Game.pb)"* or simply open the *"[Game.pbp](Game.pbp)"* file and use the project.<br>

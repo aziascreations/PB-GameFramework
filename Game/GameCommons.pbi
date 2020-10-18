@@ -16,3 +16,7 @@ XIncludeFile "./CameraTestScreen.pbi"
 XIncludeFile "./TestingScreen.pbi"
 XIncludeFile "./DungeonTestScreen.pbi"
 XIncludeFile "./ModelManipulatorScreen.pbi"
+
+CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+	XIncludeFile "./ControllerTestScreen.pbi"
+CompilerEndIf

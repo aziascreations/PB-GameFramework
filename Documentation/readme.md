@@ -9,6 +9,7 @@
 * [Controller Manager](ControllerManager.md) & [XInput](XInput.md)
 * [GUIs](GUIs.md)
 * [Resource Manager](ResourceManager.md)
+* [Snappy](Snappy.md)
 
 ## Helpers
 ### 2D Helpers

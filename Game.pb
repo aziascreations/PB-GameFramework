@@ -16,9 +16,7 @@
 
 EnableExplicit
 
-; Include the engine module and all the other ones.
-IncludePath "./Framework/"
-XIncludeFile "./Framework.pbi"
+XIncludeFile "./Framework/Framework.pbi"
 
 If Not #PB_Compiler_Debugger
 	Logger::EnableConsole()
@@ -30,6 +28,7 @@ EndIf
 
 ;-> Initialisation
 
+; Checking if the game might be running from an archive file. (ex: Via WinRAR)
 If Framework::IsRunningInArchive() Or Framework::IsRunningInArchive(#False, #Null$, "./Data") Or
    (Framework::IsRunningInArchive(#False, "Engine3d.dll") And
     Framework::IsRunningInArchive(#False, "Engine3D.dll"))
@@ -45,7 +44,6 @@ If Framework::IsRunningInArchive() Or Framework::IsRunningInArchive(#False, #Nul
 	EndIf
 EndIf
 
-
 ; Prepares the engine internally.
 If Not Framework::Init()
 	Logger::Error("Engine failed to start, now exiting...")
@@ -55,7 +53,6 @@ If Not Framework::Init()
 EndIf
 
 ; Starts the game window.
-; May open prompts before returning !
 Global GameWindow = Framework::Start()
 If Not GameWindow
 	Logger::Error("Failed to start engine, now exiting...")
@@ -68,12 +65,11 @@ EndIf
 ;-> Game Code
 
 ; Include the game's code.
-IncludePath "./Game/"
-XIncludeFile "./GameCommons.pbi"
+XIncludeFile "./Game/GameCommons.pbi"
 
 ; Going into the loading screen
 If Not ScreenManager::ChangeScreen("loading")
-	Logger::Devel("Failed to switch screen !")
+	Logger::Error("Failed to switch screen !")
 EndIf
 
 

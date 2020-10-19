@@ -4,6 +4,10 @@
 CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include file !": CompilerEndIf
 EnableExplicit
 
+CompilerIf Not Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) Or #FRAMEWORK_MODULE_ARGUMENTS = "#False"
+	CompilerError "The #FRAMEWORK_MODULE_ARGUMENTS constant is not defined !"
+CompilerEndIf
+
 
 ;- Module
 

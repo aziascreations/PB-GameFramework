@@ -18,7 +18,6 @@ goto project-clean
 :project-clean
 echo ━┫ Cleaning ┣━
 call build-clean
-del %PROJECT_FILENAME%
 del /S *.pbp
 echo Done !
 echo.
@@ -41,7 +40,7 @@ echo ^<lastopen date="2020-01-01 00:00:00" user="NOBODY" host="NONE"/^> >> %PROJ
 echo ^</section^> >> %PROJECT_FILENAME%
 echo ^<section name="files"^> >> %PROJECT_FILENAME%
 echo ^<file name="Game.pb" ^> >> %PROJECT_FILENAME%
-echo ^<config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/^> >> %PROJECT_FILENAME%
+echo ^<config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/^> >> %PROJECT_FILENAME%
 echo ^<fingerprint md5="abc123"/^> >> %PROJECT_FILENAME%
 echo ^</file ^> >> %PROJECT_FILENAME%
 for /f "delims=" %%a in ('dir /b /a:-D /s Framework') do (
@@ -58,15 +57,98 @@ for /f "delims=" %%a in ('dir /b /a:-D /s Game') do (
 )
 :: TODO: If build launcher, scan files
 echo ^</section^> >> %PROJECT_FILENAME%
-
 echo ^<section name="targets"^> >> %PROJECT_FILENAME%
+if defined PROJECT_X64_TOGGLE (
+	if "%PROJECT_X64_TOGGLE%" == "1" (
+		if defined PROJECT_X64_COMPILER_NAME (
+			if defined PROJECT_X64_DEFAULT (
+				if "%PROJECT_X64_DEFAULT%" == "1" (
+					echo ^<target name="x64" enabled="1" default="1"^> >> %PROJECT_FILENAME%
+				) else (
+					echo ^<target name="x64" enabled="1" default="0"^> >> %PROJECT_FILENAME%
+				)
+			) else (
+				echo ^<target name="x64" enabled="1" default="0"^> >> %PROJECT_FILENAME%
+			)
+			echo ^<inputfile value="Game.pb"/^> >> %PROJECT_FILENAME%
+			echo ^<outputfile value="Game-x64.exe"/^> >> %PROJECT_FILENAME%
+			echo ^<compiler version="%PROJECT_X64_COMPILER_NAME%"/^> >> %PROJECT_FILENAME%
+			echo ^<executable value="Game-x64.exe"/^> >> %PROJECT_FILENAME%
+			echo ^<options xpskin="1" debug="1"/^> >> %PROJECT_FILENAME%
+			echo ^<temporaryexe value="source"/^> >> %PROJECT_FILENAME%
+			::echo ^<icon enable="1">icon.ico</icon^> >> %PROJECT_FILENAME%
+			echo ^<compilecount enable="1" value="0"/^> >> %PROJECT_FILENAME%
+			echo ^<buildcount enable="1" value="0"/^> >> %PROJECT_FILENAME%
+			call :module-constant-parser
+			echo ^</target^> >> %PROJECT_FILENAME%
+		)
+	)
+)
+if defined PROJECT_X86_TOGGLE (
+	if "%PROJECT_X86_TOGGLE%" == "1" (
+		if defined PROJECT_X86_COMPILER_NAME (
+			if defined PROJECT_X86_DEFAULT (
+				if "%PROJECT_X86_DEFAULT%" == "1" (
+					echo ^<target name="x64" enabled="1" default="1"^> >> %PROJECT_FILENAME%
+				) else (
+					echo ^<target name="x64" enabled="1" default="0"^> >> %PROJECT_FILENAME%
+				)
+			) else (
+				echo ^<target name="x64" enabled="1" default="0"^> >> %PROJECT_FILENAME%
+			)
+			echo ^<inputfile value="Game.pb"/^> >> %PROJECT_FILENAME%
+			echo ^<outputfile value="Game-x86.exe"/^> >> %PROJECT_FILENAME%
+			echo ^<compiler version="%PROJECT_X86_COMPILER_NAME%"/^> >> %PROJECT_FILENAME%
+			echo ^<executable value="Game-x86.exe"/^> >> %PROJECT_FILENAME%
+			echo ^<options xpskin="1" debug="1"/^> >> %PROJECT_FILENAME%
+			echo ^<temporaryexe value="source"/^> >> %PROJECT_FILENAME%
+			::echo ^<icon enable="1">icon.ico</icon^> >> %PROJECT_FILENAME%
+			echo ^<compilecount enable="1" value="0"/^> >> %PROJECT_FILENAME%
+			echo ^<buildcount enable="1" value="0"/^> >> %PROJECT_FILENAME%
+			call :module-constant-parser
+			echo ^</target^> >> %PROJECT_FILENAME%
+		)
+	)
+)
 echo ^</section^> >> %PROJECT_FILENAME%
-
 echo ^</project^> >> %PROJECT_FILENAME%
 echo. >> %PROJECT_FILENAME%
 echo Done !
 echo.
 goto end
+
+
+:module-constant-parser
+echo ^<constants^> >> %PROJECT_FILENAME%
+if defined FRAMEWORK_MODULE_XINPUT (
+	if "%FRAMEWORK_MODULE_XINPUT%" == "1" (
+		echo ^<constant value="#FRAMEWORK_MODULE_XINPUT = #True" enable="1"/^> >> %PROJECT_FILENAME%
+	) else (
+		echo ^<constant value="#FRAMEWORK_MODULE_XINPUT = #False" enable="1"/^> >> %PROJECT_FILENAME%
+	)
+) else (
+	echo ^<constant value="#FRAMEWORK_MODULE_XINPUT = #False" enable="1"/^> >> %PROJECT_FILENAME%
+)
+if defined FRAMEWORK_MODULE_SNAPPY (
+	if "%FRAMEWORK_MODULE_SNAPPY%" == "1" (
+		echo ^<constant value="#FRAMEWORK_MODULE_SNAPPY = #True" enable="1"/^> >> %PROJECT_FILENAME%
+	) else (
+		echo ^<constant value="#FRAMEWORK_MODULE_SNAPPY = #False" enable="1"/^> >> %PROJECT_FILENAME%
+	)
+) else (
+	echo ^<constant value="#FRAMEWORK_MODULE_SNAPPY = #False" enable="1"/^> >> %PROJECT_FILENAME%
+)
+if defined FRAMEWORK_MODULE_ARGUMENTS (
+	if "%FRAMEWORK_MODULE_ARGUMENTS%" == "1" (
+		echo ^<constant value="#FRAMEWORK_MODULE_ARGUMENTS = #True" enable="1"/^> >> %PROJECT_FILENAME%
+	) else (
+		echo ^<constant value="#FRAMEWORK_MODULE_ARGUMENTS = #False" enable="1"/^> >> %PROJECT_FILENAME%
+	)
+) else (
+	echo ^<constant value="#FRAMEWORK_MODULE_ARGUMENTS = #False" enable="1"/^> >> %PROJECT_FILENAME%
+)
+echo ^</constants^> >> %PROJECT_FILENAME%
+goto:eof
 
 
 :error

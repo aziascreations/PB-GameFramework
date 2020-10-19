@@ -3,7 +3,7 @@
 ; Version: N/A
 ; Author: Herwin Bozet
 ; 
-; This is the engine's main file, it includes everything it will need and with declare itself as a module.
+; This is the engine's main file, it includes everything it and you might need.
 ; This file should stay untouched, there is a high risk of fucking things up you you play in here !
 ;}
 
@@ -13,19 +13,27 @@ CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include 
 EnableExplicit
 
 XIncludeFile "./InternalData/DataSection-Data.Internal.pbi"
-
-XIncludeFile "./Arguments.pbi"
 XIncludeFile "./Logger.pbi"
 XIncludeFile "./Screens.pbi"
-XIncludeFile "./ResourceManager.pbi"
 
+XIncludeFile "./ResourceManager.pbi"
 XIncludeFile "./Helpers/HelpersCommon.pbi"
 XIncludeFile "./Gui/GuiHandler.pbi"
 
-; Optional: Imports XInput if #FRAMEWORK_MODULE_XINPUT is defined.
-CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+; Optional: Imports Arguments if #FRAMEWORK_MODULE_XINPUT is defined.
+CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
+	XIncludeFile "./Arguments/Arguments.pbi"
+CompilerEndIf
+
+; Optional: Imports XInput and ControllerManager if #FRAMEWORK_MODULE_XINPUT is defined.
+CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant) And #FRAMEWORK_MODULE_XINPUT = "#True"
 	XIncludeFile "./Controllers/XInput.pbi"
 	XIncludeFile "./Controllers/ControllerManager.pbi"
+CompilerEndIf
+
+; Optional: Imports Snappy if #FRAMEWORK_MODULE_SNAPPY is defined.
+CompilerIf Defined(FRAMEWORK_MODULE_SNAPPY, #PB_Constant) And #FRAMEWORK_MODULE_SNAPPY = "#True"
+	XIncludeFile "./Snappy/Snappy.pbi"
 CompilerEndIf
 
 
@@ -100,7 +108,7 @@ Module Framework
 		Resources::ReadIndexFiles("./Data/", "./Sounds")
 		
 		; Optional: Initialize XInput if #FRAMEWORK_MODULE_XINPUT is defined.
-		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant) And #FRAMEWORK_MODULE_XINPUT = "#True"
 			Logger::Devel("Initializing XInput...")
 			XInputLibraryID = XInput::InitXInput()
 			
@@ -137,13 +145,10 @@ Module Framework
 	Procedure Start(FlipMode = #PB_Screen_WaitSynchronization)
 		Logger::Devel("Starting engine...")
 		
-		Protected GameWindow = #Null
-		;1440, 900
-		;1366, 768
-		
-		GameWindow = OpenWindow(#PB_Any, 0, 0, 1366, 768, "PureBasic - 3D Demos", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
+		Protected GameWindow = OpenWindow(#PB_Any, 0, 0, 1366, 768, "PureBasic - 3D Demos",
+		                                  #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
 		If GameWindow
-			If Not OpenWindowedScreen(WindowID(GameWindow), 0, 0, 1366, 768, 0, 0, 0, FlipMode)
+			If Not OpenWindowedScreen(WindowID(GameWindow), 0, 0, 1366, 768, #True, 0, 0, FlipMode)
 				Logger::Error("Failed to open windowed screen !")
 				ProcedureReturn #False
 			EndIf
@@ -182,7 +187,7 @@ Module Framework
 		;Logger::Finish(CleanMemory)
 		
 		; Optional: Closes XInput if #FRAMEWORK_MODULE_XINPUT is defined.
-		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant) And #FRAMEWORK_MODULE_XINPUT = "#True"
 			XInput::CloseXInputLibrary(XInputLibraryID)
 		CompilerEndIf
 	EndProcedure

@@ -5,7 +5,7 @@
 <b>Dependencies:</b> *None*<br>
 <b>Dependants:</b> *[ControllerManager](ControllerManager.md)*
 
-<b>Compile flag:</b><br>
+<b>Compile flags:</b><br>
 &emsp;`#FRAMEWORK_MODULE_XINPUT = <#False|#True>`<br>
 &emsp;`%FRAMEWORK_MODULE_XINPUT% = <0|1>`</b>
 

@@ -7,7 +7,7 @@ CompilerIf #PB_Compiler_OS <> #PB_OS_Windows
 	CompilerError "Unable to XInput module for an OS that isn't Windows !"
 CompilerEndIf
 
-CompilerIf Not Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+CompilerIf Not Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant) Or #FRAMEWORK_MODULE_XINPUT = "#False"
 	CompilerError "The #FRAMEWORK_MODULE_XINPUT constant is not defined !"
 CompilerEndIf
 

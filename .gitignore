@@ -10,3 +10,5 @@ Data/Graphics/Trash/
 todo.txt
 *.ini
 Documentation/ControllersList.md
+*.pbp
+*.pbp.cfg

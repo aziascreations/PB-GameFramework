@@ -253,11 +253,16 @@ DeclareModule XInput
 	Global XInputLoadedVersion$ = "0.0"
 	Global XInputLoadedVersion.i = 0
 	
-	Macro GetLoadedXInputVersionString() : XInputLoadedVersion$ : EndMacro
-	Macro GetLoadedXInputVersion() : XInputLoadedVersion : EndMacro
+	Macro GetLoadedXInputVersionString()
+		XInput::XInputLoadedVersion$
+	EndMacro
 	
-	Declare InitXInput(MaxVersion = #XINPUT_VERSION_LATEST, MinVersion = #XINPUT_VERSION_LATEST)
-	Declare LoadXInputFunctions(XInputLibraryID)
+	Macro GetLoadedXInputVersion()
+		XInput::XInputLoadedVersion
+	EndMacro
+	
+	Declare.i InitXInput(MaxVersion = #XINPUT_VERSION_LATEST, MinVersion = #XINPUT_VERSION_LATEST)
+	Declare.i LoadXInputFunctions(XInputLibraryID)
 	Declare CloseXInputLibrary(XInputLibraryID)
 EndDeclareModule
 
@@ -265,7 +270,7 @@ Module XInput
 	;-> Module
 	
 	; Returns the library ID if it was loaded successfully, or zero otherwise.
-	Procedure InitXInput(MaxVersion = #XINPUT_VERSION_LATEST, MinVersion = #XINPUT_VERSION_LATEST)
+	Procedure.i InitXInput(MaxVersion = #XINPUT_VERSION_LATEST, MinVersion = #XINPUT_VERSION_LATEST)
 		CompilerIf Not #PB_Compiler_OS = #PB_OS_Windows
 			DebuggerWarning("Tried to load the XInput library on a non-windows OS !")
 			CompilerWarning("Compiling XInput stuff for non-windows OS !")
@@ -317,7 +322,7 @@ Module XInput
 	EndProcedure
 	
 	; Returns non-zero if an error occured
-	Procedure LoadXInputFunctions(XInputLibraryID)
+	Procedure.i LoadXInputFunctions(XInputLibraryID)
 		If Not IsLibrary(XInputLibraryID)
 			ProcedureReturn #XINPUT_ERROR_LIBRARY_NOT_LOADED
 		EndIf

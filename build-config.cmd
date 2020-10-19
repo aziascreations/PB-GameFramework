@@ -17,6 +17,9 @@ set ZIPEXE="C:\Program Files\7-Zip\7z.exe"
 
 :: ##### Build options
 
+:: - Project file name
+set PROJECT_FILENAME=Project.pbp
+
 :: - Common executable icon toggle
 :: |-> 0 - Don't compile the apps with an icon
 :: |-> 1 - Compile the apps with the icon in the %EXECUTABLE_ICON_PATH% variable.
@@ -46,11 +49,18 @@ set EXECUTABLE_X64_ENABLE=1
 :: |-> 1 - Compile the x86 version of the game and launcher
 set EXECUTABLE_X86_ENABLE=1
 
+:: - Greedy copy mode for PB licenses
+:: |-> 0 - Only copies the PB licenses required by the framework
+:: |-> 1 - Copies every PB licenses regardless of wether they are used or not
+set LICENSES_GREEDY_PB_COPY=1
+
+
+:: ##### Module toggles
+
 :: - Common executable icon toggle
 :: |-> 0 - Don't include the XInput module
 :: |-> 1 - Include the XInput module in the game
-set MODULE_FRAMEWORK_XINPUT=1
-
+set FRAMEWORK_MODULE_XINPUT=1
 
 
 :: ##### Packaging options

@@ -8,4 +8,5 @@ del .\*.ini
 del /S *.pb.cfg
 del /S *.pbi.cfg
 del /S *.pbf.cfg
+del /S *.pbp.cfg
 exit /B

@@ -1,33 +1,48 @@
-# PureBasic 3D Game Framework Test
-A basic 3D game framework for PureBasic.
+# PureBasic 2D/3D Game Framework Test
+A basic 2D/3D game framework for PureBasic.
 
 ## Features
+### Standard
+These features come embedded in the *core* part of the framework.
+
+* Easily configurable build scripts
 * GUI system (Primitive)
 * Launch arguments parsing (Unfinished)
 * Live asset manipulator (Unfinished)
-* Logging
+* Logging (Primitive)
 * Resource Management
 * Screens (aka: scenes)
 * Unity style launcher (Unfinished)
 
-## Optional Features
+### Optional
+These features are optionnal and can be enabled or disabled via the [build script config file](build-config.cmd) or in the [project file](Game.pbp).
+
+* Snappy compression/decompression support (Windows only <sub><sup>easily portable to Linux if you compile the .so files, I think...</sup></sub>)
 * XInput controller support (Windows only)
+
+## Documentation
+All of the documentation for the different components of the framework can be found in the *"[Documentation/](Documentation/)"* folder.<br>
+A summary of all the pages will also be present in there.
 
 ## Building
 
 ### For release
-To clean, build and package the game and launcher, you can run these included scripts.<br>
+To clean, build and package the game and launcher, you can run the included scripts.<br>
+And if you want to configure these scripts, you can modify the *"[build-config.cmd](build-config.cmd)"* file and modify the lines that are relevant to your needs.
 
-<b>$> [build-clean](build-clean.cmd)</b><br>
+#### Scripts
+
+<b>$> [build-clean.cmd](build-clean.cmd)</b><br>
 Removes the *"Build/"* and *"Packages/"* folders and some trash.
 
 <b>$> [build-compile.cmd](build-compile.cmd)</b><br>
-This script builds the x86 and x64 versions of the game and launcher, copy the content of the *"[Data/](Data/)"* and *"[Licenses/](Licenses/)"* folders inside the *"Build/"* folder and removes the trash from them.
+This script builds the x86 and x64 versions of the game and launcher, copies the content of the *"[Data/](Data/)"* and *"[Licenses/](Licenses/)"* folders inside the *"Build/"* folder and removes the trash from them.
 
 <b>$> [build-package.cmd](build-package.cmd)</b><br>
-Packages the game accordingly in the *"Packages/"* folder.
+Packages the game in archives that are then put in the *"Packages/"* folder.
 
-And if you want to configure these scripts, you can modify the *"[build-config.cmd](build-config.cmd)"* file and modify the lines that are relevant to your needs.
+<b>$> [build-make-pbp.cmd](build-make-pbp.cmd)</b><br>
+Removes any PureBasic project file and creates one with all the constants the are relevant and present in the config script.
 
 ### Modules
 
@@ -60,6 +75,9 @@ You can check it here: *"[LICENSE](LICENSE)"*
 ### PureBasic Libraries
 Some of the internal libraries of PureBasic have special licenses, you can find their licenses in the *"[Licenses/](Licenses/)"* folder.<br>
 The license files are taken from the *"[fantaisie-software/purebasic-repository-template](https://github.com/fantaisie-software/purebasic-repository-template)"* repository.
+
+### Google's Snappy
+
 
 ### Remarks
 To avoid any issues with the fact you may have to include some license files in your final product, the build script copies the whole *"[Licenses/](Licenses/)"* folder in the *"Build/Commons/"* folder and adds the one for the framework under the following name: *"Custom PB Framework.txt"*.

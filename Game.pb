@@ -19,7 +19,8 @@ EnableExplicit
 XIncludeFile "./Framework/Framework.pbi"
 
 If Not #PB_Compiler_Debugger
-	Logger::EnableConsole()
+	;Logger::EnableConsole()
+	Logger::EnableHiddenConsole()
 EndIf
 ;Logger::EnableTrace()
 

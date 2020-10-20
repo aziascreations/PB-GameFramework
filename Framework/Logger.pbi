@@ -24,7 +24,15 @@ DeclareModule Logger
 	Declare.b Trace(Message$)
 	
 	; Can cause some really weird problems...
-	Declare EnableConsole()
+	Declare.b EnableConsole()
+	
+	CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+		Declare.b EnableHiddenConsole()
+	CompilerElse
+		Macro EnableHiddenConsole()
+			EnableConsole()
+		EndMacro
+	CompilerEndIf
 	
 	Declare EnableTrace()
 EndDeclareModule
@@ -35,12 +43,24 @@ Module Logger
 	Global UseConsole.b = #False
 	Global EnableTrace.b = #False
 	
+	CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+		Global UseHiddenConsole.b = #False
+		Global ConsoleHandle.i = #Null
+	CompilerEndIf
+	
 	Procedure _Log(Message$)
 		If UseConsole
 			PrintN(Message$)
 		EndIf
-			
+		
 		Debug Message$
+		
+		CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+			If UseHiddenConsole And ConsoleHandle And (Not UseConsole)
+				Message$ = Message$ + #CRLF$
+				WriteConsole_(ConsoleHandle, @Message$, Len(Message$), #Null, #Null)
+			EndIf
+		CompilerEndIf
 	EndProcedure
 	
 	Procedure.b Info(Message$)
@@ -70,11 +90,25 @@ Module Logger
 		ProcedureReturn #True
 	EndProcedure
 	
-	Procedure EnableConsole()
+	Procedure.b EnableConsole()
 		If Not UseConsole
 			UseConsole = OpenConsole("Logs")
 		EndIf
+		
+		ProcedureReturn UseConsole
 	EndProcedure
+	
+	CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+		Procedure.b EnableHiddenConsole()
+			ConsoleHandle = GetStdHandle_(#STD_OUTPUT_HANDLE)
+			
+			If ConsoleHandle
+				UseHiddenConsole = #True
+			EndIf
+			
+			ProcedureReturn UseHiddenConsole
+		EndProcedure
+	CompilerEndIf
 	
 	Procedure EnableTrace()
 		EnableTrace = #True

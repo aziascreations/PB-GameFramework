@@ -2,22 +2,19 @@
 A basic 2D/3D game framework for PureBasic.
 
 ## Features
-### Standard
-These features come embedded in the *core* part of the framework.
-
+The framework features at first a very simple set of features:
+<!--These features come embedded in the *core* part of the framework.-->
 * Easily configurable build scripts
+* Logging (Primitive)
+* Screens (aka: scenes)
+
+And if you want you can toggle the following features by editing the [build script config file](build-config.cmd):
 * GUI system (Primitive)
 * Launch arguments parsing (Unfinished)
 * Live asset manipulator (Unfinished)
-* Logging (Primitive)
 * Resource Management
-* Screens (aka: scenes)
-* Unity style launcher (Unfinished)
-
-### Optional
-These features are optionnal and can be enabled or disabled via the [build script config file](build-config.cmd) or in the [project file](Game.pbp).
-
 * Snappy compression/decompression support (Windows only <sub><sup>easily portable to Linux if you compile the .so files, I think...</sup></sub>)
+* Unity style launcher (Unfinished)
 * XInput controller support (Windows only)
 
 ## Documentation
@@ -42,7 +39,7 @@ This script builds the x86 and x64 versions of the game and launcher, copies the
 Packages the game in archives that are then put in the *"Packages/"* folder.
 
 <b>$> [build-make-pbp.cmd](build-make-pbp.cmd)</b><br>
-Removes any PureBasic project file and creates one with all the constants the are relevant and present in the config script.
+Removes any PureBasic project file and creates one with all the constants that are relevant and present in the config script.
 
 ### Modules
 

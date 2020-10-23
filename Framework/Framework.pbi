@@ -23,6 +23,7 @@ XIncludeFile "./Gui/GuiHandler.pbi"
 ; Optional: Imports Arguments if #FRAMEWORK_MODULE_XINPUT is defined.
 CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
 	XIncludeFile "./Arguments/Arguments.pbi"
+	XIncludeFile "./Arguments/ArgumentsHelper.pbi"
 CompilerEndIf
 
 ; Optional: Imports XInput and ControllerManager if #FRAMEWORK_MODULE_XINPUT is defined.
@@ -54,7 +55,7 @@ DeclareModule Framework
 	Declare.s GetFrameworkInfoText()
 	
 	Declare.b Init()
-	Declare Start(FlipMode = #PB_Screen_WaitSynchronization)
+	Declare.i Start(FlipMode = #PB_Screen_WaitSynchronization)
 	
 	Declare Update(TimeDelta.q)
 	Declare Render(TimeDelta.q)
@@ -127,6 +128,11 @@ Module Framework
 			XInput::XInputEnable(#True)
 		CompilerEndIf
 		
+		CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
+			Logger::Devel("Initializing arguments parser...")
+			Arguments::Init()
+		CompilerEndIf
+		
 ; 		Logger::Devel("Processing game.json...")
 ; 		; Load datasection config
 ; 		Protected GameJson = CatchJSON(#PB_Any, InternalData:: game_json_start,
@@ -144,8 +150,17 @@ Module Framework
 	EndProcedure
 	
 	; Starts the window and/or prompts.
-	Procedure Start(FlipMode = #PB_Screen_WaitSynchronization)
+	Procedure.i Start(FlipMode = #PB_Screen_WaitSynchronization)
 		Logger::Devel("Starting engine...")
+		
+		CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
+			Logger::Devel("Parsing arguments...")
+			If Arguments::ParseArguments(0, CountProgramParameters())
+				Logger::Devel("Failed to parse launch arguments !")
+				;Arguments::Finish()
+				ProcedureReturn #Null
+			EndIf
+		CompilerEndIf
 		
 		Protected GameWindow = OpenWindow(#PB_Any, 0, 0, 1366, 768, "PureBasic - 3D Demos",
 		                                  #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
@@ -185,7 +200,11 @@ Module Framework
 		Gui::FlushGuis(CleanMemory)
 		Resources::Finish(CleanMemory)
 		ScreenManager::Finish(CleanMemory)
-		;Args::Finish(CleanMemory)
+		
+		CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
+			Arguments::Finish()
+		CompilerEndIf
+		
 		;Logger::Finish(CleanMemory)
 		
 		; Optional: Closes XInput if #FRAMEWORK_MODULE_XINPUT is defined.

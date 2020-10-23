@@ -85,7 +85,7 @@ set FRAMEWORK_MODULE_XINPUT=1
 set FRAMEWORK_MODULE_SNAPPY=0
 
 :: - Toggle for the Arguments module
-set FRAMEWORK_MODULE_ARGUMENTS=0
+set FRAMEWORK_MODULE_ARGUMENTS=1
 
 
 :: ##### Packaging options #####

@@ -59,11 +59,8 @@ Module ScreenLoading
 		If Resources::Update() And StartTime + 1000 < ElapsedMilliseconds()
 			Logger::Devel("Finished loading resources, changing screen...")
 			
-			;ScreenManager::ChangeScreen("mainmenu")
-			ScreenManager::ChangeScreen("controller-test")
-			;ScreenManager::ChangeScreen("model-manipulator")
-			;ScreenManager::ChangeScreen("camera-test")
-			;ScreenManager::ChangeScreen("dungeon-test")
+			ScreenManager::ChangeScreen("model-manipulator")
+			;ScreenManager::ChangeScreen("digger")
 			ScreenManager::SkipNextRender()
 			Logger::Devel(Logger::#Separator$)
 		EndIf

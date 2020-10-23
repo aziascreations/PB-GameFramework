@@ -9,7 +9,7 @@
 
 ;- Notes
 
-; TODO: Check ExamineScreenModes()
+; TODO: Check ExamineScreenModes() -> In the launcher ?
 
 
 ;- Compiler Directives
@@ -85,7 +85,21 @@ ExamineMouse()
 ReleaseMouse(#True)
 
 Repeat
-	ExamineMouse()
+	; Did not work !
+	; ExamineMouse()
+	; 
+	; If ExamineMouse()
+	; 	Define TempX.i = MouseX(), TempY.i = MouseY()
+	; 	If MouseButton(#PB_MouseButton_Left)
+	; 		Framework::ProcessClick(#PB_MouseButton_Left, TempX, TempY)
+	; 	EndIf
+	; 	If MouseButton(#PB_MouseButton_Right)
+	; 		Framework::ProcessClick(#PB_MouseButton_Right, TempX, TempY)
+	; 	EndIf
+	; 	If MouseButton(#PB_MouseButton_Middle)
+	; 		Framework::ProcessClick(#PB_MouseButton_Middle, TempX, TempY)
+	; 	EndIf
+	; EndIf
 	
 	; TODO: Add an external debug window here to mess around with the engine live.
 	
@@ -95,10 +109,10 @@ Repeat
 			Event = WindowEvent()
 			Select Event
 				Case #PB_Event_LeftClick
-					Gui::MouveClick(Gui::#GuiEvent_LeftClick, MouseX(), MouseY())
+					Framework::ProcessClick(#PB_Event_LeftClick, WindowMouseX(GameWindow), WindowMouseY(GameWindow))
 					
 				Case #PB_Event_RightClick
-					Gui::MouveClick(Gui::#GuiEvent_RightClick, MouseX(), MouseY())
+					Framework::ProcessClick(#PB_Event_RightClick, WindowMouseX(GameWindow), WindowMouseY(GameWindow))
 					
 				Case #PB_Event_CloseWindow
 					;If EventWindow() = GameWindow

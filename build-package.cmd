@@ -53,9 +53,9 @@ echo Done !
 echo.
 echo ━┫ Packaging source code ┣━
 :: TODO: filter out the exes that may appear in the source code folders when testing out stuff.
-%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.zip" ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
-%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.7z" ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
-%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.tar" ./Data ./Engine ./Game ./Libraries ./Licenses ./*.cmd ./*.pb ./*.pb.cfg ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.zip" ./Data ./Documentation ./Framework ./Game ./Libraries ./Launcher ./Licenses ./*.cmd ./*.pb ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.7z" ./Data ./Documentation ./Framework ./Game ./Libraries ./Launcher ./Licenses ./*.cmd ./*.pb ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
+%ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.tar" ./Data ./Documentation ./Framework ./Game ./Libraries ./Launcher ./Licenses ./*.cmd ./*.pb ./*ico ./LICENSE ./readme.md ./*.pbp ./.gitignore
 %ZIPEXE% a -mx9 "./Packages/%PACKAGE_APP_NAME%-sources.tar.gz" "./Packages/%PACKAGE_APP_NAME%-sources.tar"
 echo Done !
 echo.

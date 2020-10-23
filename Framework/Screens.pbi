@@ -23,6 +23,7 @@ DeclareModule ScreenManager
 		*OnQuit
 		
 		; Controls
+		*OnMouseClick
 		*OnControllerButtonDown
 		*OnControllerButtonUp
 		*OnControllerAxisMoved
@@ -34,8 +35,9 @@ DeclareModule ScreenManager
 	
 	Declare.i CreateScreen(ScreenName$ = "DefaultScreen", *OnRegister = #Null, *OnUnregister = #Null,
 	                       *OnInit = #Null, *OnStart = #Null, *OnUpdate = #Null, *OnRender = #Null,
-	                       *OnLeave = #Null, *OnQuit = #Null, *OnControllerButtonDown = #Null,
-	                       *OnControllerButtonUp = #Null, *OnControllerAxisMoved = #Null)
+	                       *OnLeave = #Null, *OnQuit = #Null, *OnMouseClick = #Null,
+	                       *OnControllerButtonDown = #Null, *OnControllerButtonUp = #Null,
+	                       *OnControllerAxisMoved = #Null)
 	
 	; Returns non-zero if the screen was registered !
 	Declare.b RegisterScreen(*CurrentScreen.ScreenData, ScreenKey$, Overwrite.b = #False, AutoFreeMemory.b = #True)
@@ -53,6 +55,8 @@ DeclareModule ScreenManager
 	Declare.b SetErrorScreen(*NewErrorScreen, Overwrite.b=#True, CleanMemory.b=#True)
 	
 	Declare.b ShowErrorScreen(Message$)
+	
+	Declare.b ProcessClick(MouseButton.i, PositionX.i, PositionY.i)
 EndDeclareModule
 
 Module ScreenManager
@@ -71,8 +75,9 @@ Module ScreenManager
 	
 	Procedure.i CreateScreen(ScreenName$ = "DefaultScreen", *OnRegister = #Null, *OnUnregister = #Null,
 	                         *OnInit = #Null, *OnStart = #Null, *OnUpdate = #Null, *OnRender = #Null,
-	                         *OnLeave = #Null, *OnQuit = #Null, *OnControllerButtonDown = #Null,
-	                         *OnControllerButtonUp = #Null, *OnControllerAxisMoved = #Null)
+	                         *OnLeave = #Null, *OnQuit = #Null, *OnMouseClick = #Null,
+	                         *OnControllerButtonDown = #Null, *OnControllerButtonUp = #Null,
+	                         *OnControllerAxisMoved = #Null)
 		Protected *NewScreen.ScreenData = AllocateStructure(ScreenData)
 		
 		If *NewScreen
@@ -86,6 +91,7 @@ Module ScreenManager
 				\OnRender = *OnRender
 				\OnLeave = *OnLeave
 				\OnQuit = *OnQuit
+				\OnMouseClick = *OnMouseClick
 				\OnControllerButtonDown = *OnControllerButtonDown
 				\OnControllerButtonUp = *OnControllerButtonUp
 				\OnControllerAxisMoved = *OnControllerAxisMoved
@@ -244,6 +250,16 @@ Module ScreenManager
 		*ErrorScreen\ScreenName$ = Message$
 		ChangeScreen("ERROR")
 	EndProcedure
+	
+	Procedure.b ProcessClick(MouseButton.i, PositionX.i, PositionY.i)
+		If *CurrentScreen
+			If *CurrentScreen\OnMouseClick
+				ProcedureReturn CallFunctionFast(*CurrentScreen\OnMouseClick, MouseButton, PositionX, PositionY)
+			EndIf
+		EndIf
+		ProcedureReturn #False
+	EndProcedure
+	
 EndModule
 
 

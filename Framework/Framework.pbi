@@ -59,6 +59,8 @@ DeclareModule Framework
 	Declare Update(TimeDelta.q)
 	Declare Render(TimeDelta.q)
 	
+	Declare.b ProcessClick(MouseButton.i, PositionX.i, PositionY.i)
+	
 	; Shuts down the engine properly.
 	; No part of the engine should be used afterward !
 	Declare Finish(CleanMemory.b=#True)
@@ -190,6 +192,24 @@ Module Framework
 		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant) And #FRAMEWORK_MODULE_XINPUT = "#True"
 			XInput::CloseXInputLibrary(XInputLibraryID)
 		CompilerEndIf
+	EndProcedure
+	
+	Procedure.b ProcessClick(MouseButton.i, PositionX.i, PositionY.i)
+		If MouseButton = #PB_MouseButton_Left Or MouseButton = #PB_Event_LeftClick
+			If Not Gui::MouseClick(Gui::#GuiEvent_LeftClick, PositionX, PositionY)
+				ProcedureReturn ScreenManager::ProcessClick(MouseButton, PositionX, PositionY)
+			Else
+				ProcedureReturn #True
+			EndIf
+		ElseIf MouseButton = #PB_MouseButton_Right Or MouseButton = #PB_Event_RightClick
+			If Gui::MouseClick(Gui::#GuiEvent_RightClick, PositionX, PositionY)
+				ProcedureReturn ScreenManager::ProcessClick(MouseButton, PositionX, PositionY)
+			Else
+				ProcedureReturn #True
+			EndIf
+		EndIf
+		
+		ProcedureReturn #False
 	EndProcedure
 	
 	Procedure.b IsRunningInArchive(CheckCurrentDirectory.b = #True, CheckFile$ = #Null$, CheckFolder$ = #Null$)

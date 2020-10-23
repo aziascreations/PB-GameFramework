@@ -52,9 +52,9 @@ DeclareModule Gui
 	Declare OnFreePlaceholder(*GuiElement)
 	
 	; Events
-	Declare.b MouveMoved()
-	Declare.b MouveClick(MouseButton.i, MouseX.i, MouseY.i)
-	Declare.b MouveWheel(Amount.i)
+	Declare.b MouseMoved()
+	Declare.b MouseClick(MouseButton.i, MouseX.i, MouseY.i)
+	Declare.b _MouseWheel(Amount.i)
 	
 	; Helpers
 	Declare.b IsClickInside(*Gui.GuiElement, MouseX.i, MouseY.i)
@@ -117,31 +117,34 @@ Module Gui
 	
 	;- Events
 	
-	Procedure.b MouveMoved()
+	Procedure.b MouseMoved()
 		ForEach Guis()
 			Protected *Gui.GuiElement
 			If *Gui And *Gui\OnMouseMoved
 				;CallCFunctionFast(*Gui\OnMouseMoved)
 			EndIf
 		Next
+		ProcedureReturn #False
 	EndProcedure
 	
-	Procedure.b MouveClick(MouseButton.i, MouseX.i, MouseY.i)
+	Procedure.b MouseClick(MouseButton.i, MouseX.i, MouseY.i)
 		ForEach Guis()
 			Protected *Gui.GuiElement
 			If *Gui And *Gui\OnMouseClick
 				CallCFunctionFast(*Gui\OnMouseClick, *Gui, MouseButton, MouseX, MouseY)
 			EndIf
 		Next
+		ProcedureReturn #False
 	EndProcedure
 	
-	Procedure.b MouveWheel(Amount.i)
+	Procedure.b _MouseWheel(Amount.i)
 		ForEach Guis()
 			Protected *Gui.GuiElement
 			If *Gui And *Gui\OnMouseClick
 				CallCFunctionFast(*Gui\OnMouseWheel, *Gui, Amount)
-			endif
+			EndIf
 		Next
+		ProcedureReturn #False
 	EndProcedure
 	
 	

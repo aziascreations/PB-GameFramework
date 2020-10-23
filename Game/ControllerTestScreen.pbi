@@ -22,7 +22,7 @@ Module ControllerTestScreen
 		ProcedureReturn ScreenManager::CreateScreen("Fuck you you dumb motherfucker !",
 		                                            #Null, #Null, #Null, @OnStart(),
 		                                            @OnUpdate(), @OnRender(), #Null, #Null,
-		                                            @OnControllerButtonDown())
+		                                            #Null, @OnControllerButtonDown())
 	EndProcedure
 	
 	Procedure OnStart()

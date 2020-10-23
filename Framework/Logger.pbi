@@ -1,6 +1,6 @@
 ﻿;{
 ; * Logger.pbi
-; Version: 1.0.2
+; Version: 1.0.3
 ; Author: Herwin Bozet
 ; 
 ; A very basic logger that can either output to the debugger or the console.

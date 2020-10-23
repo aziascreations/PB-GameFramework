@@ -18,7 +18,7 @@ And if you want you can toggle the following features by editing the [build scri
 * XInput controller support (Windows only)
 
 ## Documentation
-All of the documentation for the different components of the framework can be found in the *"[Documentation/](Documentation/)"* folder.<br>
+All of the documentation for the different components of the framework can be found in the *"[Documentation/](Documentation/readme.md)"* folder.<br>
 A summary of all the pages will also be present in there.
 
 ## Building
@@ -68,6 +68,8 @@ It is probably related to the main loop, but I'm not sure why it happens yet, pr
 ### Framework
 The custom framework and examples are covered under the *Unlicense* license.<br>
 You can check it here: *"[LICENSE](LICENSE)"*
+
+Does not apply to the trash folders for "safety", just in case I ever publish them.
 
 ### PureBasic Libraries
 Some of the internal libraries of PureBasic have special licenses, you can find their licenses in the *"[Licenses/](Licenses/)"* folder.<br>

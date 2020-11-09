@@ -44,7 +44,7 @@ set PROJECT_X86_DEFAULT=0
 :: - Common executable icon toggle
 :: |-> 0 - Don't compile the apps with an icon
 :: |-> 1 - Compile the apps with the icon in the %EXECUTABLE_ICON_PATH% variable.
-set EXECUTABLE_ICON_ENABLE=0
+set EXECUTABLE_ICON_ENABLE=1
 
 :: - Path to the desired application icon (ignore if %EXECUTABLE_ICON_ENABLE% is set to 0)
 set EXECUTABLE_ICON_PATH=".\icon.ico"

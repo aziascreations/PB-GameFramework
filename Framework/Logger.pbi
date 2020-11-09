@@ -1,6 +1,6 @@
 ﻿;{
 ; * Logger.pbi
-; Version: 1.0.3
+; Version: 1.0.4
 ; Author: Herwin Bozet
 ; 
 ; A very basic logger that can either output to the debugger or the console.
@@ -17,14 +17,33 @@ EnableExplicit
 DeclareModule Logger
 	#Separator$ = "------------------------------------------------------------"
 	
-	Declare.b Info(Message$)
-	Declare.b Warning(Message$)
-	Declare.b Error(Message$)
-	Declare.b Devel(Message$)
-	Declare.b Trace(Message$)
+	Declare LogMessage(Message$, Caller$, Level.b)
+	
+	Macro Error(Message, Caller = #PB_Compiler_Module)
+		Logger::LogMessage(Message, Caller, 4)
+	EndMacro
+	
+	Macro Warning(Message, Caller = #PB_Compiler_Module)
+		Logger::LogMessage(Message, Caller, 3)
+	EndMacro
+	
+	Macro Info(Message, Caller = #PB_Compiler_Module)
+		Logger::LogMessage(Message, Caller, 2)
+	EndMacro
+	
+	Macro Devel(Message, Caller = #PB_Compiler_Module)
+		Logger::LogMessage(Message, Caller, 1)
+	EndMacro
+	
+	Macro Trace(Message, Caller = #PB_Compiler_Module)
+		Logger::LogMessage(Message, Caller, 0)
+	EndMacro
+	
 	
 	; Can cause some really weird problems...
 	Declare.b EnableConsole()
+	
+	Declare.b EnableCallerVisibility()
 	
 	CompilerIf #PB_Compiler_OS = #PB_OS_Windows
 		Declare.b EnableHiddenConsole()
@@ -42,13 +61,45 @@ Module Logger
 	
 	Global UseConsole.b = #False
 	Global EnableTrace.b = #False
+	Global ShowCaller.b = #False
 	
 	CompilerIf #PB_Compiler_OS = #PB_OS_Windows
 		Global UseHiddenConsole.b = #False
 		Global ConsoleHandle.i = #Null
 	CompilerEndIf
 	
-	Procedure _Log(Message$)
+	Procedure.s GetLevelPrefix(Level.b)
+		Select Level
+			Case 1
+				ProcedureReturn "DEBUG"
+			Case 2
+				ProcedureReturn "INFO "
+			Case 0
+				ProcedureReturn "TRACE"
+			Case 4
+				ProcedureReturn "ERROR"
+			Case 3
+				ProcedureReturn "WARN "
+			Default
+				ProcedureReturn "UNKN "
+		EndSelect
+	EndProcedure
+	
+	Procedure LogMessage(Message$, Caller$, Level.b)
+		If Level = 0 And Not EnableTrace
+			ProcedureReturn
+		EndIf
+		
+		If ShowCaller
+			If Caller$ = #Null$
+				Caller$ = "N/A"
+			EndIf
+			
+			Message$ = GetLevelPrefix(Level)+"| "+Caller$+" | "+Message$
+		Else
+			Message$ = GetLevelPrefix(Level)+"| "+Message$
+		EndIf
+		
 		If UseConsole
 			PrintN(Message$)
 		EndIf
@@ -63,39 +114,17 @@ Module Logger
 		CompilerEndIf
 	EndProcedure
 	
-	Procedure.b Info(Message$)
-		_Log("INFO | "+Message$)
-		ProcedureReturn #True
-	EndProcedure
-	
-	Procedure.b Warning(Message$)
-		_Log("WARN | "+Message$)
-		ProcedureReturn #True
-	EndProcedure
-	
-	Procedure.b Error(Message$)
-		_Log("ERROR| "+Message$)
-		ProcedureReturn #True
-	EndProcedure
-	
-	Procedure.b Devel(Message$)
-		_Log("DEBUG| "+Message$)
-		ProcedureReturn #True
-	EndProcedure
-	
-	Procedure.b Trace(Message$)
-		If EnableTrace
-			_Log("TRACE| "+Message$)
-		EndIf
-		ProcedureReturn #True
-	EndProcedure
-	
 	Procedure.b EnableConsole()
 		If Not UseConsole
 			UseConsole = OpenConsole("Logs")
 		EndIf
 		
 		ProcedureReturn UseConsole
+	EndProcedure
+	
+	Procedure.b EnableCallerVisibility()
+		ShowCaller = #True
+		ProcedureReturn ShowCaller
 	EndProcedure
 	
 	CompilerIf #PB_Compiler_OS = #PB_OS_Windows

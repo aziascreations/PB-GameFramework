@@ -48,13 +48,13 @@ Modules are typically used to keep the procedures names [...], but it's not mand
 `OnQuit()`<br>
 &emsp;
 
-`OnControllerButtonDown(???)`<br>
+`OnControllerButtonDown(UserIndex.l, ButtonPressed.w)`<br>
 &emsp;
 
-`OnControllerButtonUp(???)`<br>
+`OnControllerButtonUp(UserIndex.l, ButtonPressed.w)`<br>
 &emsp;
 
-`OnControllerAxisMoved(???)`<br>
+`OnControllerAxisMoved(UserIndex.l, ButtonPressed.w, AxisX.f, AxisY.f)`<br>
 &emsp;
 
 ### Example

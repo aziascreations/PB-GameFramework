@@ -12,6 +12,8 @@
 CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include file !": CompilerEndIf
 EnableExplicit
 
+XIncludeFile "./ExitCodes.pbi"
+
 XIncludeFile "./InternalData/DataSection-Data.Internal.pbi"
 XIncludeFile "./Logger.pbi"
 XIncludeFile "./Screens.pbi"
@@ -76,6 +78,10 @@ EndDeclareModule
 Module Framework
 	EnableExplicit
 	
+	CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
+		Global SkipArguments.b = #False
+	CompilerEndIf
+	
 	Procedure.s GetFrameworkInfoText()
 		ProcedureReturn #EngineName$+" v"+#EngineVersion$
 	EndProcedure
@@ -129,8 +135,12 @@ Module Framework
 		CompilerEndIf
 		
 		CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
-			Logger::Devel("Initializing arguments parser...")
-			Arguments::Init()
+			If Arguments::GetRootVerb() = #Null
+				Logger::Devel("Initializing arguments parser...")
+				Arguments::Init()
+			Else
+				SkipArguments = #True
+			EndIf
 		CompilerEndIf
 		
 ; 		Logger::Devel("Processing game.json...")
@@ -154,11 +164,13 @@ Module Framework
 		Logger::Devel("Starting engine...")
 		
 		CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
-			Logger::Devel("Parsing arguments...")
-			If Arguments::ParseArguments(0, CountProgramParameters())
-				Logger::Devel("Failed to parse launch arguments !")
-				;Arguments::Finish()
-				ProcedureReturn #Null
+			If Not SkipArguments
+				Logger::Devel("Parsing arguments...")
+				If Arguments::ParseArguments(0, CountProgramParameters())
+					Logger::Devel("Failed to parse launch arguments !")
+					;Arguments::Finish()
+					ProcedureReturn #Null
+				EndIf
 			EndIf
 		CompilerEndIf
 		

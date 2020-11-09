@@ -22,6 +22,7 @@ If Not #PB_Compiler_Debugger
 	;Logger::EnableConsole()
 	Logger::EnableHiddenConsole()
 EndIf
+;Logger::EnableCallerVisibility()
 ;Logger::EnableTrace()
 
 
@@ -29,7 +30,58 @@ EndIf
 
 ;-> Initialisation
 
-; Checking if the game might be running from an archive file. (ex: Via WinRAR)
+; Optional: Initialize, declare, parse and interpret the arguments and the parser.
+;           Only done if #FRAMEWORK_MODULE_XINPUT is defined.
+CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
+	Logger::Devel("Preparing arguments structure...")
+	
+	Logger::Trace("Init")
+	If Not Arguments::Init()
+		Logger::Error("Failed to init arguments ")
+		MessageRequester("Fatal error", "Argument parser initialization failure !",
+		                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
+		End ExitCodes::#Arguments_InitFailure
+	EndIf
+	
+	Logger::Trace("declaring")
+	If (Not ArgumentsHelper::RegisterOption('h', "help", "Prints this help text and quits")) Or
+	   (Not ArgumentsHelper::RegisterOption(#Null, "width", "Window width")) Or
+	   (Not ArgumentsHelper::RegisterOption(#Null, "height", "Window height")) Or
+	   (Not ArgumentsHelper::RegisterOption('x', #Null$, "Window x position")) Or
+	   (Not ArgumentsHelper::RegisterOption('y', #Null$, "Window y position")) Or
+	   (Not ArgumentsHelper::RegisterOption('s', "screen", "Screen index")) Or
+	   (Not ArgumentsHelper::RegisterOption(#Null, "show-console", "Show the logs console")) Or
+	   (Not ArgumentsHelper::RegisterOption(#Null, "enable-hidden-console",
+	                                        "Enables the hidden console and logging to it")) Or
+	   (Not ArgumentsHelper::RegisterOption(#Null, "show-trace", "Show the trace-level logs"))
+		Logger::Error("Failed to create one or more options")
+		Arguments::Finish()
+		MessageRequester("Fatal error", "Argument parser option creation failure !",
+		                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
+		End ExitCodes::#Arguments_RegisteringFailure
+	EndIf
+	
+	Logger::Devel("Parsing arguments...")
+	If Arguments::ParseArguments(1, CountProgramParameters())
+		Logger::Error("Failed to parse one argument")
+		Arguments::Finish()
+		MessageRequester("Fatal error", "Argument parser parsing failure !",
+		                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
+		End ExitCodes::#Arguments_ParsingError
+	EndIf
+	
+	Define Tmp$ = ArgumentsHelper::GetSimpleHelpText(Arguments::GetRootVerb())
+	If Tmp$ = #Null$
+		Debug "Error for help text"
+	Else
+		Debug Tmp$
+	EndIf
+	
+	Logger::Devel("Interpreting standard arguments...")
+	;If Arguments::
+CompilerEndIf
+
+; Checking if the game might be running from an archive file. (ex: Via WinRAR/7Zip)
 If Framework::IsRunningInArchive() Or Framework::IsRunningInArchive(#False, #Null$, "./Data") Or
    (Framework::IsRunningInArchive(#False, "Engine3d.dll") And
     Framework::IsRunningInArchive(#False, "Engine3D.dll"))
@@ -41,30 +93,33 @@ If Framework::IsRunningInArchive() Or Framework::IsRunningInArchive(#False, #Nul
 	                                      "Do you still wish to continue and run the game ?",
 	                                      #PB_MessageRequester_Warning | #PB_MessageRequester_YesNo)
 	If MsgResult = #PB_MessageRequester_No
-		End 0
+		End ExitCodes::#Common_NormalExit
 	EndIf
 EndIf
 
 ; Prepares the engine internally.
+Logger::Devel(Logger::#Separator$)
 If Not Framework::Init()
 	Logger::Error("Engine failed to start, now exiting...")
 	MessageRequester("Fatal error", "Engine initialization failure !",
 	                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
-	End 1
+	End ExitCodes::#Framework_InitFailure
 EndIf
 
 ; Starts the game window.
+Logger::Devel(Logger::#Separator$)
 Global GameWindow = Framework::Start()
 If Not GameWindow
 	Logger::Error("Failed to start engine, now exiting...")
 	MessageRequester("Fatal error", "Engine start failure !",
 	                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
-	End 2
+	End ExitCodes::#Framework_StartFailure
 EndIf
 
 
 ;-> Game Code
 
+Logger::Devel(Logger::#Separator$)
 ; Include the game's code.
 XIncludeFile "./Game/GameCommons.pbi"
 
@@ -146,4 +201,5 @@ Else
 EndIf
 
 Framework::Finish(#True)
-End 0
+
+End ExitCodes::#Common_NormalExit

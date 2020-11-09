@@ -143,11 +143,14 @@ Module Arguments
 	EndProcedure
 	
 	Procedure.b Finish()
+		Protected ReturnValue = #False
+		
 		If *RootVerb
-			ProcedureReturn FreeVerb(*RootVerb)
-		Else
-			ProcedureReturn #False
+			ReturnValue = FreeVerb(*RootVerb)
+			*RootVerb = #Null
 		EndIf
+		
+		ProcedureReturn ReturnValue
 	EndProcedure
 	
 	Procedure.b FreeVerb(*Verb.Verb)

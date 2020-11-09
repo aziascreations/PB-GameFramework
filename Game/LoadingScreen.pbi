@@ -8,12 +8,10 @@ EnableExplicit
 ;- Module
 
 DeclareModule ScreenLoading
-	Declare.i GetScreen()
+	#ScreenId$ = "loading"
+	#ScreenName$ = "Loading Screen"
 	
-	Declare OnStart()
-	Declare OnUpdate(TimeDelta.q)
-	Declare OnRender(TimeDelta.q)
-	Declare OnLeave()
+	Declare.i GetScreen()
 EndDeclareModule
 
 Module ScreenLoading
@@ -22,19 +20,8 @@ Module ScreenLoading
 	Global DefaultCamera
 	Global TextSprite, LogoSprite, StartTime.q
 	
-	Procedure.i GetScreen()
-		ProcedureReturn ScreenManager::CreateScreen("Loading screen",
-		                                            #Null,
-		                                            #Null,
-		                                            #Null,
-		                                            @OnStart(),
-		                                            @OnUpdate(),
-		                                            @OnRender(),
-		                                            @OnLeave())
-	EndProcedure
-	
 	Procedure OnStart()
-		Logger::Devel("OnStart was called for loading screen !")
+		Logger::Trace(#PB_Compiler_Module+"::"+#PB_Compiler_Procedure+"() was called !")
 		
 		LogoSprite = Resources::GetSprite("loading-logo")
 		TextSprite = Resources::GetSprite("loading-text")
@@ -58,9 +45,7 @@ Module ScreenLoading
 		
 		If Resources::Update() And StartTime + 1000 < ElapsedMilliseconds()
 			Logger::Devel("Finished loading resources, changing screen...")
-			
-			ScreenManager::ChangeScreen("model-manipulator")
-			;ScreenManager::ChangeScreen("digger")
+			ScreenManager::ChangeScreen("robotron-arena")
 			ScreenManager::SkipNextRender()
 			Logger::Devel(Logger::#Separator$)
 		EndIf
@@ -85,20 +70,27 @@ Module ScreenLoading
 	EndProcedure
 	
 	Procedure OnLeave()
-		Logger::Devel("OnLeave was called for loading screen !")
+		Logger::Trace(#PB_Compiler_Module+"::"+#PB_Compiler_Procedure+"() was called !")
 		Resources::FlushCameras(#True)
+	EndProcedure
+	
+	Procedure.i GetScreen()
+		ProcedureReturn ScreenManager::CreateScreen(#ScreenName$, #Null, #Null, #Null,
+		                                            @OnStart(), @OnUpdate(), @OnRender(), @OnLeave())
 	EndProcedure
 EndModule
 
 
 ;- Code
 
+Logger::Devel("Executing: "+GetFilePart(#PB_Compiler_Filename, #PB_FileSystem_NoExtension)+"...")
+
 Global *LoadingScreen = ScreenLoading::GetScreen()
 
 If Not *LoadingScreen
-	ScreenManager::ShowErrorScreen("Failed to create loading screen !")
+	ScreenManager::ShowErrorScreen("Failed to create "+#DQUOTE$+ScreenLoading::#ScreenId$+#DQUOTE$+" screen !")
 EndIf
 
-If Not ScreenManager::RegisterScreen(*LoadingScreen, "loading", #True, #True)
-	ScreenManager::ShowErrorScreen("Failed to register loading screen !")
+If Not ScreenManager::RegisterScreen(*LoadingScreen, ScreenLoading::#ScreenId$, #True, #True)
+	ScreenManager::ShowErrorScreen("Failed to register "+#DQUOTE$+ScreenLoading::#ScreenId$+#DQUOTE$+" screen !")
 EndIf

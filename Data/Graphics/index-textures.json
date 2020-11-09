@@ -32,6 +32,7 @@
 	"dev-grid-16": "Developement/grid-16.png",
 	"dev-grid-32": "Developement/grid-32.png",
 	"dev-grid-64": "Developement/grid-64.png",
+	"dev-grid-old": "Developement/grid-old.png",
 	
 	"dev-uv-map-01": "Developement/texture01x4.png",
 	
@@ -47,8 +48,6 @@
 	"metal1": "Terrain/metal-01-16.png",
 	"metal2": "Terrain/metal-02-16.png",
 	
-	"pot-2": "Objects/pot-02.png",
-	
 	"car-ambulance": "Developement/car-ambulance-1.png",
 	"city-building": "Developement/city-building-1.png",
 	"city-house": "Developement/city-building-2.png",
@@ -61,5 +60,7 @@
 	"city-car-4": "Developement/city-car-4.png",
 	"city-car-5": "Developement/city-car-5.png",
 	
-	"city-wall-1": "Developement/city-wall-1.png"
+	"city-wall-1": "Developement/city-wall-1.png",
+	
+	"city-wall-1": "Entities/shadow-64-127.png"
 }

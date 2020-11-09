@@ -87,31 +87,45 @@ Module ControllerManager
 			
 			If *CurrentControllerInfo\LastControllerState\Gamepad\bLeftTrigger <> *TempControllerInfo\Gamepad\bLeftTrigger
 				;Debug "bLeftTrigger"
+				If ScreenManager::*CurrentScreen\OnControllerAxisMoved
+					CallFunctionFast(ScreenManager::*CurrentScreen\OnControllerAxisMoved,
+					                 dwUserIndex, XInput::#XINPUT_GAMEPAD_LEFT_SHOULDER,
+					                 *CurrentControllerInfo\LastControllerState\Gamepad\bLeftTrigger, 0)
+				EndIf
 				HasDoneSomething = #True
 			EndIf
 			
 			If *CurrentControllerInfo\LastControllerState\Gamepad\bRightTrigger <> *TempControllerInfo\Gamepad\bRightTrigger
 				;Debug "bRightTrigger"
+				If ScreenManager::*CurrentScreen\OnControllerAxisMoved
+					CallFunctionFast(ScreenManager::*CurrentScreen\OnControllerAxisMoved,
+					                 dwUserIndex, XInput::#XINPUT_GAMEPAD_RIGHT_SHOULDER,
+					                 *CurrentControllerInfo\LastControllerState\Gamepad\bRightTrigger, 0)
+				EndIf
 				HasDoneSomething = #True
 			EndIf
 			
-			If *CurrentControllerInfo\LastControllerState\Gamepad\sThumbLX <> *TempControllerInfo\Gamepad\sThumbLX
+			If *CurrentControllerInfo\LastControllerState\Gamepad\sThumbLX <> *TempControllerInfo\Gamepad\sThumbLX Or
+			   *CurrentControllerInfo\LastControllerState\Gamepad\sThumbLY <> *TempControllerInfo\Gamepad\sThumbLY
 				;Debug "sThumbLX"
+				If ScreenManager::*CurrentScreen\OnControllerAxisMoved
+					CallFunctionFast(ScreenManager::*CurrentScreen\OnControllerAxisMoved,
+					                 dwUserIndex, XInput::#XINPUT_GAMEPAD_LEFT_THUMB,
+					                 *CurrentControllerInfo\LastControllerState\Gamepad\sThumbLX,
+					                 *CurrentControllerInfo\LastControllerState\Gamepad\sThumbLY)
+				EndIf
 				HasDoneSomething = #True
 			EndIf
 			
-			If *CurrentControllerInfo\LastControllerState\Gamepad\sThumbLY <> *TempControllerInfo\Gamepad\sThumbLY
-				;Debug "sThumbLY"
-				HasDoneSomething = #True
-			EndIf
-			
-			If *CurrentControllerInfo\LastControllerState\Gamepad\sThumbRX <> *TempControllerInfo\Gamepad\sThumbRX
+			If *CurrentControllerInfo\LastControllerState\Gamepad\sThumbRX <> *TempControllerInfo\Gamepad\sThumbRX Or
+			   *CurrentControllerInfo\LastControllerState\Gamepad\sThumbRY <> *TempControllerInfo\Gamepad\sThumbRY
 				;Debug "sThumbRX"
-				HasDoneSomething = #True
-			EndIf
-			
-			If *CurrentControllerInfo\LastControllerState\Gamepad\sThumbRY <> *TempControllerInfo\Gamepad\sThumbRY
-				;Debug "sThumbRY"
+				If ScreenManager::*CurrentScreen\OnControllerAxisMoved
+					CallFunctionFast(ScreenManager::*CurrentScreen\OnControllerAxisMoved,
+					                 dwUserIndex, XInput::#XINPUT_GAMEPAD_RIGHT_THUMB,
+					                 *CurrentControllerInfo\LastControllerState\Gamepad\sThumbRX,
+					                 *CurrentControllerInfo\LastControllerState\Gamepad\sThumbRY)
+				EndIf
 				HasDoneSomething = #True
 			EndIf
 			

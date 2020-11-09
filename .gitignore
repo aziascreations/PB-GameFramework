@@ -6,6 +6,7 @@ Packages/
 *.pbi.cfg
 Data/Trash/
 Game/RobotronClone/
+Game/Trash/
 Data/Graphics/Trash/
 Data/Musics/
 *.dll

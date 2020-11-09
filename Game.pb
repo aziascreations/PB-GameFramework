@@ -121,7 +121,7 @@ EndIf
 
 Logger::Devel(Logger::#Separator$)
 ; Include the game's code.
-XIncludeFile "./Game/GameCommons.pbi"
+XIncludeFile "./Game/GameIncluder.pbi"
 
 ; Going into the loading screen
 If Not ScreenManager::ChangeScreen("loading")

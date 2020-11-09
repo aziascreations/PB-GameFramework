@@ -14,12 +14,6 @@ CompilerIf #PB_Compiler_IsMainFile: CompilerError "Unable to compile an include 
 EnableExplicit
 
 XIncludeFile "./LoadingScreen.pbi"
-XIncludeFile "./MainMenuScreen.pbi"
-XIncludeFile "./CameraTestScreen.pbi"
-;XIncludeFile "./TestingScreen.pbi"
-;XIncludeFile "./DungeonTestScreen.pbi"
-;XIncludeFile "./ModelManipulatorScreen.pbi"
-;XIncludeFile "./DiggerScreenTest.pbi"
 XIncludeFile "./RobotronClone/RobotronArena.pbi"
 
 CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant) And #FRAMEWORK_MODULE_XINPUT = "#True"

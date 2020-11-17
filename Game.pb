@@ -1,10 +1,9 @@
 ﻿;{
-; * Game.pb
-; Version: N/A
+; File:   Game.pb
 ; Author: Herwin Bozet
 ; 
 ; This is the entry point of the game.
-; This file should preferably stay untouched, but it is not prohibited.
+; This file should preferably stay untouched, but modifications are not prohibited.
 ;}
 
 ;- Notes
@@ -28,22 +27,22 @@ EndIf
 
 ;- Code
 
-;-> Initialisation
+;-> Framework Pre-Initialisation
 
-; Optional: Initialize, declare, parse and interpret the arguments and the parser.
+; Optional: Initialize, declare, parse and interpret the arguments with the parser.
 ;           Only done if #FRAMEWORK_MODULE_XINPUT is defined.
 CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODULE_ARGUMENTS = "#True"
-	Logger::Devel("Preparing arguments structure...")
+	Logger::Devel("Preparing Arguments module...")
 	
-	Logger::Trace("Init")
+	Logger::Trace("Initializing Arguments module")
 	If Not Arguments::Init()
-		Logger::Error("Failed to init arguments ")
+		Logger::Error("Failed to init Arguments module...")
 		MessageRequester("Fatal error", "Argument parser initialization failure !",
 		                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
 		End ExitCodes::#Arguments_InitFailure
 	EndIf
 	
-	Logger::Trace("declaring")
+	Logger::Trace("Declaring default options in Arguments module...")
 	If (Not ArgumentsHelper::RegisterOption('h', "help", "Prints this help text and quits")) Or
 	   (Not ArgumentsHelper::RegisterOption(#Null, "width", "Window width")) Or
 	   (Not ArgumentsHelper::RegisterOption(#Null, "height", "Window height")) Or
@@ -63,25 +62,34 @@ CompilerIf Defined(FRAMEWORK_MODULE_ARGUMENTS, #PB_Constant) And #FRAMEWORK_MODU
 	
 	Logger::Devel("Parsing arguments...")
 	If Arguments::ParseArguments(1, CountProgramParameters())
-		Logger::Error("Failed to parse one argument")
+		Logger::Error("Failed to parse a launch option !")
 		Arguments::Finish()
 		MessageRequester("Fatal error", "Argument parser parsing failure !",
 		                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
 		End ExitCodes::#Arguments_ParsingError
 	EndIf
 	
-	Define Tmp$ = ArgumentsHelper::GetSimpleHelpText(Arguments::GetRootVerb())
-	If Tmp$ = #Null$
-		Debug "Error for help text"
-	Else
-		Debug Tmp$
+	Logger::Devel("Interpreting standard arguments...")
+	If ArgumentsHelper::WasOptionUsed('h', "help")
+		Logger::LogMessage(ArgumentsHelper::GetSimpleHelpText(Arguments::GetRootVerb()), #Null$, Logger::#Level_Raw)
+		End ExitCodes::#Common_NormalExit
 	EndIf
 	
-	Logger::Devel("Interpreting standard arguments...")
-	;If Arguments::
+	If ArgumentsHelper::WasOptionUsed(#Null, "show-console")
+		Logger::EnableConsole()
+	EndIf
+	
+	If ArgumentsHelper::WasOptionUsed(#Null, "enable-hidden-console")
+		Logger::EnableHiddenConsole()
+	EndIf
+	
+	If ArgumentsHelper::WasOptionUsed(#Null, "show-trace")
+		Logger::EnableTrace()
+	EndIf
 CompilerEndIf
 
 ; Checking if the game might be running from an archive file. (ex: Via WinRAR/7Zip)
+Logger::Devel("Performing archive detection...")
 If Framework::IsRunningInArchive() Or Framework::IsRunningInArchive(#False, #Null$, "./Data") Or
    (Framework::IsRunningInArchive(#False, "Engine3d.dll") And
     Framework::IsRunningInArchive(#False, "Engine3D.dll"))
@@ -96,15 +104,21 @@ If Framework::IsRunningInArchive() Or Framework::IsRunningInArchive(#False, #Nul
 		End ExitCodes::#Common_NormalExit
 	EndIf
 EndIf
+Logger::Devel(Logger::#Separator$)
+
+
+;-> Framework Initialisation
 
 ; Prepares the engine internally.
-Logger::Devel(Logger::#Separator$)
 If Not Framework::Init()
 	Logger::Error("Engine failed to start, now exiting...")
 	MessageRequester("Fatal error", "Engine initialization failure !",
 	                 #PB_MessageRequester_Error | #PB_MessageRequester_Ok)
 	End ExitCodes::#Framework_InitFailure
 EndIf
+
+
+;-> Framework Startup
 
 ; Starts the game window.
 Logger::Devel(Logger::#Separator$)

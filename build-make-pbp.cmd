@@ -89,12 +89,12 @@ if defined PROJECT_X86_TOGGLE (
 		if defined PROJECT_X86_COMPILER_NAME (
 			if defined PROJECT_X86_DEFAULT (
 				if "%PROJECT_X86_DEFAULT%" == "1" (
-					echo ^<target name="x64" enabled="1" default="1"^> >> %PROJECT_FILENAME%
+					echo ^<target name="x86" enabled="1" default="1"^> >> %PROJECT_FILENAME%
 				) else (
-					echo ^<target name="x64" enabled="1" default="0"^> >> %PROJECT_FILENAME%
+					echo ^<target name="x86" enabled="1" default="0"^> >> %PROJECT_FILENAME%
 				)
 			) else (
-				echo ^<target name="x64" enabled="1" default="0"^> >> %PROJECT_FILENAME%
+				echo ^<target name="x86" enabled="1" default="0"^> >> %PROJECT_FILENAME%
 			)
 			echo ^<inputfile value="Game.pb"/^> >> %PROJECT_FILENAME%
 			echo ^<outputfile value="Game-x86.exe"/^> >> %PROJECT_FILENAME%

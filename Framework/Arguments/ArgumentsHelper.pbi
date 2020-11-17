@@ -25,8 +25,11 @@ CompilerEndIf
 DeclareModule ArgumentsHelper
 	Declare.s GetSimpleHelpText(*RootVerb.Arguments::Verb)
 	
-	Declare.b RegisterOption(Token.c, Name.s, Description.s = #Null$, Flags.i = 0, *ParentVerb = #Null)
+	Declare.b RegisterOption(Token.c, Name.s, Description.s = #Null$, Flags.i = 0,
+	                         *ParentVerb.Arguments::Verb = #Null)
 	; SimpleRegisterVerb/Option
+	
+	Declare.b WasOptionUsed(Token.c = #Null, Name.s = #Null$, *ParentVerb.Arguments::Verb = #Null)
 EndDeclareModule
 
 
@@ -78,7 +81,8 @@ Module ArgumentsHelper
 		ProcedureReturn HelpText$
 	EndProcedure
 
-	Procedure.b RegisterOption(Token.c, Name.s, Description.s = #Null$, Flags.i = 0, *ParentVerb = #Null)
+	Procedure.b RegisterOption(Token.c, Name.s, Description.s = #Null$, Flags.i = 0,
+	                           *ParentVerb.Arguments::Verb = #Null)
 		Protected Option = Arguments::CreateOption(Token, Name, Description, Flags)
 		
 		If Option
@@ -87,6 +91,32 @@ Module ArgumentsHelper
 			Else
 				Arguments::FreeOption(Option)
 			EndIf
+		EndIf
+		
+		ProcedureReturn #False
+	EndProcedure
+	
+	Procedure.b WasOptionUsed(Token.c = #Null, Name.s = #Null$, *ParentVerb.Arguments::Verb = #Null)
+		If *ParentVerb = #Null
+			*ParentVerb = Arguments::GetRootVerb()
+		EndIf
+		
+		If *ParentVerb
+			ForEach *ParentVerb\Options()
+				If *ParentVerb\Options()\Token <> #Null And Token <> #Null
+					Debug *ParentVerb\Options()\Token
+					If *ParentVerb\Options()\Token = Token
+						ProcedureReturn *ParentVerb\Options()\WasUsed
+					EndIf
+				EndIf
+				
+				If *ParentVerb\Options()\Name <> #Null$ And Name <> #Null$
+					Debug *ParentVerb\Options()\Name
+					If *ParentVerb\Options()\Name = Name
+						ProcedureReturn *ParentVerb\Options()\WasUsed
+					EndIf
+				EndIf
+			Next
 		EndIf
 		
 		ProcedureReturn #False

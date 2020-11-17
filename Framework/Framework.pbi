@@ -195,7 +195,7 @@ Module Framework
 	EndProcedure
 	
 	Procedure Update(TimeDelta.q)
-		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant)
+		CompilerIf Defined(FRAMEWORK_MODULE_XINPUT, #PB_Constant) And #FRAMEWORK_MODULE_XINPUT = "#True"
 			ControllerManager::Update()
 		CompilerEndIf
 		

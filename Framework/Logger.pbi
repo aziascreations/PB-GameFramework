@@ -17,26 +17,35 @@ EnableExplicit
 DeclareModule Logger
 	#Separator$ = "------------------------------------------------------------"
 	
+	Enumeration LoggingLevels
+		#Level_Raw
+		#Level_Trace
+		#Level_Debug
+		#Level_Info
+		#Level_Warning
+		#Level_Error
+	EndEnumeration
+	
 	Declare LogMessage(Message$, Caller$, Level.b)
 	
 	Macro Error(Message, Caller = #PB_Compiler_Module)
-		Logger::LogMessage(Message, Caller, 4)
+		Logger::LogMessage(Message, Caller, Logger::#Level_Error)
 	EndMacro
 	
 	Macro Warning(Message, Caller = #PB_Compiler_Module)
-		Logger::LogMessage(Message, Caller, 3)
+		Logger::LogMessage(Message, Caller, Logger::#Level_Warning)
 	EndMacro
 	
 	Macro Info(Message, Caller = #PB_Compiler_Module)
-		Logger::LogMessage(Message, Caller, 2)
+		Logger::LogMessage(Message, Caller, Logger::#Level_Info)
 	EndMacro
 	
 	Macro Devel(Message, Caller = #PB_Compiler_Module)
-		Logger::LogMessage(Message, Caller, 1)
+		Logger::LogMessage(Message, Caller, Logger::#Level_Debug)
 	EndMacro
 	
 	Macro Trace(Message, Caller = #PB_Compiler_Module)
-		Logger::LogMessage(Message, Caller, 0)
+		Logger::LogMessage(Message, Caller, Logger::#Level_Trace)
 	EndMacro
 	
 	
@@ -49,7 +58,7 @@ DeclareModule Logger
 		Declare.b EnableHiddenConsole()
 	CompilerElse
 		Macro EnableHiddenConsole()
-			EnableConsole()
+			Logger::EnableConsole()
 		EndMacro
 	CompilerEndIf
 	
@@ -70,15 +79,15 @@ Module Logger
 	
 	Procedure.s GetLevelPrefix(Level.b)
 		Select Level
-			Case 1
+			Case #Level_Debug
 				ProcedureReturn "DEBUG"
-			Case 2
+			Case#Level_Info
 				ProcedureReturn "INFO "
-			Case 0
+			Case #Level_Trace
 				ProcedureReturn "TRACE"
-			Case 4
+			Case #Level_Error
 				ProcedureReturn "ERROR"
-			Case 3
+			Case #Level_Warning
 				ProcedureReturn "WARN "
 			Default
 				ProcedureReturn "UNKN "
@@ -86,20 +95,22 @@ Module Logger
 	EndProcedure
 	
 	Procedure LogMessage(Message$, Caller$, Level.b)
-		If Level = 0 And Not EnableTrace
-			ProcedureReturn
-		EndIf
-		
-		If ShowCaller
-			If Caller$ = #Null$
-				Caller$ = "N/A"
+		If Level <> #Level_Raw
+			If Level = #Level_Trace And Not EnableTrace
+				ProcedureReturn
 			EndIf
 			
-			Message$ = GetLevelPrefix(Level)+"| "+Caller$+" | "+Message$
-		Else
-			Message$ = GetLevelPrefix(Level)+"| "+Message$
+			If ShowCaller
+				If Caller$ = #Null$
+					Caller$ = "N/A"
+				EndIf
+				
+				Message$ = GetLevelPrefix(Level)+"| "+Caller$+" | "+Message$
+			Else
+				Message$ = GetLevelPrefix(Level)+"| "+Message$
+			EndIf
 		EndIf
-		
+	
 		If UseConsole
 			PrintN(Message$)
 		EndIf

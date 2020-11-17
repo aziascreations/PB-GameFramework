@@ -7,6 +7,27 @@ DeclareModule PreferencesHelper
 	Macro ClosePreferences()
 		ClosePreferences()
 	EndMacro
+	
+	Macro ReadPreferenceInteger(Key, DefaultValue)
+		ReadPreferenceInteger(Key, DefaultValue)
+	EndMacro
+	
+	Macro ReadPreferenceBoolean(Key, DefaultValue)
+		ReadPreferenceInteger(Key, DefaultValue)
+	EndMacro
+	
+	Macro ReadPreferenceString(Key, DefaultValue)
+		ReadPreferenceString(Key, DefaultValue)
+	EndMacro
+	
+	Macro WritePreferenceInteger(Key, DefaultValue)
+		WritePreferenceInteger(Key, DefaultValue)
+	EndMacro
+	
+	Macro WritePreferenceBoolean(Key, DefaultValue)
+		WritePreferenceInteger(Key, DefaultValue)
+	EndMacro
+	
 EndDeclareModule
 
 Module PreferencesHelper

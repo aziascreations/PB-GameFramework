@@ -50,8 +50,6 @@ Module Resolutions
 	Procedure Load()
 		Restore ResolutionTable:
 		
-		Debug "Reading resolution list..."
-		
 		Define IsDoneParsingResolutions.b = #False
 		Define IsReadingResolutions.b = #False
 		
@@ -81,8 +79,6 @@ Module Resolutions
 				EndIf
 			EndIf 
 		Until IsDoneParsingResolutions
-		
-		Debug "Done !"
 	EndProcedure
 	
 	Procedure Clean()

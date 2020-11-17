@@ -6,11 +6,12 @@
 
 Global Window_Launcher
 
-Global Image_0, Panel_0, Checkbox_ShowUncommon, Text_WindowMode, Combo_WindowMode, Text_AspectRatio, Combo_AspectRatio, Combo_Resolution, Combo_Display, Text_Resolution, Text_Display, Text_ManualResX, String_ManualResWidth, String_ManualResHeight, Text_ManualRes, Checkbox_ShowLogs, Checkbox_ShowTracing, Button_0, Button_1
+Global Image_0, Panel_0, Checkbox_ShowUncommon, Text_WindowMode, Combo_WindowMode, Text_AspectRatio, Combo_AspectRatio, Combo_Resolution, Combo_Display, Text_Resolution, Text_Display, Text_ManualResX, String_ManualResWidth, String_ManualResHeight, Text_ManualRes, Checkbox_ShowLogs, Checkbox_ShowTracing, Checkbox_IDK1, Button_Launch, Button_Quit
 
 
 Procedure OpenWindow_Launcher(x = 0, y = 0, width = 320, height = 530)
-  Window_Launcher = OpenWindow(#PB_Any, x, y, width, height, "", #PB_Window_SystemMenu)
+  Window_Launcher = OpenWindow(#PB_Any, x, y, width, height, "", #PB_Window_SystemMenu | #PB_Window_ScreenCentered)
+  HideWindow(Window_Launcher, 1)
   Image_0 = ImageGadget(#PB_Any, 10, 10, 300, 150, 0, #PB_Image_Border)
   Panel_0 = PanelGadget(#PB_Any, 10, 170, 300, 315)
   AddGadgetItem(Panel_0, -1, "Graphics")
@@ -26,14 +27,16 @@ Procedure OpenWindow_Launcher(x = 0, y = 0, width = 320, height = 530)
   Text_Resolution = TextGadget(#PB_Any, 10, 110, 270, 20, "Resolution:")
   Text_Display = TextGadget(#PB_Any, 10, 208, 270, 20, "Display:")
   Text_ManualResX = TextGadget(#PB_Any, 140, 178, 20, 20, "X", #PB_Text_Center)
-  String_ManualResWidth = StringGadget(#PB_Any, 20, 178, 120, 20, "")
-  String_ManualResHeight = StringGadget(#PB_Any, 160, 178, 120, 20, "")
+  String_ManualResWidth = StringGadget(#PB_Any, 20, 178, 120, 20, "", #PB_String_Numeric)
+  String_ManualResHeight = StringGadget(#PB_Any, 160, 178, 120, 20, "", #PB_String_Numeric)
   Text_ManualRes = TextGadget(#PB_Any, 10, 160, 270, 20, "Manual resolution:")
   AddGadgetItem(Panel_0, -1, "Others")
   Checkbox_ShowLogs = CheckBoxGadget(#PB_Any, 10, 8, 280, 20, "Show logs console")
   Checkbox_ShowTracing = CheckBoxGadget(#PB_Any, 10, 28, 280, 20, "Show tracing level logs (Advanced debugging)")
+  Checkbox_IDK1 = CheckBoxGadget(#PB_Any, 10, 48, 280, 20, "???")
+  DisableGadget(Checkbox_IDK1, 1)
   CloseGadgetList()
-  Button_0 = ButtonGadget(#PB_Any, 210, 495, 100, 25, "Launch")
-  Button_1 = ButtonGadget(#PB_Any, 10, 495, 100, 25, "Quit")
+  Button_Launch = ButtonGadget(#PB_Any, 210, 495, 100, 25, "Launch")
+  Button_Quit = ButtonGadget(#PB_Any, 10, 495, 100, 25, "Quit")
 EndProcedure
 

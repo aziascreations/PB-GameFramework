@@ -9,7 +9,7 @@ Game/RobotronClone/
 Game/Trash/
 Data/Graphics/Trash/
 Data/Musics/
-*.dll
+/*.dll
 todo.txt
 *.ini
 Documentation/ControllersList.md

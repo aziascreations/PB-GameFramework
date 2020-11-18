@@ -83,8 +83,8 @@ goto build-copy
 :build-copy
 echo ━┫ Copying assets ┣━
 copy .\LICENSE ".\Build\Commons\Licenses\Custom PB Framework.txt"
-robocopy .\Libraries\x64\ .\Build\x64
-robocopy .\Libraries\x86\ .\Build\x86
+robocopy .\Libraries\Windows\x64\ .\Build\x64
+robocopy .\Libraries\Windows\x86\ .\Build\x86
 xcopy Data Build\Commons\Data\ /E /Y
 xcopy Licenses Build\Commons\Licenses\ /E /Y
 rmdir /Q /S Build\Commons\Data\Trash
